@@ -3,7 +3,7 @@
   "draft": false,
   "publicationReady": false,
   "sourcePublicationReady": true,
-  "readinessScope": "Local source-only review; no remote push, release upload or live update acceptance is asserted.",
+  "readinessScope": "Reviewed community source is pushed and both preview releases are public. Production updater checking, full HTTPS download, SHA-256 and verifyStaged passed; system installation and native Revit acceptance remain separate.",
   "repository": {
     "host": "github.com",
     "owner": "queqideliang",
@@ -12,8 +12,8 @@
     "cloneUrl": "https://github.com/queqideliang/bright-vision.git",
     "confirmedByUser": true
   },
-  "repositoryPushed": false,
-  "onlineReleaseAvailable": false,
+  "repositoryPushed": true,
+  "onlineReleaseAvailable": true,
   "brand": "Bright Vision",
   "company": "崛亮视觉",
   "intendedFirstPartyLicense": "Apache-2.0",
@@ -25,7 +25,7 @@
     "tools/bright-revit-installer"
   ],
   "sourceSnapshotDate": "2026-10-28",
-  "sourceSnapshotSha256": "581573cc11e8f13eddfabafad838de08ea78cd25a0d2dbfa76222b7ed5dec06a",
+  "sourceSnapshotSha256": "9439a5f087f184524c44e919c1509408473326eaa0411f7f9e022bd2fb4d8c1d",
   "files": [
     {
       "path": "tools/bim-viewer/.gitignore",
@@ -559,8 +559,8 @@
     },
     {
       "path": "tools/bright-open-source/templates/public-README.md",
-      "bytes": 4198,
-      "sha256": "5fc6a079e15bfc369b89d0f783290a4705d385c421de5c6b0cf7a9fcc303f12d"
+      "bytes": 4757,
+      "sha256": "11f8dc9657e4916bf074bc9e9d83c3748409c8941a3ea5a6e475c9f57cae1456"
     },
     {
       "path": "tools/bright-open-source/templates/public-SECURITY.md",
@@ -1064,8 +1064,8 @@
     {
       "path": "README.md",
       "sourcePath": "tools/bright-open-source/templates/public-README.md",
-      "bytes": 4198,
-      "sha256": "5fc6a079e15bfc369b89d0f783290a4705d385c421de5c6b0cf7a9fcc303f12d"
+      "bytes": 4757,
+      "sha256": "11f8dc9657e4916bf074bc9e9d83c3748409c8941a3ea5a6e475c9f57cae1456"
     },
     {
       "path": "CONTRIBUTING.md",
@@ -1100,7 +1100,53 @@
   ],
   "excluded": "No original git history, cloud code, research, recovered vendor code, SDK binaries, models, credentials, installation records or compiled artifacts.",
   "outstanding": [
-    "Review binary release assets independently of this source snapshot",
-    "Push only the reviewed clean repository and validate published release/update behavior"
-  ]
+    "Verify system installation independently of public updater download and staging checks.",
+    "Extend and document native Revit/model acceptance by build and supported function."
+  ],
+  "publicationReadyMeaning": "The legacy publicationReady=false field does not deny source publication or preview availability; it does not assert a stable release or complete runtime/update acceptance.",
+  "initialPublicationSnapshot": {
+    "sourceCommit": "2eeb7b356d73b8e3722c6a1905d36451676ca59d",
+    "sourceSnapshotSha256": "581573cc11e8f13eddfabafad838de08ea78cd25a0d2dbfa76222b7ed5dec06a",
+    "repositoryPushed": false,
+    "onlineReleaseAvailable": false,
+    "meaning": "The false fields in the first source archive described local preparation time, before the subsequent push and public preview releases; that archive and its tags remain unchanged."
+  },
+  "publicationStatus": {
+    "recordedAtUtc": "2026-10-28T12:09:56.276525+00:00",
+    "sourceCommitForInitialReleaseTags": "2eeb7b356d73b8e3722c6a1905d36451676ca59d",
+    "repositoryPushed": true,
+    "onlineReleaseAvailable": true,
+    "automaticUpdateDownloadInstallEndToEndVerified": false,
+    "releases": [
+      {
+        "tag": "viewer-v0.6.0",
+        "id": 426613335,
+        "url": "https://github.com/queqideliang/bright-vision/releases/tag/viewer-v0.6.0",
+        "draft": false,
+        "prerelease": true,
+        "assets": 4
+      },
+      {
+        "tag": "revit-v1.7.0",
+        "id": 426611447,
+        "url": "https://github.com/queqideliang/bright-vision/releases/tag/revit-v1.7.0",
+        "draft": false,
+        "prerelease": true,
+        "assets": 4
+      }
+    ],
+    "automaticUpdateDownloadEndToEndVerified": true,
+    "automaticUpdateInstallExecuted": false,
+    "downloadVerification": {
+      "transport": "real unauthenticated production updater HTTPS",
+      "requests": 7,
+      "bytes": 122982995,
+      "sha256": "7e1cacf45320310828734d4935e747590138172d669bfc49f49f4ef6379aaa4e",
+      "verifyStagedPassed": true,
+      "sameVersionAvoidsDownload": true,
+      "stableExcludesPreview": true,
+      "legacyVersionProtocolSimulated": true,
+      "legacyApplicationExecuted": false
+    }
+  }
 }

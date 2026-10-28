@@ -4,7 +4,11 @@ Bright Vision 是本地 BIM 模型查看器和独立 Revit 导出／计量插件
 
 当前源码目标为查看器 **0.6.0**、插件／安装器 **1.7.0 开发预览**。实际下载、签名状态、已测 Revit build、已知限制和业务验收以本仓库每次 Release 说明为准；源码存在不代表所有功能或年份已实测。
 
-用户已确认官方源码仓库为 [queqideliang/bright-vision](https://github.com/queqideliang/bright-vision)。源码与安装包正在准备公开；仓库推送、Release 附件上传及在线更新实测尚未由这份源码说明确认完成。
+官方源码已发布至 [queqideliang/bright-vision](https://github.com/queqideliang/bright-vision)，以下两个开发预览版均已公开：
+
+**[下载 Windows 完整安装包 · 0.6.0](https://github.com/queqideliang/bright-vision/releases/download/viewer-v0.6.0/Bright.Vision-0.6.0-Setup.exe)** — 包含查看器与 Revit 插件 1.7.0。[发行说明](https://github.com/queqideliang/bright-vision/releases/tag/viewer-v0.6.0)
+
+**[仅下载 Revit 插件 · 1.7.0](https://github.com/queqideliang/bright-vision/releases/download/revit-v1.7.0/BV-1.7.0-Setup.exe)** — 适用于已有查看器、只需安装导出／计量插件的电脑。[发行说明](https://github.com/queqideliang/bright-vision/releases/tag/revit-v1.7.0)
 
 ## 可以做什么
 
@@ -17,7 +21,7 @@ Bright Vision 是本地 BIM 模型查看器和独立 Revit 导出／计量插件
 
 ## 使用与构建
 
-安装包发布后，用户可在本仓库 Releases 下载并核对对应限制。当前官方更新配置采用上述固定仓库的预览频道，线上检查与下载仍待发布后的实际验收。创建仓库不会给旧安装版本增加联网更新能力；需要先安装包含该配置的新客户端。
+上方链接对应已公开的开发预览附件，安装前请阅读发行说明中的签名状态及已知限制。官方更新配置采用上述固定仓库的预览频道；生产更新模块的公网检查、完整下载及 SHA-256 核验已通过实际验证，系统安装与 Revit 新墙体 SDK 的验收另行记录。旧安装版本需要先安装包含该配置的新客户端。
 
 开发者先从 Web 查看器开始，不需要 Revit 或 Autodesk SDK：
 
