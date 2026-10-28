@@ -1,0 +1,114 @@
+{
+  "name": "bim-model-viewer",
+  "version": "0.6.0",
+  "private": true,
+  "description": "Independent local BIM model ZIP viewer",
+  "type": "module",
+  "main": "electron/main.cjs",
+  "author": "崛亮视觉",
+  "scripts": {
+    "dev": "vite --host 127.0.0.1",
+    "typecheck": "tsc --noEmit",
+    "build": "npm run typecheck && vite build && node scripts/copy-notices.mjs && node scripts/build-brand-icon.mjs",
+    "build:native": "node scripts/build-native.mjs",
+    "preview": "vite preview --host 127.0.0.1",
+    "test": "node --experimental-strip-types --test --test-isolation=none tests/*.test.ts && node scripts/static-assets.test.mjs",
+    "serve:web": "node scripts/serve-web.mjs",
+    "desktop": "npm run build && npm run build:native && node scripts/prepare-revit.mjs && node scripts/start-desktop.mjs",
+    "pack:dir": "npm run build && npm run build:native && node scripts/prepare-revit.mjs && electron-builder --win --dir --publish never",
+    "dist:win": "npm run build && npm run build:native && node scripts/prepare-revit.mjs && electron-builder --win nsis --publish never",
+    "dist:win:release": "npm run build && npm run build:native && node scripts/prepare-revit.mjs && electron-builder --win nsis --config electron-builder.release.cjs --publish never",
+    "test:browser": "node tests/browser-smoke.mjs"
+  },
+  "dependencies": {
+    "fflate": "0.8.3",
+    "three": "0.186.1"
+  },
+  "devDependencies": {
+    "@types/node": "26.6.5",
+    "@types/three": "0.186.0",
+    "electron": "45.0.0",
+    "electron-builder": "26.18.0",
+    "playwright": "1.64.1",
+    "typescript": "5.9.3",
+    "vite": "8.3.5"
+  },
+  "build": {
+    "appId": "local.bim.modelviewer",
+    "productName": "Bright Vision",
+    "directories": {
+      "output": "release"
+    },
+    "files": [
+      "dist/**/*",
+      "electron/**/*",
+      "native/**/*.cs",
+      "package.json",
+      "THIRD-PARTY-NOTICES.md",
+      "!node_modules/**/*",
+      "LICENSE",
+      "NOTICE"
+    ],
+    "npmRebuild": false,
+    "extraResources": [
+      {
+        "from": "installer/generated/revit-plugin",
+        "to": "revit-plugin"
+      },
+      {
+        "from": "installer/Install-RevitIntegration.ps1",
+        "to": "revit-integration/Install-RevitIntegration.ps1"
+      },
+      {
+        "from": "native/generated",
+        "to": "native-helper"
+      },
+      {
+        "from": "LICENSE",
+        "to": "attribution/LICENSE"
+      },
+      {
+        "from": "NOTICE",
+        "to": "attribution/NOTICE"
+      },
+      {
+        "from": "THIRD-PARTY-NOTICES.md",
+        "to": "attribution/THIRD-PARTY-NOTICES.md"
+      }
+    ],
+    "asar": true,
+    "win": {
+      "executableName": "BIM Model Viewer",
+      "target": [
+        {
+          "target": "nsis",
+          "arch": [
+            "x64"
+          ]
+        }
+      ],
+      "signAndEditExecutable": true,
+      "signExecutable": false,
+      "icon": "electron/assets/bv.ico"
+    },
+    "nsis": {
+      "guid": "e85adad6-a2d0-5df4-a040-39ad3dfc786b",
+      "include": "installer/revit-integration.nsh",
+      "shortcutName": "bright.vision",
+      "oneClick": false,
+      "perMachine": false,
+      "allowToChangeInstallationDirectory": true,
+      "multiLanguageInstaller": true,
+      "installerLanguages": [
+        "en_US",
+        "zh_CN"
+      ],
+      "displayLanguageSelector": true,
+      "createDesktopShortcut": true,
+      "createStartMenuShortcut": true,
+      "artifactName": "Bright.Vision-${version}-Setup.${ext}"
+    },
+    "copyright": "Copyright © 2026 崛亮视觉 / Bright Vision"
+  },
+  "license": "Apache-2.0"
+}

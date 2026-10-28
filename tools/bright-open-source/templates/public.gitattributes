@@ -1,0 +1,3 @@
+# Preserve reviewed source fingerprints and canonical license bytes on checkout.
+# This disables newline conversion; normal text diffs remain available.
+* -text

@@ -1,0 +1,10 @@
+{
+  "apiDirectories": {
+    "2020-net45": "C:\\Program Files\\Autodesk\\Revit 2020",
+    "2026-net10": "C:\\Program Files\\Autodesk\\Revit 2026"
+  },
+  "frameworkDirectories": {
+    "net45": "C:\\Program Files (x86)\\Reference Assemblies\\Microsoft\\Framework\\.NETFramework\\v4.5",
+    "net48": "C:\\Program Files (x86)\\Reference Assemblies\\Microsoft\\Framework\\.NETFramework\\v4.8"
+  }
+}

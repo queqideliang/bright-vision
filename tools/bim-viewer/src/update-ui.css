@@ -1,0 +1,6 @@
+.update-source-path{overflow-wrap:anywhere;padding:10px 12px;background:#f4f7fb;border:1px solid #e2e9f2;border-radius:6px;font:11px/1.7 Consolas,monospace}
+.update-actions{display:flex;flex-wrap:wrap;gap:9px;margin-top:10px}
+#update-dialog{width:min(590px,calc(100vw - 36px))}
+#update-status{font-weight:550;color:#315f94}
+#update-note{font-size:11px;color:#6e7e91}
+#update-button.has-update::after{content:'';display:inline-block;width:6px;height:6px;border-radius:50%;background:#24916e;margin-left:6px;vertical-align:middle}

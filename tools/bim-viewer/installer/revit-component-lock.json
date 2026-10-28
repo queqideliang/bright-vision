@@ -1,0 +1,119 @@
+{
+  "schemaVersion": 1,
+  "packageId": "BrightVision.RevitExporter",
+  "packageVersion": "1.7.0",
+  "sourceFileCount": 24,
+  "variantCount": 14,
+  "moduleFileCount": 65,
+  "producerManifestSha256": "b71c592eff4d57d368ef09f84e928e55c7de0e80941d66eb53c6c98840fec177",
+  "sourceFiles": [
+    {
+      "name": "Json.cs",
+      "sha256": "2ffe46676d6dc974aa50f1c0140433ee2dae69ece9b618491529b20270d8cc1d"
+    },
+    {
+      "name": "PackageWriter.cs",
+      "sha256": "1ff8d5bbccf88f5a9267a6b9a4aac248bd4d9bb5be446bdc0f84dcf3dcae6e30"
+    },
+    {
+      "name": "ExportStatistics.cs",
+      "sha256": "c08e9682833cadc955a16594edcfc9a20d4994ff1d0a4ad642ce6d010509ce54"
+    },
+    {
+      "name": "QuantitySnapshot.cs",
+      "sha256": "bc6a65f1522ef367378114d8551b728092ce512aef616e9ce9c2f731c2af8166"
+    },
+    {
+      "name": "RevitQuantityReader.cs",
+      "sha256": "3dcb162e9780f422b286eb6fc5432515b8351401e39ed16963198ee82ca724ce"
+    },
+    {
+      "name": "CivilQuantityModel.cs",
+      "sha256": "5aace88f9ccc4dd82fc8bcc1e4b333b8b5abd1dbcc7384057e69c1975f5f409e"
+    },
+    {
+      "name": "CivilProject.cs",
+      "sha256": "14703321103775091cf72fadf8fe0dc7a5ba6c4911c150b41643a35cb3317108"
+    },
+    {
+      "name": "CivilLevelResolver.cs",
+      "sha256": "e803bd01325798e4df37e7ed62459168d47fe40d7d487357fa3dbab7ae64192f"
+    },
+    {
+      "name": "RevitCivilQuantityReader.cs",
+      "sha256": "4a90079aa9ea78ddc7678c4eb26846f636f99ee07dfef48b147639b2ca885ce9"
+    },
+    {
+      "name": "CivilProjectWindow.cs",
+      "sha256": "10b708824167fc05aeec33abf2a71ac5afad7a3cedc3a6d661934b3a37f07b1c"
+    },
+    {
+      "name": "CivilQuantityWindow.cs",
+      "sha256": "c27ba49be1c73716accb73b9998def402f1ec028392a108fce940f86955a28c0"
+    },
+    {
+      "name": "CivilQuantityCommand.cs",
+      "sha256": "16a004558873e3759b62e56a806c444ea4ce059cdfa38a9ec2983e194dbf92aa"
+    },
+    {
+      "name": "CivilWallFacts.cs",
+      "sha256": "39e05a44ad40d430bd639eaa465c64f207eb2993cd4bcf583e11e70e0de5df21"
+    },
+    {
+      "name": "CivilWallCalculation.cs",
+      "sha256": "7c38703b9d900d733b9a142591042e0b9d1a689d3915f9a26f82111660ee0ce8"
+    },
+    {
+      "name": "RevitCivilWallReader.cs",
+      "sha256": "103b96253ae0af6fa6e3789ff1e8caf947bdd765dc0e29d75fc247f89e5cbeb2"
+    },
+    {
+      "name": "CivilWallWindow.cs",
+      "sha256": "3ee8bf0c832746f516a5030197383a8905b9a5d329ab8e0716e806be57943cea"
+    },
+    {
+      "name": "CivilWallCommand.cs",
+      "sha256": "613f94904fa0d717e890d7cc6066f2ea366066cc4ac85e9c28ce41a71211a0e8"
+    },
+    {
+      "name": "BrandPixels.cs",
+      "sha256": "09e559a5d19d1f36ec5085a02d725b160b2a58f1eb2abe12de45488a542e15ea"
+    },
+    {
+      "name": "Branding.cs",
+      "sha256": "99b6145d71fd0ded0efa4ff00500f9baafa8174a89b61f7f153835969f0b8d14"
+    },
+    {
+      "name": "ExportOptions.cs",
+      "sha256": "8048b2cb2cb3a6cd643cba91d7157839f7fc8ae63828b2bee40334d7913bd624"
+    },
+    {
+      "name": "ExportOptionsDialog.cs",
+      "sha256": "da667ebe8b72933a5defd1250725e328a62751c162f0f90525cdf4dcbe655c2e"
+    },
+    {
+      "name": "ExportAttachments.cs",
+      "sha256": "554d73a95b0feb238a6a7b12664925e74cb1f88d6012e286d83e412b234b2813"
+    },
+    {
+      "name": "SelectedViewResolver.cs",
+      "sha256": "d0d350308bae43a439bd66d7460aae36cf6f64aa8f6d4334964b056bdab23cbc"
+    },
+    {
+      "name": "RevitApp.cs",
+      "sha256": "edd85676fd0a743e9c2898c071e40265f8d72470b5b825574f99440c9e548a12"
+    }
+  ],
+  "helpers": {
+    "bundle.json": "af84bdd189e121f3283bf4d205086118038e4909082f5b15ad5d0a6b1c18c8d5",
+    "Manage-BrightVisionPlugin.ps1": "4877face35d3ee1cef59cb22be5590079c656fef04d6f7527becdc35bfdc9677",
+    "RevitHosts.ps1": "b50cbe85651c313e0deb9f2a3c3669261f7f7c95fa33178a3f8486baaa0d99b7",
+    "LegacyMigration.ps1": "15924d45f68879413b4dedbe26daba0791561d4d53e08e2f05ddde3a956ac955",
+    "BridgeMigration.ps1": "e6aa8106f9788b776eb85dba5d6f063c5d300d72e2fe2152d55d6658bcc02995",
+    "Invoke-BrightVisionSetup.ps1": "087936a0e711471fa97d62562544e564a1786c8967b048ca3c0ccc1bf63d9109",
+    "README.md": "d4312678224259b6e6ef6e9257154b325048ccb73ea842b166000b9fa9971111",
+    "LICENSE": "cfc7749b96f63bd31c3c42b5c471bf756814053e847c10f3eb003417bc523d30",
+    "NOTICE": "825c409809562dc01049528d26ce4ec3606775457fe8685ba34c25eaf4d07067"
+  },
+  "reviewScope": "Explicitly reviewed local build; source/helper/legal/payload consistency checked. This is not an attestation for arbitrary downloaded binaries or a bit-for-bit reproducibility claim."
+}

@@ -1,0 +1,9 @@
+/node_modules/
+/.npm-cache/
+/.electron-cache/
+/dist/
+/release/
+/test-results/
+*.log
+*.tsbuildinfo
+/installer/generated/

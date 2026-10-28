@@ -1,0 +1,8 @@
+{
+  "schemaVersion": 1,
+  "enabled": true,
+  "owner": "queqideliang",
+  "repository": "bright-vision",
+  "channel": "preview",
+  "productId": "local.bim.modelviewer"
+}

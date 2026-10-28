@@ -1,0 +1,1106 @@
+{
+  "schemaVersion": 1,
+  "draft": false,
+  "publicationReady": false,
+  "sourcePublicationReady": true,
+  "readinessScope": "Local source-only review; no remote push, release upload or live update acceptance is asserted.",
+  "repository": {
+    "host": "github.com",
+    "owner": "queqideliang",
+    "name": "bright-vision",
+    "url": "https://github.com/queqideliang/bright-vision",
+    "cloneUrl": "https://github.com/queqideliang/bright-vision.git",
+    "confirmedByUser": true
+  },
+  "repositoryPushed": false,
+  "onlineReleaseAvailable": false,
+  "brand": "Bright Vision",
+  "company": "崛亮视觉",
+  "intendedFirstPartyLicense": "Apache-2.0",
+  "licenseBoundary": "First-party community source is prepared under Apache-2.0 with Copyright 2026 崛亮视觉 (Bright Vision); third-party packages retain their own licenses and notices.",
+  "candidateModules": [
+    "tools/bim-viewer",
+    "tools/bright-open-source",
+    "tools/bright-revit-exporter",
+    "tools/bright-revit-installer"
+  ],
+  "sourceSnapshotDate": "2026-10-28",
+  "sourceSnapshotSha256": "581573cc11e8f13eddfabafad838de08ea78cd25a0d2dbfa76222b7ed5dec06a",
+  "files": [
+    {
+      "path": "tools/bim-viewer/.gitignore",
+      "bytes": 120,
+      "sha256": "8a7c3e5dc5b101867e6b7754edbfa055f30c29ee8bfd92c7135d44db1746d644"
+    },
+    {
+      "path": "tools/bim-viewer/BUILDING.md",
+      "bytes": 4065,
+      "sha256": "8a164952415638d83ff410333acda25f5f53a537203be877a700accbb955a5da"
+    },
+    {
+      "path": "tools/bim-viewer/electron/archive-extractor.cjs",
+      "bytes": 6946,
+      "sha256": "24c391d9164e06b64c778563023d424a89430b4f5bb17ecfcb59fc498f7017e6"
+    },
+    {
+      "path": "tools/bim-viewer/electron/desktop-updates.cjs",
+      "bytes": 9366,
+      "sha256": "d307d3f0b974ce85c6290d47f7bc6733c3971999efee2035a0622c70a55c4528"
+    },
+    {
+      "path": "tools/bim-viewer/electron/github-update-source.cjs",
+      "bytes": 23001,
+      "sha256": "f4b8ef2ede0ae8db0a1a5b7d2b79e652e1eaf05486d53f25414bafed30268532"
+    },
+    {
+      "path": "tools/bim-viewer/electron/main.cjs",
+      "bytes": 9780,
+      "sha256": "5c7c4098f409cc0c464c15eadf2e7aff9b13a93760fea1cdccaa816f709a80b6"
+    },
+    {
+      "path": "tools/bim-viewer/electron/preload.cjs",
+      "bytes": 1702,
+      "sha256": "a54c9c3c10b1d1c92b512989da019561ff87f3dcb2e6d96ae7a177bb32cad297"
+    },
+    {
+      "path": "tools/bim-viewer/electron/revit-integration.cjs",
+      "bytes": 6324,
+      "sha256": "1029d7c1b3d75686c2d79eacc1a702dc88e0a5d0f2a27d9a4d3f83307657d95d"
+    },
+    {
+      "path": "tools/bim-viewer/electron/static-assets.cjs",
+      "bytes": 2113,
+      "sha256": "c8def0b2f314c933f89615b14c3f26d449ab00d447df0448e6dc1085e1d20b5e"
+    },
+    {
+      "path": "tools/bim-viewer/electron/update-release.json",
+      "bytes": 168,
+      "sha256": "167564b4db46e178e220a465159921c8200b858dbdfe113e493cb119c7435b22"
+    },
+    {
+      "path": "tools/bim-viewer/electron/update-service.cjs",
+      "bytes": 13694,
+      "sha256": "6ef5d90a98d3f6d2ff6c649dfc5ee43ca851926b4c22f36977f3920fb69ab959"
+    },
+    {
+      "path": "tools/bim-viewer/electron-builder.release.cjs",
+      "bytes": 528,
+      "sha256": "c0ff3e692f1306cf79719798364844c83859091be871db3bb908e3b38462bb32"
+    },
+    {
+      "path": "tools/bim-viewer/index.html",
+      "bytes": 779,
+      "sha256": "a21ae7851ca08b65df2b4b8017d61afad58e4662f0b1d36f29f43c7b5b9257e3"
+    },
+    {
+      "path": "tools/bim-viewer/installer/Install-RevitIntegration.ps1",
+      "bytes": 11596,
+      "sha256": "58c321b2174b5f58f639c90e6c92236f60c1ca888cc4608ee809ba558dcd3e3b"
+    },
+    {
+      "path": "tools/bim-viewer/installer/revit-component-lock.json",
+      "bytes": 4524,
+      "sha256": "2c3c3847ec2b2752b508d30c0a130d53c99e29aaba71fbfba060d67626bd2f61"
+    },
+    {
+      "path": "tools/bim-viewer/installer/revit-integration.nsh",
+      "bytes": 1980,
+      "sha256": "514400ed96223b126a9dd9c6b19365c3730d44ca742ec87fcde095bf815fbea9"
+    },
+    {
+      "path": "tools/bim-viewer/installer/tests/Test-RevitIntegration.ps1",
+      "bytes": 12418,
+      "sha256": "fe1613de0dc8860283f1aaf109cf163376eafa7a7ddd77171f37b0a56d9b4e12"
+    },
+    {
+      "path": "tools/bim-viewer/LICENSE",
+      "bytes": 11358,
+      "sha256": "cfc7749b96f63bd31c3c42b5c471bf756814053e847c10f3eb003417bc523d30"
+    },
+    {
+      "path": "tools/bim-viewer/native/ArchiveExtractor.cs",
+      "bytes": 4768,
+      "sha256": "d39955f873bb4337777a1870a149b15764f9f72a4cccf57c09202ac8f36ad31e"
+    },
+    {
+      "path": "tools/bim-viewer/NOTICE",
+      "bytes": 1126,
+      "sha256": "825c409809562dc01049528d26ce4ec3606775457fe8685ba34c25eaf4d07067"
+    },
+    {
+      "path": "tools/bim-viewer/package-lock.json",
+      "bytes": 155139,
+      "sha256": "a117caa7dd35a0ee2bb1a745dd2c8f60a25891b7236185c5f324bbe292e0adfc"
+    },
+    {
+      "path": "tools/bim-viewer/package.json",
+      "bytes": 3581,
+      "sha256": "c5ce6920d6e5863f2786c0817180c030ec69dba307757c4b861d3b7374d83173"
+    },
+    {
+      "path": "tools/bim-viewer/README.md",
+      "bytes": 5999,
+      "sha256": "e46a2e50bc8c4162d95f56176a80f904b84f7a72128a82bb217e3ab181aa3fad"
+    },
+    {
+      "path": "tools/bim-viewer/ROADMAP.md",
+      "bytes": 2209,
+      "sha256": "00c612f6b01f3687cadef9fa16b66412e31f71c7fdfd4b709ac5e9849a775277"
+    },
+    {
+      "path": "tools/bim-viewer/scripts/build-brand-icon.mjs",
+      "bytes": 3887,
+      "sha256": "c7366015d95d8418c6cfdaff3ee737e02aa0596425a1c78616b599f9b11b81e5"
+    },
+    {
+      "path": "tools/bim-viewer/scripts/build-native.mjs",
+      "bytes": 8255,
+      "sha256": "9bcc957cf09cfc64ebbf67712a3a94634a81410901cd729ac19c460888deb1f4"
+    },
+    {
+      "path": "tools/bim-viewer/scripts/copy-notices.mjs",
+      "bytes": 1717,
+      "sha256": "937937b695cb9143d7bcccecbd5809aa34b9c50c22862cb041206b7ca4f85248"
+    },
+    {
+      "path": "tools/bim-viewer/scripts/diagnose-imports.mjs",
+      "bytes": 1334,
+      "sha256": "d59a3203ae9c876837ac443743ff18332f28b00209624fc3255e4f6b1ff20862"
+    },
+    {
+      "path": "tools/bim-viewer/scripts/prepare-revit.mjs",
+      "bytes": 7736,
+      "sha256": "72441855e69ab5db1c96512e7a71ddc86b1f964704912732c8957a59b8c3be16"
+    },
+    {
+      "path": "tools/bim-viewer/scripts/publish-update.mjs",
+      "bytes": 5436,
+      "sha256": "4d4d3298a39f27b93a6d84c0c1adb1a3f157bc2560b9518892e3475edc073ebe"
+    },
+    {
+      "path": "tools/bim-viewer/scripts/review-revit-bundle.mjs",
+      "bytes": 10897,
+      "sha256": "60cf256c3210be95a2d7bfd84756478aa13b4a34a1456f374cb7d7d889be6d8d"
+    },
+    {
+      "path": "tools/bim-viewer/scripts/serve-web.mjs",
+      "bytes": 2016,
+      "sha256": "5a720d6fdfe5afa049a93da3f2224994a5d4c226bd8ba042728eaa165520352a"
+    },
+    {
+      "path": "tools/bim-viewer/scripts/start-desktop.mjs",
+      "bytes": 521,
+      "sha256": "076d239e7bee5d760a58f5a6388cab1b297b7d7c73cdb3962879b65235c7922c"
+    },
+    {
+      "path": "tools/bim-viewer/scripts/static-assets.test.mjs",
+      "bytes": 1547,
+      "sha256": "f3d9b4ffe05e8d38613f966adf978ab202ea50d58100d74e1aaa8520bcaa8567"
+    },
+    {
+      "path": "tools/bim-viewer/scripts/verify-brand.mjs",
+      "bytes": 803,
+      "sha256": "b787f5b345fdd5d4710dd54bec90bfa78704fa2b2e11e2b03ed41389f80ababf"
+    },
+    {
+      "path": "tools/bim-viewer/scripts/verify-release-trust.ps1",
+      "bytes": 6349,
+      "sha256": "96731159fd03e8b9d6e05fa7cca0521697ae53539b56f8335e721baef2a0fd8f"
+    },
+    {
+      "path": "tools/bim-viewer/src/brand.ts",
+      "bytes": 1063,
+      "sha256": "1fc802ad56df949f74dc6e37487ea0490c01093a52aca5a3e5dcdb6d7474d785"
+    },
+    {
+      "path": "tools/bim-viewer/src/component-index.ts",
+      "bytes": 5670,
+      "sha256": "6a7d27308135fc527e41b59519468e23a3b0c689aba8ed727d30e4923e6d832a"
+    },
+    {
+      "path": "tools/bim-viewer/src/component-index.worker.ts",
+      "bytes": 891,
+      "sha256": "c61f61cc2e229177da665544d26c9e27859185a9ad8dbf4bf3f9af45b859b491"
+    },
+    {
+      "path": "tools/bim-viewer/src/demo.ts",
+      "bytes": 2527,
+      "sha256": "244a88382bebf377a9c3f42ede7bcb141318111316cb3276c54f50da9807da53"
+    },
+    {
+      "path": "tools/bim-viewer/src/desktop.d.ts",
+      "bytes": 2117,
+      "sha256": "67beacd702cce202a99bd8639be0625e44430a88269b3266e6e9d430112beb92"
+    },
+    {
+      "path": "tools/bim-viewer/src/i18n.ts",
+      "bytes": 26452,
+      "sha256": "dd9c01f1231012b8eb8f8aceeeb9d3cf7d8869d72eec813c9e014f199eb4254f"
+    },
+    {
+      "path": "tools/bim-viewer/src/import/json-stream.ts",
+      "bytes": 2637,
+      "sha256": "fe534794a168dd3a24f3e77cdeb8f51de333df3bf3b7ba2770063622cd77e184"
+    },
+    {
+      "path": "tools/bim-viewer/src/import/packages.ts",
+      "bytes": 2706,
+      "sha256": "ccb00078343752974e56942517cab6eca6340c73715dbcf105896dfaccfd4522"
+    },
+    {
+      "path": "tools/bim-viewer/src/import/parse.ts",
+      "bytes": 22407,
+      "sha256": "623af16cbda3bd20c95b036e7beb24b9ef7a054aeccc1bf8d11aa3b6635b664c"
+    },
+    {
+      "path": "tools/bim-viewer/src/import/zip.ts",
+      "bytes": 12425,
+      "sha256": "28b636ccf4c871c29120bc65bf90285506f1b79d70dcedcd2c487e87fdb54137"
+    },
+    {
+      "path": "tools/bim-viewer/src/main.ts",
+      "bytes": 67364,
+      "sha256": "4655e565c7fa66d8501cdb9942d24a0a52cd5481027f7b7b385ea71018fa14a6"
+    },
+    {
+      "path": "tools/bim-viewer/src/model.ts",
+      "bytes": 1579,
+      "sha256": "c8d0640ab61c90d490a0ad256b615c8f5049f6ddea765cc159f51e97dec84bef"
+    },
+    {
+      "path": "tools/bim-viewer/src/model.worker.ts",
+      "bytes": 5003,
+      "sha256": "3fbb3b17a1c629e96ea5dd484870fa0c862c2d82d34ec1b44261e422018f51a4"
+    },
+    {
+      "path": "tools/bim-viewer/src/quantities.ts",
+      "bytes": 14834,
+      "sha256": "255b922dac86777f374da370dd9898cbf708c12ee306b90561fb7a8904941605"
+    },
+    {
+      "path": "tools/bim-viewer/src/quantity-ui.css",
+      "bytes": 2626,
+      "sha256": "6101f74d27b0915092099aa3fa8dda8a7bbcd812454fa278bb6f985e3a52a2e9"
+    },
+    {
+      "path": "tools/bim-viewer/src/quantity-ui.ts",
+      "bytes": 12011,
+      "sha256": "13093eebf2bc91bd876aade3ed05c27f276a8fe8646288e9b10a9d4b76a29786"
+    },
+    {
+      "path": "tools/bim-viewer/src/revit-ui.css",
+      "bytes": 1507,
+      "sha256": "3e3612d799a572cd81097ff1c3bca285de169a44954a7f4322dc4755355415c2"
+    },
+    {
+      "path": "tools/bim-viewer/src/revit-ui.ts",
+      "bytes": 8037,
+      "sha256": "040e47e4d4ba73d6e0e57097e78716c5657be081b80d887d4ccf077cef408bf6"
+    },
+    {
+      "path": "tools/bim-viewer/src/saved-views.ts",
+      "bytes": 3529,
+      "sha256": "1d3e80275a6c37ef7959d252728e7510f345e443987c57fbf8c65ffd031a5aa4"
+    },
+    {
+      "path": "tools/bim-viewer/src/style.css",
+      "bytes": 21068,
+      "sha256": "68226e79bdd8717c21a1cbca0d0e92b92efa4973da9775a40730387fc0a732c2"
+    },
+    {
+      "path": "tools/bim-viewer/src/update-ui.css",
+      "bytes": 529,
+      "sha256": "da7e82288e8cb3aa7cb4c54cec3b7d6bdd5ca3dfaa1509f2593cddb180519677"
+    },
+    {
+      "path": "tools/bim-viewer/src/update-ui.ts",
+      "bytes": 7759,
+      "sha256": "970b8d3e52a429da9f1524560b0a87c6d1e069ab4bff62bb846119ca43cce0e3"
+    },
+    {
+      "path": "tools/bim-viewer/src/viewer/geometry.ts",
+      "bytes": 3938,
+      "sha256": "89f622e5af4a88cb5e2b3775f74fa10df111afce46b9139b196c699cfb8f3ec2"
+    },
+    {
+      "path": "tools/bim-viewer/src/viewer/model-viewer.ts",
+      "bytes": 53128,
+      "sha256": "0abfac3852ee07e8f4c0b5950a5ae993c03111e258e22be82ad749ef1328f191"
+    },
+    {
+      "path": "tools/bim-viewer/src/viewer/spatial.ts",
+      "bytes": 7628,
+      "sha256": "9a7ba628d776558e2ba0b7489cb1a9ad191a56676206326ba2fb7e49a01b9d7b"
+    },
+    {
+      "path": "tools/bim-viewer/tests/archive-extractor.test.ts",
+      "bytes": 14018,
+      "sha256": "2cbca22a55295e7ce5a242817380f989d95b1d86d2bd8f0af9a1457f61918170"
+    },
+    {
+      "path": "tools/bim-viewer/tests/archive-native.mjs",
+      "bytes": 2317,
+      "sha256": "c2e5510f5df622343288d60b13cafbaa15b12474ca140627e5633c02b4ccdc7e"
+    },
+    {
+      "path": "tools/bim-viewer/tests/branding.test.ts",
+      "bytes": 1466,
+      "sha256": "004aaa4067fdf7047a64ef8d1b02c173121c13ec3c8394bde2c755e8d9521818"
+    },
+    {
+      "path": "tools/bim-viewer/tests/browser-open-source-updates.mjs",
+      "bytes": 8860,
+      "sha256": "51290317b1a3a866e7c808248480720f418dd426f5385930139a183f678842b1"
+    },
+    {
+      "path": "tools/bim-viewer/tests/browser-revit-ui.mjs",
+      "bytes": 11911,
+      "sha256": "f44e29f963115ab6221b10abd21c6629ab269e84ae09cff47c257469432ac635"
+    },
+    {
+      "path": "tools/bim-viewer/tests/browser-smoke.mjs",
+      "bytes": 15960,
+      "sha256": "ef9dff07f45e13387d2c5584d0a625e50c394e1d3d7d8f105a47571a5cdbc492"
+    },
+    {
+      "path": "tools/bim-viewer/tests/browser-update-language.mjs",
+      "bytes": 26144,
+      "sha256": "0515999cdd4f7a9621054e0f909d941723be794e8aea0c887c457dc3f50c3b71"
+    },
+    {
+      "path": "tools/bim-viewer/tests/browser-workbench.mjs",
+      "bytes": 10671,
+      "sha256": "accab1c48fe3ea98eede241f5bcf0caeccdc0959c633c58983991a9e13515d73"
+    },
+    {
+      "path": "tools/bim-viewer/tests/component-index.test.ts",
+      "bytes": 2372,
+      "sha256": "b9cef1bd2e907b40c77a628e310896794c5b85818ae0349ce066db5070230319"
+    },
+    {
+      "path": "tools/bim-viewer/tests/desktop-updates.test.ts",
+      "bytes": 12227,
+      "sha256": "ec160c3a9a79c9320a50236c460eb5fbf7fcae24605302a33614e8298b51e446"
+    },
+    {
+      "path": "tools/bim-viewer/tests/github-update-source.test.ts",
+      "bytes": 17354,
+      "sha256": "135c2f5f46ff998a7c7b8c22cd26a6164e19fc6365a9175b883868b1e070aa2b"
+    },
+    {
+      "path": "tools/bim-viewer/tests/i18n.test.ts",
+      "bytes": 2312,
+      "sha256": "5b587d26fe40df53aa6528463b0ea37a497c60cb875ef1d471fb06a28288b995"
+    },
+    {
+      "path": "tools/bim-viewer/tests/independent-viewer.test.ts",
+      "bytes": 1435,
+      "sha256": "9d0491b58a66a7b6a6b438eed059229514fadf3d6e2628270f04bf6a4427112d"
+    },
+    {
+      "path": "tools/bim-viewer/tests/model-stream.test.ts",
+      "bytes": 6244,
+      "sha256": "a2107678b8431f9b86961270b5e02bf5d32104a551ba330264abcd36d6085ccd"
+    },
+    {
+      "path": "tools/bim-viewer/tests/model.test.ts",
+      "bytes": 11788,
+      "sha256": "371caaa5bf5ee8fbd5ccc6cca59a74e6bea38afd4ce4ad9cc3d5cdadf850c202"
+    },
+    {
+      "path": "tools/bim-viewer/tests/native-helper-acceptance.mjs",
+      "bytes": 3451,
+      "sha256": "56850f30d49c4c294d9c541ed77dae2660c1be121cc6ae38f575c5481ee65ea0"
+    },
+    {
+      "path": "tools/bim-viewer/tests/packages.test.ts",
+      "bytes": 2117,
+      "sha256": "c466e1627ff2ac6100946a7a542f8d65b4aed85cbe828607c347a2a99965ce0b"
+    },
+    {
+      "path": "tools/bim-viewer/tests/prepare-revit.test.ts",
+      "bytes": 8150,
+      "sha256": "a7e14e41d4103705c28953b147ae594b1a1cc1a1672b1f809e9b6082190043fa"
+    },
+    {
+      "path": "tools/bim-viewer/tests/quantities.test.ts",
+      "bytes": 20841,
+      "sha256": "7561aa181f2cbbcb8afa55d3da8b5351c1ec1c2b7f3c9c76fcc16fd9f8bda632"
+    },
+    {
+      "path": "tools/bim-viewer/tests/quantity-browser-smoke.mjs",
+      "bytes": 12383,
+      "sha256": "7985dbefffde334e35565264319fd3f962c113a0d3ccf3bf19d4fab6c0b3c66e"
+    },
+    {
+      "path": "tools/bim-viewer/tests/quantity-exporter-contract.mjs",
+      "bytes": 2037,
+      "sha256": "4418dc8340a5a7c234dd16ced9b5c0796133f4e4c178a633d1938f19217acdc4"
+    },
+    {
+      "path": "tools/bim-viewer/tests/release-config.test.ts",
+      "bytes": 2524,
+      "sha256": "7b5c6e95050518370547da34e526fb495ebf6240b1aaee71a17bbd907a3be265"
+    },
+    {
+      "path": "tools/bim-viewer/tests/renderer-geometry.test.ts",
+      "bytes": 3148,
+      "sha256": "951f55ea5b71f6f9cb9a2d03f54a86e2cd970cdbe5b92e71e838bd9cb1cf9713"
+    },
+    {
+      "path": "tools/bim-viewer/tests/renderer-interaction.test.ts",
+      "bytes": 6343,
+      "sha256": "51785de1e972ec2505c69099482d698441a4c7fe339972fda35cf81d19a3a997"
+    },
+    {
+      "path": "tools/bim-viewer/tests/renderer-spatial.test.ts",
+      "bytes": 4437,
+      "sha256": "c876f35d565f4792a35685a1dc884d9e1c4c1ddda24cc41c41e4eb995116fb5f"
+    },
+    {
+      "path": "tools/bim-viewer/tests/review-revit-bundle.test.ts",
+      "bytes": 6376,
+      "sha256": "2db2526486902c711d6a3529ea1ef0e72f5eaea683e951d39957f0de3fce8a3c"
+    },
+    {
+      "path": "tools/bim-viewer/tests/revit-host-browser.mjs",
+      "bytes": 9121,
+      "sha256": "17ddededd670cc29b1e0004ffcffc9fc5c8dba31d82d5f43b115a64c9f6bab11"
+    },
+    {
+      "path": "tools/bim-viewer/tests/revit-host-verifier.test.mjs",
+      "bytes": 9517,
+      "sha256": "391b2271566ad5c026e95dc3e55c5f7d3a274b81f4bc346d51b45b88c5e9758f"
+    },
+    {
+      "path": "tools/bim-viewer/tests/saved-views.test.ts",
+      "bytes": 1417,
+      "sha256": "143cf950f24b2491e8afde35613ec4c38e46063594ed29e5ed85349f6550d406"
+    },
+    {
+      "path": "tools/bim-viewer/tests/Test-ReleaseTrust.ps1",
+      "bytes": 4138,
+      "sha256": "8648ec41338224eb88404d554d27f040d5903daac26e1f032055178115895032"
+    },
+    {
+      "path": "tools/bim-viewer/tests/updater.test.ts",
+      "bytes": 14989,
+      "sha256": "dc3d2b8ac36c27e5625b71831fcd9d8c85f20e0510dc5b91ef71c5b5b40ee95c"
+    },
+    {
+      "path": "tools/bim-viewer/tests/verify-quantity-package.mjs",
+      "bytes": 8765,
+      "sha256": "820e92ef14702b3ff9da3d4c62c325d8aec6c2a99009f73ad6d66350d72d48cb"
+    },
+    {
+      "path": "tools/bim-viewer/tests/verify-revit-host.mjs",
+      "bytes": 20333,
+      "sha256": "96e691c4f99eda939e6def3acb02077a249546476ad770e98a9d1ea55de0eb4f"
+    },
+    {
+      "path": "tools/bim-viewer/tests/workbench-scenarios.mjs",
+      "bytes": 9380,
+      "sha256": "b5cc132e21f435d6c9711839247d153eb0d6717b3013f4307d218fbd88e4afc7"
+    },
+    {
+      "path": "tools/bim-viewer/THIRD-PARTY-NOTICES.md",
+      "bytes": 2137,
+      "sha256": "a7a8b98b913ce1b9e5e14773e2a7c1e37b247ebe176b97d551ea327008a72a0c"
+    },
+    {
+      "path": "tools/bim-viewer/tsconfig.json",
+      "bytes": 422,
+      "sha256": "1e7b02e332322287734f990056853fe346fb4053daff4cb8612af4471d24b781"
+    },
+    {
+      "path": "tools/bim-viewer/vite.config.ts",
+      "bytes": 303,
+      "sha256": "48524cc169dcd5e08b155b50746694fd448afce9c3afbcd22b2bd347db1d8363"
+    },
+    {
+      "path": "tools/bright-open-source/legal/BRANDING.md",
+      "bytes": 1336,
+      "sha256": "3598e2eca633f981c3c6797ec4c84fed01908018e5e514ea8e58388c7ff10628"
+    },
+    {
+      "path": "tools/bright-open-source/legal/COMMUNITY-AND-SERVICES.md",
+      "bytes": 2187,
+      "sha256": "3b51564d811445c625b46a203650cd463551144f4e5a5d3d60da2fa18c5c2048"
+    },
+    {
+      "path": "tools/bright-open-source/legal/LICENSE",
+      "bytes": 11358,
+      "sha256": "cfc7749b96f63bd31c3c42b5c471bf756814053e847c10f3eb003417bc523d30"
+    },
+    {
+      "path": "tools/bright-open-source/legal/NOTICE",
+      "bytes": 1126,
+      "sha256": "825c409809562dc01049528d26ce4ec3606775457fe8685ba34c25eaf4d07067"
+    },
+    {
+      "path": "tools/bright-open-source/prepare-github-release.mjs",
+      "bytes": 13993,
+      "sha256": "fb0b1ac0c583c86c1a2a44cc06958614bc8955b6b29eb6d1076eb753621e0f62"
+    },
+    {
+      "path": "tools/bright-open-source/Publish-GitHubDraft.ps1",
+      "bytes": 3649,
+      "sha256": "a584f55f27eae497d015d828053e83d17a67cdf45f7f58ead631ac143a597081"
+    },
+    {
+      "path": "tools/bright-open-source/RELEASE_PLAN.md",
+      "bytes": 7593,
+      "sha256": "25fb122ebcd3d9ac1564cec32bdfc6e97525b5dfad8c9da5ab8f0b3d76c6c7bb"
+    },
+    {
+      "path": "tools/bright-open-source/templates/public-CONTRIBUTING.md",
+      "bytes": 2727,
+      "sha256": "bce2ec0e63c5146fd84887c6c5e4f61db1279b8175675c7726ac776acceed254"
+    },
+    {
+      "path": "tools/bright-open-source/templates/public-README.md",
+      "bytes": 4198,
+      "sha256": "5fc6a079e15bfc369b89d0f783290a4705d385c421de5c6b0cf7a9fcc303f12d"
+    },
+    {
+      "path": "tools/bright-open-source/templates/public-SECURITY.md",
+      "bytes": 2242,
+      "sha256": "8e697b72f7ebbb5e49a5e3a1efed7a8316f0174db189a158094e7a37b8b13146"
+    },
+    {
+      "path": "tools/bright-open-source/templates/public.gitattributes",
+      "bytes": 161,
+      "sha256": "05af435af1e53eb67cac71d2ebe74348ab809baef1ece758907892b862dc0891"
+    },
+    {
+      "path": "tools/bright-open-source/templates/public.gitignore",
+      "bytes": 998,
+      "sha256": "672a729b0e6c68f62feee26e61270c919e3c1dbbc24c1928055ebcde0dd142dc"
+    },
+    {
+      "path": "tools/bright-open-source/templates/source-ci.yml.example",
+      "bytes": 1973,
+      "sha256": "51fd5de36676cce854c59664e48bb2435cfaa7c8aaafe46b62a22e1d159ed6ca"
+    },
+    {
+      "path": "tools/bright-open-source/tests/prepare-github-release.test.mjs",
+      "bytes": 7541,
+      "sha256": "2c54111b86c0d4c514f07294b4102673a6b0d9e5408b456b21b1ea23032eebab"
+    },
+    {
+      "path": "tools/bright-open-source/tests/Test-PublishGitHubDraft.ps1",
+      "bytes": 4722,
+      "sha256": "7f186b3541f79b2f35deb2f14966d881b1f5fed4341e7d447ffc0b7f2954f355"
+    },
+    {
+      "path": "tools/bright-revit-exporter/.gitignore",
+      "bytes": 12,
+      "sha256": "defc758c6720f3e63dbe47182a9c485a47eeed2999b3903f8dbfbdca4c906499"
+    },
+    {
+      "path": "tools/bright-revit-exporter/Benchmark-Exporter.ps1",
+      "bytes": 2122,
+      "sha256": "53144d170007072b752c14ee26e829b1e6362fbb451fd3e08ce97b6c24be84ed"
+    },
+    {
+      "path": "tools/bright-revit-exporter/BenchmarkFixture.cs",
+      "bytes": 7944,
+      "sha256": "c4bd7b3befd4b0a0e1b3cbe0dd2fa17c2cd1f6ffa3fb7bc4ad0073054dd73342"
+    },
+    {
+      "path": "tools/bright-revit-exporter/Branding.cs",
+      "bytes": 408,
+      "sha256": "99b6145d71fd0ded0efa4ff00500f9baafa8174a89b61f7f153835969f0b8d14"
+    },
+    {
+      "path": "tools/bright-revit-exporter/BrandPixels.cs",
+      "bytes": 2609,
+      "sha256": "09e559a5d19d1f36ec5085a02d725b160b2a58f1eb2abe12de45488a542e15ea"
+    },
+    {
+      "path": "tools/bright-revit-exporter/Build-Exporter.ps1",
+      "bytes": 10423,
+      "sha256": "672ca3b65ad25e5a985646b1768483505860a1e7659ac4e906f1f9ab58ee2ca7"
+    },
+    {
+      "path": "tools/bright-revit-exporter/BUILDING.md",
+      "bytes": 2459,
+      "sha256": "45c425fdd72f710892cbe127785abb1ff2bab49ebc6529de12c050f7ab2cb297"
+    },
+    {
+      "path": "tools/bright-revit-exporter/CIVIL_QUANTITY_ROADMAP.md",
+      "bytes": 12127,
+      "sha256": "858ec6b59708bb1930b2b161f2666166b9a3f5b42078c7671d453df1c77d183f"
+    },
+    {
+      "path": "tools/bright-revit-exporter/CivilLevelResolver.cs",
+      "bytes": 6701,
+      "sha256": "e803bd01325798e4df37e7ed62459168d47fe40d7d487357fa3dbab7ae64192f"
+    },
+    {
+      "path": "tools/bright-revit-exporter/CivilProject.cs",
+      "bytes": 24931,
+      "sha256": "14703321103775091cf72fadf8fe0dc7a5ba6c4911c150b41643a35cb3317108"
+    },
+    {
+      "path": "tools/bright-revit-exporter/CivilProjectWindow.cs",
+      "bytes": 16792,
+      "sha256": "10b708824167fc05aeec33abf2a71ac5afad7a3cedc3a6d661934b3a37f07b1c"
+    },
+    {
+      "path": "tools/bright-revit-exporter/CivilQuantityCommand.cs",
+      "bytes": 5194,
+      "sha256": "16a004558873e3759b62e56a806c444ea4ce059cdfa38a9ec2983e194dbf92aa"
+    },
+    {
+      "path": "tools/bright-revit-exporter/CivilQuantityModel.cs",
+      "bytes": 27825,
+      "sha256": "5aace88f9ccc4dd82fc8bcc1e4b333b8b5abd1dbcc7384057e69c1975f5f409e"
+    },
+    {
+      "path": "tools/bright-revit-exporter/CivilQuantityWindow.cs",
+      "bytes": 42021,
+      "sha256": "c27ba49be1c73716accb73b9998def402f1ec028392a108fce940f86955a28c0"
+    },
+    {
+      "path": "tools/bright-revit-exporter/CivilWallCalculation.cs",
+      "bytes": 16651,
+      "sha256": "7c38703b9d900d733b9a142591042e0b9d1a689d3915f9a26f82111660ee0ce8"
+    },
+    {
+      "path": "tools/bright-revit-exporter/CivilWallCommand.cs",
+      "bytes": 3795,
+      "sha256": "613f94904fa0d717e890d7cc6066f2ea366066cc4ac85e9c28ce41a71211a0e8"
+    },
+    {
+      "path": "tools/bright-revit-exporter/CivilWallFacts.cs",
+      "bytes": 4029,
+      "sha256": "39e05a44ad40d430bd639eaa465c64f207eb2993cd4bcf583e11e70e0de5df21"
+    },
+    {
+      "path": "tools/bright-revit-exporter/CivilWallWindow.cs",
+      "bytes": 19123,
+      "sha256": "3ee8bf0c832746f516a5030197383a8905b9a5d329ab8e0716e806be57943cea"
+    },
+    {
+      "path": "tools/bright-revit-exporter/ExportAttachments.cs",
+      "bytes": 27529,
+      "sha256": "554d73a95b0feb238a6a7b12664925e74cb1f88d6012e286d83e412b234b2813"
+    },
+    {
+      "path": "tools/bright-revit-exporter/ExportFixture.cs",
+      "bytes": 18877,
+      "sha256": "802a7808804926d1ed4c064dde77ae559e87a10196beaf71a9ed2b46821982cd"
+    },
+    {
+      "path": "tools/bright-revit-exporter/ExportOptions.cs",
+      "bytes": 786,
+      "sha256": "8048b2cb2cb3a6cd643cba91d7157839f7fc8ae63828b2bee40334d7913bd624"
+    },
+    {
+      "path": "tools/bright-revit-exporter/ExportOptionsDialog.cs",
+      "bytes": 20881,
+      "sha256": "da667ebe8b72933a5defd1250725e328a62751c162f0f90525cdf4dcbe655c2e"
+    },
+    {
+      "path": "tools/bright-revit-exporter/ExportStatistics.cs",
+      "bytes": 6545,
+      "sha256": "c08e9682833cadc955a16594edcfc9a20d4994ff1d0a4ad642ce6d010509ce54"
+    },
+    {
+      "path": "tools/bright-revit-exporter/Json.cs",
+      "bytes": 4647,
+      "sha256": "2ffe46676d6dc974aa50f1c0140433ee2dae69ece9b618491529b20270d8cc1d"
+    },
+    {
+      "path": "tools/bright-revit-exporter/PackageWriter.cs",
+      "bytes": 16695,
+      "sha256": "1ff8d5bbccf88f5a9267a6b9a4aac248bd4d9bb5be446bdc0f84dcf3dcae6e30"
+    },
+    {
+      "path": "tools/bright-revit-exporter/PERFORMANCE_REVIEW.md",
+      "bytes": 8417,
+      "sha256": "05df9b0b22be9a55f0ba0d775579db69716692027711d3be337cc896b39d9963"
+    },
+    {
+      "path": "tools/bright-revit-exporter/QUANTITY_SNAPSHOT.md",
+      "bytes": 3834,
+      "sha256": "7602974300708914e8b655e9c40870a92d61c847651bac8b54a51753b7b1d5df"
+    },
+    {
+      "path": "tools/bright-revit-exporter/QuantitySnapshot.cs",
+      "bytes": 2676,
+      "sha256": "bc6a65f1522ef367378114d8551b728092ce512aef616e9ce9c2f731c2af8166"
+    },
+    {
+      "path": "tools/bright-revit-exporter/README.md",
+      "bytes": 7993,
+      "sha256": "56dba376438fa58539d6b652cd211ad2509c3c9532a9bc3ad843b88169aeec97"
+    },
+    {
+      "path": "tools/bright-revit-exporter/reference-paths.example.json",
+      "bytes": 393,
+      "sha256": "3eb2c613e4310e4e2895bd81e89f55cc8cb0c66663e8ba0143db918fe2389313"
+    },
+    {
+      "path": "tools/bright-revit-exporter/RevitApp.cs",
+      "bytes": 32244,
+      "sha256": "edd85676fd0a743e9c2898c071e40265f8d72470b5b825574f99440c9e548a12"
+    },
+    {
+      "path": "tools/bright-revit-exporter/RevitCivilQuantityReader.cs",
+      "bytes": 23830,
+      "sha256": "4a90079aa9ea78ddc7678c4eb26846f636f99ee07dfef48b147639b2ca885ce9"
+    },
+    {
+      "path": "tools/bright-revit-exporter/RevitCivilWallReader.cs",
+      "bytes": 35331,
+      "sha256": "103b96253ae0af6fa6e3789ff1e8caf947bdd765dc0e29d75fc247f89e5cbeb2"
+    },
+    {
+      "path": "tools/bright-revit-exporter/RevitQuantityReader.cs",
+      "bytes": 1810,
+      "sha256": "3dcb162e9780f422b286eb6fc5432515b8351401e39ed16963198ee82ca724ce"
+    },
+    {
+      "path": "tools/bright-revit-exporter/SelectedViewResolver.cs",
+      "bytes": 1933,
+      "sha256": "d0d350308bae43a439bd66d7460aae36cf6f64aa8f6d4334964b056bdab23cbc"
+    },
+    {
+      "path": "tools/bright-revit-exporter/tests/civil-host-verifier.test.mjs",
+      "bytes": 13961,
+      "sha256": "f016b3e6c779c1218f9c82ded36c0e330357cf604970eadabd35c0a78cbae3f5"
+    },
+    {
+      "path": "tools/bright-revit-exporter/tests/civil-project-host-verifier.test.mjs",
+      "bytes": 11447,
+      "sha256": "ee23aa72061bae18540331dd5d9a1085117bbd6febb834422643c456ffceedd0"
+    },
+    {
+      "path": "tools/bright-revit-exporter/tests/civil-wall-host-verifier.test.mjs",
+      "bytes": 6389,
+      "sha256": "eb375e67e5fec0f80a1ac05a335018fd2524dbd9b827b3dd074bce11c421db3f"
+    },
+    {
+      "path": "tools/bright-revit-exporter/tests/CivilProjectFixture.cs",
+      "bytes": 19250,
+      "sha256": "fd7b4f666ffed80e26947a6791cfab56917be54fe93f2472c3e557694273e9e6"
+    },
+    {
+      "path": "tools/bright-revit-exporter/tests/CivilQuantityFixture.cs",
+      "bytes": 17416,
+      "sha256": "05f4836886c51203a0b179c7c016ed1bd7639fe7051993800ed3ad97170527cf"
+    },
+    {
+      "path": "tools/bright-revit-exporter/tests/CivilQuantityUiFixture.cs",
+      "bytes": 29979,
+      "sha256": "e61699f9ac172c0465695ce55a14af275cb7dfa16918b6768a4872972f7b9a85"
+    },
+    {
+      "path": "tools/bright-revit-exporter/tests/CivilReaderApiStubs.cs",
+      "bytes": 8289,
+      "sha256": "c7af6e56f97718fcd2a43e17b3cb1ab79cfdb5e5a9f68c391f3c67e7ede083d1"
+    },
+    {
+      "path": "tools/bright-revit-exporter/tests/CivilReaderFixture.cs",
+      "bytes": 25828,
+      "sha256": "c8611bbdf2243d0b0a6494e9208df0110468dc18ec353f5da426f46ed41afc1d"
+    },
+    {
+      "path": "tools/bright-revit-exporter/tests/CivilWallApiStubs.cs",
+      "bytes": 10451,
+      "sha256": "5f573fd8685bd3fd3d193fa0121ec83a251d80f3caf9e07462f31fbeae5e89cf"
+    },
+    {
+      "path": "tools/bright-revit-exporter/tests/CivilWallCalculationFixture.cs",
+      "bytes": 10014,
+      "sha256": "43505d05877b655b69126847d94f1bb9011461863ffb0b46191f74908b66fe23"
+    },
+    {
+      "path": "tools/bright-revit-exporter/tests/CivilWallReaderFixture.cs",
+      "bytes": 15754,
+      "sha256": "c0e014db5b846c2e85c129fea8dc76c452450f9d01c79ce06b92bd6a978a8738"
+    },
+    {
+      "path": "tools/bright-revit-exporter/tests/CivilWallUiFixture.cs",
+      "bytes": 6423,
+      "sha256": "7c26ac3479323657ad5d674b45a74d5594499c579f20ca9c0f319ace177cac34"
+    },
+    {
+      "path": "tools/bright-revit-exporter/tests/ExportOptionsUiFixture.cs",
+      "bytes": 3536,
+      "sha256": "19bc0059fdb0b300f5ddec56a39dbcd292fe7de56b9f317c1b9837923e76c019"
+    },
+    {
+      "path": "tools/bright-revit-exporter/tests/host/Build-CivilWallHostAcceptance.ps1",
+      "bytes": 3056,
+      "sha256": "5ed5b6580ec1e8794543fd30408209d555ad8b4883b90e46ad20d1ee79f155ec"
+    },
+    {
+      "path": "tools/bright-revit-exporter/tests/host/CivilWallHostAcceptanceApp.cs",
+      "bytes": 36745,
+      "sha256": "48d034ceebe475ac947bfcb5466ab0e34d7cf4bfc8b09cd994abe9cf03a31d1f"
+    },
+    {
+      "path": "tools/bright-revit-exporter/tests/host/Invoke-CivilWallHostAcceptance.ps1",
+      "bytes": 11503,
+      "sha256": "77bfac24e2190fda064d5e2f7dc26b58438dca31c91479efdc813094737929fb"
+    },
+    {
+      "path": "tools/bright-revit-exporter/tests/host/README.md",
+      "bytes": 4314,
+      "sha256": "9aa3ce9a2d048274d1a9fbcecb05f15b285c9d56628de1ae06605c843d7d3fdf"
+    },
+    {
+      "path": "tools/bright-revit-exporter/tests/QuantityApiStubs.cs",
+      "bytes": 1376,
+      "sha256": "86f0ee2bd0479bae3bfd3327a483a983b190dff1af7a95331ed3a938ec4f70fa"
+    },
+    {
+      "path": "tools/bright-revit-exporter/tests/QuantitySnapshotFixture.cs",
+      "bytes": 6550,
+      "sha256": "4308bfe1624496d8d3669066ea6ed67a3dbcf01988c9e01f88a81036dd856b12"
+    },
+    {
+      "path": "tools/bright-revit-exporter/tests/RevitUiStubs.cs",
+      "bytes": 1338,
+      "sha256": "ba70c80ab42d4e50f16079d4686cddf00d5e73f8e3dc56802063f312cbf9fa3a"
+    },
+    {
+      "path": "tools/bright-revit-exporter/tests/SelectedViewApiStubs.cs",
+      "bytes": 2447,
+      "sha256": "059be4e44996226a4ff790a657682aeb425d82fbca2290dec61f250c75c690b5"
+    },
+    {
+      "path": "tools/bright-revit-exporter/tests/SelectedViewFixture.cs",
+      "bytes": 6112,
+      "sha256": "77863e29ee2f064fc80908a046c700882e113f2e091824cf182e6c6ed47a77a3"
+    },
+    {
+      "path": "tools/bright-revit-exporter/tests/Test-CivilProjects.ps1",
+      "bytes": 3282,
+      "sha256": "d3b2d21d900b82272436bc08ccb4c033e8ab0acf5aab4ee5ea9e7ed3d7b73fdd"
+    },
+    {
+      "path": "tools/bright-revit-exporter/tests/Test-CivilQuantities.ps1",
+      "bytes": 2666,
+      "sha256": "94c3c515618f4b683d52345b58c83083364d206d8f83e227083f2b4bb1e1969c"
+    },
+    {
+      "path": "tools/bright-revit-exporter/tests/Test-CivilQuantityReader.ps1",
+      "bytes": 1998,
+      "sha256": "c04b3e76d06f36c462fdc09f0aa5e57450e31a4b7da4f6156a97bd5ecba8d933"
+    },
+    {
+      "path": "tools/bright-revit-exporter/tests/Test-CivilQuantityUi.ps1",
+      "bytes": 4757,
+      "sha256": "3c59270f03d3b8d326336a57dfa30d44e70314b19be5b7497029b1e4976389ec"
+    },
+    {
+      "path": "tools/bright-revit-exporter/tests/Test-CivilWallApi.ps1",
+      "bytes": 3994,
+      "sha256": "ccc8513bbe94ef0262f1739a3eef216e6dbd5c8ba893de380054f5cd1ec0bb4c"
+    },
+    {
+      "path": "tools/bright-revit-exporter/tests/Test-CivilWallCalculation.ps1",
+      "bytes": 1526,
+      "sha256": "0218441de863623614c36063eff5d7d89c3fe2814dc58b4c0620901a5e378532"
+    },
+    {
+      "path": "tools/bright-revit-exporter/tests/Test-CivilWallReader.ps1",
+      "bytes": 2293,
+      "sha256": "f2958176df862eb4c2b2d8f0f00c27633caeee690391b98834cde3f8ebd3a442"
+    },
+    {
+      "path": "tools/bright-revit-exporter/tests/Test-CivilWallUi.ps1",
+      "bytes": 1580,
+      "sha256": "31b027b26d6995ac207cd0110a481d4693045dc410d46005ea1c5aa37bd10e83"
+    },
+    {
+      "path": "tools/bright-revit-exporter/tests/Test-ExportOptionsDialog.ps1",
+      "bytes": 2186,
+      "sha256": "21fe5c4dce62dde16f214539ae1505e672166e00ec23df4b1ad17f9a5142a864"
+    },
+    {
+      "path": "tools/bright-revit-exporter/tests/Test-QuantitySnapshot.ps1",
+      "bytes": 1741,
+      "sha256": "c2a1a01b9deab49ea07f210e000a4588b97523c8c603240ead52d36c2e5dc1a5"
+    },
+    {
+      "path": "tools/bright-revit-exporter/tests/Test-SelectedView.ps1",
+      "bytes": 3205,
+      "sha256": "380b72e5ba3e0bdcdb324ed890167d0001fd2656f9da7c41317860c9871abbdc"
+    },
+    {
+      "path": "tools/bright-revit-exporter/tests/verify-civil-host.mjs",
+      "bytes": 26415,
+      "sha256": "71d6c9f61cfc8e1a9a162e7ef2041add245d397c2d00ad5f752cf604d1321a5d"
+    },
+    {
+      "path": "tools/bright-revit-exporter/tests/verify-civil-project-host.mjs",
+      "bytes": 38523,
+      "sha256": "8668996579d0b749b3dbd45d95c58d324f5f7befe6005c90378f42b0c97e9599"
+    },
+    {
+      "path": "tools/bright-revit-exporter/tests/verify-civil-wall-host.mjs",
+      "bytes": 24649,
+      "sha256": "0d60fd108e08481fc4f279ad3b16389d0098d01c459ba828386f06bd8602a9eb"
+    },
+    {
+      "path": "tools/bright-revit-exporter/tests/verify-viewer.mjs",
+      "bytes": 1059,
+      "sha256": "c9b0dfd5452b35b13f3779a1652d09e0c4d3764f56dd6e966b192a897318e1b4"
+    },
+    {
+      "path": "tools/bright-revit-installer/.gitignore",
+      "bytes": 25,
+      "sha256": "08f3a0ae771999da5616a3244380e9608da5a5bf1c61bd8db4521b27019ffe70"
+    },
+    {
+      "path": "tools/bright-revit-installer/BridgeMigration.ps1",
+      "bytes": 10315,
+      "sha256": "e6aa8106f9788b776eb85dba5d6f063c5d300d72e2fe2152d55d6658bcc02995"
+    },
+    {
+      "path": "tools/bright-revit-installer/BrightVisionSetup.cs",
+      "bytes": 19105,
+      "sha256": "c7784b54946e6ade5165e31b5a679e6e0ebae758554efa6b2f0065689597cb00"
+    },
+    {
+      "path": "tools/bright-revit-installer/BrightVisionSetup.manifest",
+      "bytes": 629,
+      "sha256": "2e84b93a94c1eeacc6432cfc5bcd3be9a0d228ff60a008dd5cee2c6bcaaaf766"
+    },
+    {
+      "path": "tools/bright-revit-installer/Build-BrightVisionInstaller.ps1",
+      "bytes": 8725,
+      "sha256": "f32a30e3333fde516789676b8ed55fcd0e0575ef8846f1a72c1ac16baa17b58a"
+    },
+    {
+      "path": "tools/bright-revit-installer/Invoke-BrightVisionSetup.ps1",
+      "bytes": 1986,
+      "sha256": "087936a0e711471fa97d62562544e564a1786c8967b048ca3c0ccc1bf63d9109"
+    },
+    {
+      "path": "tools/bright-revit-installer/LegacyMigration.ps1",
+      "bytes": 11452,
+      "sha256": "15924d45f68879413b4dedbe26daba0791561d4d53e08e2f05ddde3a956ac955"
+    },
+    {
+      "path": "tools/bright-revit-installer/Manage-BrightVisionPlugin.ps1",
+      "bytes": 35809,
+      "sha256": "4877face35d3ee1cef59cb22be5590079c656fef04d6f7527becdc35bfdc9677"
+    },
+    {
+      "path": "tools/bright-revit-installer/README.md",
+      "bytes": 7482,
+      "sha256": "d4312678224259b6e6ef6e9257154b325048ccb73ea842b166000b9fa9971111"
+    },
+    {
+      "path": "tools/bright-revit-installer/Restore-BosExport.ps1",
+      "bytes": 10976,
+      "sha256": "2215680ca09d92e72cad01a7667550f7224898b2ce43af3bc216c2654fa7e226"
+    },
+    {
+      "path": "tools/bright-revit-installer/RevitHosts.ps1",
+      "bytes": 3008,
+      "sha256": "b50cbe85651c313e0deb9f2a3c3669261f7f7c95fa33178a3f8486baaa0d99b7"
+    },
+    {
+      "path": "tools/bright-revit-installer/tests/Test-BrightVisionInstaller.ps1",
+      "bytes": 38400,
+      "sha256": "373805f947e9062f1e60a5cd5e6f962d1ad864cfe97ab5faf9a586cc820f7141"
+    },
+    {
+      "path": "tools/bright-revit-installer/tests/Test-PackagedInstaller.ps1",
+      "bytes": 8460,
+      "sha256": "d3be4a4c82e36b6b0b5c7a3d115d81688946f2c9de656df4a87d0090a9f49174"
+    },
+    {
+      "path": "tools/bright-revit-installer/tests/Test-RestoreBosExport.ps1",
+      "bytes": 7500,
+      "sha256": "5f8371339f6268d4033c970bebe9361600f8f01c82d04ac5a142f0e092e23341"
+    },
+    {
+      "path": "tools/bright-revit-installer/tests/verify-model-fixture.mjs",
+      "bytes": 2213,
+      "sha256": "15c332784103b35f88499619ee0db250f608bdf079523b0fbad4130fe9d97d79"
+    }
+  ],
+  "legalFiles": [
+    {
+      "path": "LICENSE",
+      "sourcePath": "tools/bright-open-source/legal/LICENSE",
+      "bytes": 11358,
+      "sha256": "cfc7749b96f63bd31c3c42b5c471bf756814053e847c10f3eb003417bc523d30"
+    },
+    {
+      "path": "NOTICE",
+      "sourcePath": "tools/bright-open-source/legal/NOTICE",
+      "bytes": 1126,
+      "sha256": "825c409809562dc01049528d26ce4ec3606775457fe8685ba34c25eaf4d07067"
+    },
+    {
+      "path": "BRANDING.md",
+      "sourcePath": "tools/bright-open-source/legal/BRANDING.md",
+      "bytes": 1336,
+      "sha256": "3598e2eca633f981c3c6797ec4c84fed01908018e5e514ea8e58388c7ff10628"
+    },
+    {
+      "path": "COMMUNITY-AND-SERVICES.md",
+      "sourcePath": "tools/bright-open-source/legal/COMMUNITY-AND-SERVICES.md",
+      "bytes": 2187,
+      "sha256": "3b51564d811445c625b46a203650cd463551144f4e5a5d3d60da2fa18c5c2048"
+    },
+    {
+      "path": "THIRD-PARTY-NOTICES.md",
+      "sourcePath": "tools/bim-viewer/THIRD-PARTY-NOTICES.md",
+      "bytes": 2137,
+      "sha256": "a7a8b98b913ce1b9e5e14773e2a7c1e37b247ebe176b97d551ea327008a72a0c"
+    }
+  ],
+  "publicMetadataFiles": [
+    {
+      "path": "README.md",
+      "sourcePath": "tools/bright-open-source/templates/public-README.md",
+      "bytes": 4198,
+      "sha256": "5fc6a079e15bfc369b89d0f783290a4705d385c421de5c6b0cf7a9fcc303f12d"
+    },
+    {
+      "path": "CONTRIBUTING.md",
+      "sourcePath": "tools/bright-open-source/templates/public-CONTRIBUTING.md",
+      "bytes": 2727,
+      "sha256": "bce2ec0e63c5146fd84887c6c5e4f61db1279b8175675c7726ac776acceed254"
+    },
+    {
+      "path": "SECURITY.md",
+      "sourcePath": "tools/bright-open-source/templates/public-SECURITY.md",
+      "bytes": 2242,
+      "sha256": "8e697b72f7ebbb5e49a5e3a1efed7a8316f0174db189a158094e7a37b8b13146"
+    },
+    {
+      "path": ".gitignore",
+      "sourcePath": "tools/bright-open-source/templates/public.gitignore",
+      "bytes": 998,
+      "sha256": "672a729b0e6c68f62feee26e61270c919e3c1dbbc24c1928055ebcde0dd142dc"
+    },
+    {
+      "path": ".gitattributes",
+      "sourcePath": "tools/bright-open-source/templates/public.gitattributes",
+      "bytes": 161,
+      "sha256": "05af435af1e53eb67cac71d2ebe74348ab809baef1ece758907892b862dc0891"
+    },
+    {
+      "path": ".github/workflows/source-ci.yml",
+      "sourcePath": "tools/bright-open-source/templates/source-ci.yml.example",
+      "bytes": 1973,
+      "sha256": "51fd5de36676cce854c59664e48bb2435cfaa7c8aaafe46b62a22e1d159ed6ca"
+    }
+  ],
+  "excluded": "No original git history, cloud code, research, recovered vendor code, SDK binaries, models, credentials, installation records or compiled artifacts.",
+  "outstanding": [
+    "Review binary release assets independently of this source snapshot",
+    "Push only the reviewed clean repository and validate published release/update behavior"
+  ]
+}

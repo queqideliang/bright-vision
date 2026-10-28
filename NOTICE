@@ -1,0 +1,22 @@
+Bright Vision Community
+Copyright 2026 崛亮视觉 (Bright Vision)
+
+This distribution includes community viewer, Revit exporter and installer
+source code developed for Bright Vision by 崛亮视觉.
+
+Company-authored community source files in this distribution are provided
+under the Apache License, Version 2.0, except where a file explicitly states
+otherwise. A copy of that license is included in LICENSE.
+
+Third-party components remain the property of their respective authors and
+retain their own licenses and notices. See THIRD-PARTY-NOTICES.md and the
+original license files distributed with the applicable source or binary asset.
+Autodesk Revit, Autodesk API reference assemblies, third-party export engines,
+user models and hosted cloud services are not relicensed by this notice.
+
+Bright Vision and the BV artwork identify the official project distribution.
+Use of names and marks is described in BRANDING.md and Apache-2.0 section 6.
+Forks may change product branding while retaining applicable attribution.
+
+This NOTICE is informational and does not add conditions to, or modify,
+the Apache License, Version 2.0.
