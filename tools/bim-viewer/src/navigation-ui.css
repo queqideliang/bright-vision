@@ -1,0 +1,23 @@
+/* Keep all tools reachable without shrinking the 3D canvas to a fixed width. */
+.viewer-toolsbar {
+  height: auto;
+  min-height: 42px;
+  flex-wrap: wrap;
+  padding-block: 5px;
+  row-gap: 4px;
+}
+.tools-buttons { flex: 1 1 260px; min-width: 0; flex-wrap: wrap; justify-content: flex-end; }
+.welcome, .load-overlay { inset: var(--tools-offset, 94px) 0 0; }
+.tools-panel {
+  top: calc(var(--tools-offset, 94px) + 12px);
+  max-height: calc(100% - var(--tools-offset, 94px) - 60px);
+}
+.tools-panel.assistant-panel { width: 420px; }
+.navigation-settings { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; }
+.navigation-status { min-height: 88px; box-sizing: border-box; padding: 10px; border-radius: 6px; background: #eef5ff; color: #315b8a !important; }
+#navigation-controls .tool-note { color: #75869c; }
+@media (max-width: 580px) {
+  .tools-buttons { flex-basis: 210px; }
+  .navigation-settings { grid-template-columns: 1fr; }
+  .tools-panel.assistant-panel { width: 350px; }
+}

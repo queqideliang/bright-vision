@@ -1,4 +1,5 @@
 import './style.css';
+import './navigation-ui.css';
 import { MODEL_LIMITS } from './import/parse.ts';
 import { brand, brandPresentation } from './brand.ts';
 import { createDemoModel } from './demo.ts';
@@ -14,6 +15,7 @@ import { bindStaticTranslations, getLanguage, locale, setLanguage, tr, translate
 import { mountUpdateUI } from './update-ui.ts';
 import { mountRevitUI } from './revit-ui.ts';
 import { QuantityPanel } from './quantity-ui.ts';
+import { AssistantPanel } from './assistant-ui.ts';
 const icons: Record<string, string> = {
     open: '<path d="M3 7h6l2 2h10l-3 10H3V7Z"/><path d="M3 7V4h6l2 3"/>',
     fit: '<path d="M8 3H3v5M16 3h5v5M3 16v5h5M21 16v5h-5"/><path d="m8 8 8 8m0-8-8 8"/>',
@@ -53,7 +55,7 @@ app.innerHTML = `
       </div>
       <div class="viewer-toolsbar" role="toolbar" aria-label="模型分析工具">
         <span id="selection-summary">未选择构件</span><label class="ghost-control"><input id="ghost-mode" type="checkbox" disabled />隔离时保留透明背景</label>
-        <div class="tools-buttons"><button id="section-tool" disabled>剖切盒</button><button id="measurement-tool" disabled>测量</button><button id="views-tool" disabled>视点</button><button id="audit-tool" disabled>统计与审查</button><button id="quantity-tool" disabled>构件量表</button></div>
+        <div class="tools-buttons"><button id="navigation-tool" disabled>漫游与飞行</button><button id="section-tool" disabled>剖切盒</button><button id="measurement-tool" disabled>测量</button><button id="views-tool" disabled>视点</button><button id="audit-tool" disabled>统计与审查</button><button id="quantity-tool" disabled>构件量表</button><button id="assistant-tool">模型助手</button></div>
       </div>
       <section id="tools-panel" class="tools-panel" aria-label="模型工具" hidden>
         <div class="tools-heading"><h2 id="tools-title">模型工具</h2><button id="tools-close" class="icon-button" aria-label="关闭模型工具">${icon('close')}</button></div>
@@ -62,6 +64,17 @@ app.innerHTML = `
         <div id="views-controls" class="tool-content" hidden><p>保存相机、选择、显示和剖切状态，视点保存在本机。</p><label class="tool-field">视点名称<input id="viewpoint-name" maxlength="80" placeholder="例如：二层设备检查" /></label><button id="viewpoint-save" class="primary">保存当前视点</button><label class="tool-field">已保存视点<select id="viewpoint-select" size="5" aria-label="已保存视点"></select></label><div class="tool-actions"><button id="viewpoint-restore" class="quiet">恢复视点</button><button id="viewpoint-delete" class="quiet">删除视点</button></div><p id="viewpoint-note" class="tool-note">同一模型重新打开后可恢复；关闭程序不会删除保存的视点。</p></div>
         <div id="audit-controls" class="tool-content" hidden><p id="audit-summary">统计当前筛选结果。点击类别筛选，点击构件定位。</p><h3>按类别统计</h3><div id="category-summary" class="category-summary"></div><h3>三角面最多的构件</h3><div id="heavy-components" class="heavy-components"></div><p class="tool-note">面数按导出几何及实例累计，可辅助寻找高开销构件，不等同于工程量。碰撞检测、模型版本对比和参数审查在后续阶段交付。</p></div>
         <div id="quantity-controls" class="tool-content" hidden></div>
+        <div id="navigation-controls" class="tool-content" hidden>
+          <p>人物漫游采用第三人称跟随视角；飞行可自由查看模型。</p>
+          <label class="tool-field">导航模式<select id="navigation-mode"><option value="orbit">旋转查看</option><option value="walk">人物漫游</option><option value="fly">自由飞行</option></select></label>
+          <label class="tool-field">模型长度单位<select id="navigation-unit"><option value="unknown">未知，请先核对</option><option value="m">米（m）</option><option value="mm">毫米（mm）</option><option value="ft">英尺（ft）</option></select></label>
+          <div class="navigation-settings"><label class="tool-field">移动速度（m/s）<input id="navigation-speed" type="number" min="0.1" max="10" step="0.1" value="1.4" /></label><label class="tool-field">人物眼高（m）<input id="navigation-height" type="number" min="0.8" max="2.2" step="0.05" value="1.7" /></label></div>
+          <div class="tool-actions"><button id="navigation-place" class="quiet">重新放置人物</button><button id="navigation-exit" class="quiet">退出导航</button></div>
+          <p id="navigation-status" class="navigation-status" role="status">打开模型后可使用人物漫游和飞行。</p>
+          <p class="tool-note">WASD 移动，右键拖动环看，Shift 加速；飞行时 Q/E 升降。点击三维窗口后启用键盘，Esc 返回旋转查看。</p>
+          <p class="tool-note">人物需放置在可确认的模型表面。当前为基础表面检测与射线阻挡，复杂楼梯、狭缝和完整身体碰撞尚待扩展。</p>
+        </div>
+        <div id="assistant-controls" class="tool-content" hidden></div>
       </section>
       <div id="viewport" class="viewport"></div>
       <div id="welcome" class="welcome"><div class="welcome-card"><div class="welcome-icon">${icon('cube')}</div><span class="eyebrow">模型工作台</span><h2>把模型带到眼前</h2><p>直接打开模型 ZIP，<br />查看几何、楼层与构件信息。</p><button id="welcome-open" class="primary">${icon('open')}选择模型文件</button><button id="demo-button" class="demo-link">先体验演示模型 <span aria-hidden="true">↗</span></button><span class="welcome-note">模型最大 2 GB · 本机处理 · 支持拖放文件</span></div></div>
@@ -81,6 +94,9 @@ app.innerHTML = `
 const revitHelp = document.createElement('section');
 revitHelp.innerHTML = '<h3>Revit导出插件</h3><p>Windows 桌面版包含 Revit 导出插件，可在这里查看安装状态并安装或修复。</p><p>没有 Revit 也能直接查看已导出的模型 ZIP。</p><button id="help-revit-button" class="quiet">管理Revit插件</button>';
 $('help-dialog').querySelector('.help-content')!.append(revitHelp);
+const navigationHelp = document.createElement('section');
+navigationHelp.innerHTML = '<h3>人物漫游与飞行</h3><p>打开“漫游与飞行”，核对模型长度单位。选择“人物漫游”后点击模型地面放置人物；WASD 行走，右键环看，Shift 加速。选择“自由飞行”后点击三维窗口启用，Q/E 升降；Esc 返回旋转查看。</p><h3>本地模型助手</h3><p>打开“模型助手”，可查询模型概览、类别数量、楼层分布、所选属性、缺失项和原始量，也可输入“查找：关键词”或“缺少参数：参数名”。结果附构件定位依据；切换模型或查询范围后请重新查询。此版本使用本地有限规则查询，模型数据不上传。</p>';
+$('help-dialog').querySelector('.help-content')!.append(navigationHelp);
 const companyHelp = document.createElement('section');
 companyHelp.id = 'company-information';
 for (const [tag, id] of [['h3', 'brand-license-heading'], ['p', 'brand-attribution'], ['p', 'brand-license-summary']] as const) {
@@ -88,6 +104,15 @@ for (const [tag, id] of [['h3', 'brand-license-heading'], ['p', 'brand-attributi
 }
 $('help-dialog').querySelector('.help-content')!.append(companyHelp);
 const applyStaticTranslations = bindStaticTranslations(app);
+const viewportPanel = document.querySelector<HTMLElement>('.viewport-panel')!;
+const updateToolInsets = () => {
+    const height = [...viewportPanel.querySelectorAll<HTMLElement>('.viewer-toolbar,.viewer-toolsbar')]
+        .reduce((sum, toolbar) => sum + toolbar.getBoundingClientRect().height, 0);
+    viewportPanel.style.setProperty('--tools-offset', `${height}px`);
+};
+const toolbarResizeObserver = new ResizeObserver(updateToolInsets);
+for (const toolbar of viewportPanel.querySelectorAll('.viewer-toolbar,.viewer-toolsbar')) toolbarResizeObserver.observe(toolbar);
+updateToolInsets();
 document.documentElement.lang = getLanguage() === 'en' ? 'en' : 'zh-CN';
 applyStaticTranslations();
 mountUpdateUI();
@@ -118,7 +143,8 @@ let selecting = false;
 let selectionAnchor = -1;
 let listRenderFrame = 0;
 let measuring = false;
-let activeTool: 'section' | 'measurement' | 'views' | 'audit' | 'quantity' | null = null;
+const toolIds = ['section', 'measurement', 'views', 'audit', 'quantity', 'navigation', 'assistant'] as const;
+let activeTool: typeof toolIds[number] | null = null;
 let viewStorageKey = '';
 let savedViews: SavedView[] = [];
 let currentPhase = '读取文件';
@@ -139,6 +165,44 @@ const quantityPanel = new QuantityPanel($('quantity-controls'), () => ({
     filtering,
 }), ids => { selectMany(ids); viewer.focusSelection(); }, notify);
 function renderQuantities() { if (model && activeTool === 'quantity') quantityPanel.refresh(); }
+const assistantPanel = new AssistantPanel($('assistant-controls'), {
+    getContext: () => ({ model, filtered: allFiltered,
+        selected: [...selectedIds].map(componentForId).filter((component): component is BimComponent => !!component),
+        filtering: filtering || loading,
+        filterKey: JSON.stringify([$<HTMLSelectElement>('level-filter').value, $<HTMLSelectElement>('category-filter').value, $<HTMLInputElement>('search').value]),
+        filterDescription: [$<HTMLSelectElement>('level-filter').value || tr('全部楼层'),
+            $<HTMLSelectElement>('category-filter').value || tr('全部类别'), $<HTMLInputElement>('search').value].filter(Boolean).join(' · '),
+    }),
+    onLocate: (ids: readonly string[]) => { if (!model || loading || viewerUnavailable) return; selectMany(ids); viewer.focusSelection(); },
+    getLanguage,
+});
+function refreshAssistant() { assistantPanel.refresh(); }
+function refreshNavigation() {
+    if (!viewer || viewerUnavailable) return;
+    const state = viewer.getNavigationState();
+    const viewport = $('viewport');
+    Object.assign(viewport.dataset, { navigationMode: state.mode, navigationActive: String(state.active),
+        navigationNeedsGroundPlacement: String(state.needsGroundPlacement), navigationAvatarVisible: String(state.avatarVisible) });
+    $<HTMLSelectElement>('navigation-mode').value = state.mode;
+    $<HTMLSelectElement>('navigation-unit').value = state.unit;
+    $<HTMLInputElement>('navigation-speed').value = String(state.speedMetersPerSecond);
+    $<HTMLInputElement>('navigation-height').value = String(state.eyeHeightMeters);
+    $<HTMLButtonElement>('navigation-exit').disabled = state.mode === 'orbit';
+    $<HTMLButtonElement>('navigation-place').disabled = state.mode !== 'walk';
+    $<HTMLSelectElement>('navigation-mode').disabled = !model || loading;
+    let message: string;
+    if (!model || state.reason === 'no-model') message = tr('打开模型后可使用人物漫游和飞行。');
+    else if (state.reason === 'unknown-unit') message = tr('请先核对并指定模型长度单位，再进入导航。');
+    else if (state.mode === 'orbit') message = tr('旋转查看模式。可选择人物漫游或自由飞行。');
+    else if (state.needsGroundPlacement) message = tr('请在三维窗口点击可见地面，放置人物起点。');
+    else if (state.groundStatus === 'blocked') message = tr('前方表面或障碍未通过当前检测，本次移动已停止。');
+    else if (!state.active) message = tr('点击三维窗口以启用移动；输入框和面板中不会行走。');
+    else message = state.mode === 'walk' ? tr('人物漫游中 · WASD 移动 · 右键环看 · Esc 退出') : tr('自由飞行中 · WASD 移动 · Q/E 升降 · Esc 退出');
+    $('navigation-status').textContent = message;
+    const hint = document.querySelector<HTMLElement>('.navigation-hint');
+    if (hint) hint.textContent = state.mode === 'orbit' ? tr('左键旋转 · 滚轮缩放 · 右键平移')
+        : state.mode === 'walk' ? tr('人物漫游 · WASD 移动 · 右键环看 · Esc 退出') : tr('自由飞行 · WASD / Q E · Esc 退出');
+}
 function notify(message: string) {
     lastToastMessage = message;
     $('toast').textContent = translatedMessage(message);
@@ -215,12 +279,15 @@ function updateActions() {
     const selectedGeometry = !viewerUnavailable && [...selectedIds].some(id => viewer.getComponentBounds(id) !== null);
     for (const id of ['fit-selection', 'isolate-selection', 'section-selection'])
         $<HTMLButtonElement>(id).disabled = !selectedGeometry || loading;
-    for (const id of ['ghost-mode', 'section-tool', 'measurement-tool', 'views-tool', 'audit-tool', 'quantity-tool'])
+    for (const id of ['ghost-mode', 'section-tool', 'measurement-tool', 'views-tool', 'audit-tool', 'quantity-tool', 'navigation-tool'])
         $<HTMLButtonElement>(id).disabled = !model || loading;
+    $<HTMLButtonElement>('assistant-tool').disabled = loading;
     $('selection-summary').textContent = selectedIds.size ? tr("已选 {0} 个构件 · Ctrl 点击多选", { "0": selectedIds.size.toLocaleString(locale()) }) : tr("Ctrl 点击可多选");
     $('load-overlay').hidden = !loading;
     $('welcome').hidden = !!model || loading;
     renderQuantities();
+    refreshNavigation();
+    refreshAssistant();
     if (model) {
         const hidden = viewer.getHiddenCount();
         const ghosted = viewer.getStats().ghostedComponents;
@@ -272,6 +339,7 @@ function filterList() {
     const request = ++indexRequest;
     filtering = true;
     renderQuantities();
+    refreshAssistant();
     $('list-summary').textContent = tr("正在筛选…");
     indexWorker.postMessage({ type: 'query', request, filter: {
             search: $<HTMLInputElement>('search').value,
@@ -294,6 +362,7 @@ function receiveIndex(result: IndexResult) {
     renderList();
     renderAudit();
     renderQuantities();
+    refreshAssistant();
 }
 function selectTreeGroup(group: TreeGroup, additive: boolean) {
     if (!model || !indexResult)
@@ -684,11 +753,12 @@ function openTool(tool: NonNullable<typeof activeTool>) {
     activeTool = closing ? null : tool;
     $('tools-panel').hidden = closing;
     $('tools-panel').classList.toggle('quantity-panel', tool === 'quantity');
-    for (const id of ['section', 'measurement', 'views', 'audit', 'quantity'] as const) {
+    $('tools-panel').classList.toggle('assistant-panel', tool === 'assistant');
+    for (const id of toolIds) {
         $(`${id}-controls`).hidden = closing || tool !== id;
         $(`${id}-tool`).setAttribute('aria-pressed', String(!closing && tool === id));
     }
-    const titles = { section: tr("剖切盒"), measurement: tr("两点测量"), views: tr("命名视点"), audit: tr("统计与审查"), quantity: tr('构件量表') };
+    const titles = { section: tr("剖切盒"), measurement: tr("两点测量"), views: tr("命名视点"), audit: tr("统计与审查"), quantity: tr('构件量表'), navigation: tr('漫游与飞行'), assistant: tr('模型助手') };
     $('tools-title').textContent = titles[tool];
     if (tool === 'section')
         refreshSectionInputs();
@@ -698,6 +768,10 @@ function openTool(tool: NonNullable<typeof activeTool>) {
         renderViewpoints();
     else if (tool === 'quantity')
         renderQuantities();
+    else if (tool === 'navigation')
+        refreshNavigation();
+    else if (tool === 'assistant')
+        refreshAssistant();
     else
         renderAudit();
 }
@@ -709,7 +783,8 @@ function closeTools() {
     $('tools-panel').hidden = true;
     activeTool = null;
     $('tools-panel').classList.remove('quantity-panel');
-    for (const id of ['section', 'measurement', 'views', 'audit', 'quantity'])
+    $('tools-panel').classList.remove('assistant-panel');
+    for (const id of toolIds)
         $(`${id}-tool`).setAttribute('aria-pressed', 'false');
 }
 async function displayModel(next: BimModel, id: number) {
@@ -738,6 +813,7 @@ async function displayModel(next: BimModel, id: number) {
         }
         const sourceUnit = next.units?.length ?? 'unknown';
         $<HTMLSelectElement>('source-unit').value = sourceUnit;
+        viewer.setNavigationUnit(sourceUnit);
         $<HTMLSelectElement>('measurement-unit').value = sourceUnit === 'unknown' ? 'model' : sourceUnit;
         refreshMeasurementNote();
         $('load-error').hidden = true;
@@ -895,7 +971,7 @@ function closeModel() {
     activeTool = null;
     $<HTMLInputElement>('ghost-mode').checked = false;
     quantityPanel.clear();
-    for (const tool of ['section', 'measurement', 'views', 'audit', 'quantity'])
+    for (const tool of toolIds)
         $(`${tool}-tool`).setAttribute('aria-pressed', 'false');
     viewerUnavailable = true;
     viewer?.dispose();
@@ -921,6 +997,7 @@ function createViewer() {
             syncSelection(); };
         viewer.onMeasurementChange = () => { renderMeasurement(); if (model)
             updateActions(); };
+        viewer.onNavigationChange = () => refreshNavigation();
         viewerUnavailable = false;
         updateCanvasLanguage();
         return true;
@@ -970,7 +1047,7 @@ $('search').oninput = () => { clearTimeout(searchTimer); searchTimer = setTimeou
 for (const id of ['level-filter', 'category-filter'])
     $(id).onchange = filterList;
 $('ghost-mode').onchange = () => viewer.setGhostMode($<HTMLInputElement>('ghost-mode').checked);
-for (const tool of ['section', 'measurement', 'views', 'audit', 'quantity'] as const)
+for (const tool of toolIds)
     $(`${tool}-tool`).onclick = () => openTool(tool);
 $('tools-close').onclick = closeTools;
 $('section-selection').onclick = () => {
@@ -1010,7 +1087,32 @@ $('measurement-start').onclick = () => { measuring = true; viewer.clearMeasureme
 $('measurement-stop').onclick = () => { measuring = false; viewer.setMeasurementMode(false); renderMeasurement(); };
 $('measurement-clear').onclick = () => { viewer.clearMeasurement(); renderMeasurement(); };
 for (const id of ['source-unit', 'measurement-unit'])
-    $(id).onchange = renderMeasurement;
+    $(id).onchange = () => {
+        if (id === 'source-unit') viewer.setNavigationUnit($<HTMLSelectElement>('source-unit').value as 'm' | 'mm' | 'ft' | 'unknown');
+        renderMeasurement(); refreshNavigation();
+    };
+$('navigation-unit').onchange = () => {
+    const unit = $<HTMLSelectElement>('navigation-unit').value as 'm' | 'mm' | 'ft' | 'unknown';
+    $<HTMLSelectElement>('source-unit').value = unit;
+    viewer.setNavigationUnit(unit); renderMeasurement(); refreshNavigation();
+};
+$('navigation-mode').onchange = () => {
+    if (measuring) { measuring = false; viewer.setMeasurementMode(false); renderMeasurement(); }
+    viewer.setNavigationMode($<HTMLSelectElement>('navigation-mode').value as 'orbit' | 'walk' | 'fly');
+    refreshNavigation();
+};
+$('navigation-exit').onclick = () => { viewer.setNavigationMode('orbit'); refreshNavigation(); };
+$('navigation-place').onclick = () => { viewer.resetWalkPlacement(); refreshNavigation(); };
+$('navigation-speed').onchange = () => {
+    const speed = Number($<HTMLInputElement>('navigation-speed').value);
+    if (!Number.isFinite(speed) || speed < 0.1 || speed > 10) { notify(tr('移动速度需在 0.1 至 10 m/s 之间。')); refreshNavigation(); return; }
+    viewer.setNavigationSpeed(speed); refreshNavigation();
+};
+$('navigation-height').onchange = () => {
+    const height = Number($<HTMLInputElement>('navigation-height').value);
+    if (!Number.isFinite(height) || height < 0.8 || height > 2.2) { notify(tr('人物眼高需在 0.8 至 2.2 m 之间。')); refreshNavigation(); return; }
+    viewer.setNavigationEyeHeight(height); refreshNavigation();
+};
 $('viewpoint-save').onclick = () => {
     if (!model)
         return;
@@ -1071,13 +1173,15 @@ window.addEventListener('dragover', (event) => { if (event.dataTransfer?.types.i
 window.addEventListener('drop', (event) => { event.preventDefault(); dragDepth = 0; $('drop-overlay').hidden = true; const file = event.dataTransfer?.files[0]; if (file)
     void openFile(file); });
 window.addEventListener('keydown', (event) => {
+    if (event.defaultPrevented) return;
     if (viewerUnavailable)
         return;
-    if (document.querySelector('dialog[open]') || event.target instanceof HTMLInputElement || event.target instanceof HTMLSelectElement || event.ctrlKey || event.metaKey || event.altKey)
+    if (document.querySelector('dialog[open]') || (event.target instanceof HTMLElement && event.target.closest('input,select,textarea,[contenteditable="true"]')) || event.ctrlKey || event.metaKey || event.altKey)
         return;
     if (loading)
         return;
     if (event.key === 'Escape') {
+        if (viewer.getNavigationState().mode !== 'orbit') { viewer.setNavigationMode('orbit'); refreshNavigation(); return; }
         if (measuring) {
             measuring = false;
             viewer.setMeasurementMode(false);
@@ -1097,7 +1201,7 @@ window.addEventListener('keydown', (event) => {
     else if (selectedId && event.key.toLowerCase() === 'i')
         $('isolate-selection').click();
 });
-window.addEventListener('beforeunload', () => { worker?.terminate(); indexWorker?.terminate(); viewer?.dispose(); });
+window.addEventListener('beforeunload', () => { worker?.terminate(); indexWorker?.terminate(); toolbarResizeObserver.disconnect(); assistantPanel.destroy(); viewer?.dispose(); });
 
 function updateCanvasLanguage() {
     $('viewport').querySelector('canvas')?.setAttribute('aria-label', tr('三维模型，拖动旋转，滚轮缩放，单击选择构件'));
@@ -1152,7 +1256,7 @@ function applyLanguage() {
         renderMeasurement();
     }
     if (activeTool) {
-        const titles = { section: '剖切盒', measurement: '两点测量', views: '命名视点', audit: '统计与审查', quantity: '构件量表' };
+        const titles = { section: '剖切盒', measurement: '两点测量', views: '命名视点', audit: '统计与审查', quantity: '构件量表', navigation: '漫游与飞行', assistant: '模型助手' };
         $('tools-title').textContent = tr(titles[activeTool]);
     }
     $('load-phase').textContent = translatedProgress(currentPhase);

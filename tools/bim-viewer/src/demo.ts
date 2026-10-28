@@ -10,6 +10,7 @@ export function createDemoModel(): BimModel {
   ];
   return {
     name: '演示模型 · 合成数据',
+    units: { length: 'm', source: 'Bright Vision built-in synthetic demo' },
     components: components.map((c) => {
       const matrix = identity();
       matrix[0] = c.sx; matrix[5] = c.sy; matrix[10] = c.sz; matrix[12] = c.x; matrix[14] = c.z;

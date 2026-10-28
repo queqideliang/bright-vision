@@ -1,15 +1,19 @@
 import {
-  AmbientLight, Box3, Box3Helper, BufferAttribute, BufferGeometry, Color,
+  AmbientLight, Box3, Box3Helper, BufferAttribute, BufferGeometry, Color, CylinderGeometry,
   DataTexture, DirectionalLight, DoubleSide, GridHelper, Group, InstancedMesh, InstancedBufferAttribute,
   LinearFilter, LinearSRGBColorSpace, Matrix3, Matrix4, Mesh,
   MeshPhongMaterial, NearestFilter, PerspectiveCamera, Raycaster,
   RepeatWrapping, RGBAFormat, Scene, Sphere, SRGBColorSpace, Texture, Plane, Ray, Line, LineBasicMaterial, Points, PointsMaterial,
-  TextureLoader, UnsignedByteType, Vector2, Vector3, WebGLRenderer,
+  TextureLoader, UnsignedByteType, Vector2, Vector3, WebGLRenderer, SphereGeometry,
 } from 'three';
 import { OrbitControls } from 'three/addons/controls/OrbitControls.js';
 import type { BimComponent, BimGeometry, BimModel, BimNode } from '../model.ts';
 import { geometryBounds, materialSignature, texturePathCandidates, textureTransform, vertexNormals } from './geometry.ts';
 import { BoundsTree, TriangleIndex, canInstanceTransform, rayBoxDistance } from './spatial.ts';
+import { NavigationControls } from './navigation-controls.ts';
+import { navigationUnitsPerMeter } from './navigation.ts';
+import type { NavigationMode, NavigationState, NavigationUnit } from './navigation.ts';
+export type { NavigationMode, NavigationState, NavigationUnit } from './navigation.ts';
 
 export interface WorldBox { min: [number, number, number]; max: [number, number, number] }
 export interface MeasurementResult { points: [number, number, number][]; distance: number | null }
@@ -83,6 +87,9 @@ export class ModelViewer {
   private readonly scene = new Scene();
   private readonly camera = new PerspectiveCamera(45, 1, 0.1, 10_000);
   private readonly controls: OrbitControls;
+  private readonly navigation: NavigationControls;
+  /** Own helper geometry, never part of BIM model picking, IDs or quantities. */
+  private readonly walkAvatar = new Group();
   private readonly modelRoot = new Group();
   private readonly raycaster = new Raycaster();
   private readonly pointer = new Vector2();
@@ -117,6 +124,7 @@ export class ModelViewer {
   private instanceCount = 0;
   onSelectionChange?: (ids: string[]) => void;
   onMeasurementChange?: (measurement: MeasurementResult | null) => void;
+  onNavigationChange?: (state: NavigationState) => void;
   private center = new Vector3();
   private bounds = new Box3();
   private grid: GridHelper | null = null;
@@ -153,6 +161,26 @@ export class ModelViewer {
     this.controls.enableDamping = false;
     this.controls.screenSpacePanning = true;
     this.controls.addEventListener('change', this.requestRender);
+    this.scene.add(this.walkAvatar);
+    this.walkAvatar.visible = false;
+    this.navigation = new NavigationControls({
+      canvas: this.renderer.domElement, camera: this.camera, orbit: this.controls,
+      sampleGround: (feet, rise, drop) => this.pickRay(new Ray(feet.clone().add(new Vector3(0, 0, rise + 1e-7)), new Vector3(0, 0, -1)), rise + drop + 2e-7, false),
+      blockedByObstacle: (from, to) => this.walkObstacle(from, to),
+      cameraObstruction: (from, to) => this.pickRay(new Ray(from, to.clone().sub(from).normalize()), from.distanceTo(to), false),
+      onWalkPosition: (feet, yaw, scale, height) => {
+        this.walkAvatar.position.copy(feet);
+        this.walkAvatar.rotation.z = yaw;
+        this.walkAvatar.scale.setScalar(scale * height / 1.7);
+      },
+      onStateChange: state => {
+        this.walkAvatar.visible = state.avatarVisible;
+        this.renderer.domElement.style.cursor = state.needsGroundPlacement ? 'crosshair' : this.measurementMode ? 'crosshair' : '';
+        this.onNavigationChange?.({ ...state, avatarVisible: this.walkAvatar.visible });
+        this.requestRender();
+      },
+      onRender: this.requestRender,
+    });
     this.scene.add(new AmbientLight(0xffffff, 1.4));
     const key = new DirectionalLight(0xffffff, 2.3);
     key.position.set(1, -2, 3);
@@ -188,6 +216,7 @@ export class ModelViewer {
     if (this.disposed) throw new Error('查看器已关闭。');
     const version = ++this.loadVersion;
     this.clearModel();
+    this.createWalkAvatar();
     try {
     this.componentIds = model.components.map((component) => component.id);
     this.componentIndex = new Map(this.componentIds.map((id, index) => [id, index]));
@@ -336,6 +365,8 @@ export class ModelViewer {
     imageLookup.clear();
     this.addGrid();
     this.focus();
+    this.navigation.setUnit(model.units?.length ?? 'unknown');
+    this.navigation.setModelAvailable(true);
     this.onProgress?.('模型已就绪', 1);
     } catch (error) {
       if (!this.disposed && version === this.loadVersion) this.clearModel();
@@ -645,6 +676,81 @@ export class ModelViewer {
 
   getSelectedIds(): string[] { return [...this.selectedIds]; }
 
+  /** Third-person person walking or first-person free flight; source scale is explicit. */
+  setNavigationMode(mode: NavigationMode): boolean {
+    if (mode !== 'orbit' && this.navigation.getState().available) this.setMeasurementMode(false);
+    return this.navigation.setMode(mode);
+  }
+
+  getNavigationState(): NavigationState {
+    return { ...this.navigation.getState(), avatarVisible: this.walkAvatar.visible };
+  }
+
+  setNavigationUnit(unit: NavigationUnit): void { this.navigation.setUnit(unit); }
+  setNavigationSpeed(metersPerSecond: number): void { this.navigation.setSpeed(metersPerSecond); }
+  /** Reference eye height also scales the generated human proportions. */
+  setNavigationEyeHeight(meters: number): void { this.navigation.setEyeHeight(meters); }
+  resetWalkPlacement(): void { this.navigation.resetWalkPlacement(); }
+  pauseNavigation(): void { this.navigation.pause(); }
+
+  private createWalkAvatar(): void {
+    if (this.walkAvatar.children.length) return;
+    const blue = new MeshPhongMaterial({ color: 0x167ac6, shininess: 35 });
+    const dark = new MeshPhongMaterial({ color: 0x233d58, shininess: 12 });
+    const skin = new MeshPhongMaterial({ color: 0xf1c6a2, shininess: 15 });
+    const addCylinder = (radiusTop: number, radiusBottom: number, height: number, x: number, y: number, z: number, material: MeshPhongMaterial): void => {
+      const mesh = new Mesh(new CylinderGeometry(radiusTop, radiusBottom, height, 10), material);
+      mesh.rotation.x = Math.PI / 2;
+      mesh.position.set(x, y, z);
+      this.walkAvatar.add(mesh);
+    };
+    // The little person faces +X, with Z-up proportions defined in meters.
+    addCylinder(0.22, 0.17, 0.57, 0, 0, 1.15, blue);
+    addCylinder(0.095, 0.075, 0.75, 0, -0.115, 0.415, dark);
+    addCylinder(0.095, 0.075, 0.75, 0, 0.115, 0.415, dark);
+    addCylinder(0.065, 0.055, 0.57, 0, -0.285, 1.1, blue);
+    addCylinder(0.065, 0.055, 0.57, 0, 0.285, 1.1, blue);
+    addCylinder(0.07, 0.07, 0.1, 0, 0, 1.47, skin);
+    const head = new Mesh(new SphereGeometry(0.16, 12, 10), skin);
+    head.position.set(0, 0, 1.66);
+    this.walkAvatar.add(head);
+    for (const side of [-1, 1]) {
+      const eye = new Mesh(new SphereGeometry(0.018, 6, 4), dark);
+      eye.position.set(0.143, side * 0.055, 1.7);
+      this.walkAvatar.add(eye);
+    }
+    this.walkAvatar.visible = false;
+  }
+
+  private clearWalkAvatar(): void {
+    if (!this.walkAvatar) return; // Headless state fixtures do not allocate helpers.
+    const geometries = new Set<BufferGeometry>(), materials = new Set<MeshPhongMaterial>();
+    this.walkAvatar.traverse(object => {
+      if (!(object instanceof Mesh)) return;
+      geometries.add(object.geometry);
+      for (const material of Array.isArray(object.material) ? object.material : [object.material]) materials.add(material as MeshPhongMaterial);
+    });
+    for (const geometry of geometries) geometry.dispose();
+    for (const material of materials) material.dispose();
+    this.walkAvatar.clear();
+    this.walkAvatar.visible = false;
+  }
+
+  /** Two forward body rays are a conservative helper, not a capsule collision test. */
+  private walkObstacle(from: Vector3, to: Vector3): boolean {
+    const scale = navigationUnitsPerMeter(this.navigation.getState().unit)!;
+    const direction = to.clone().sub(from); direction.z = 0;
+    const distance = direction.length();
+    if (distance < scale * 1e-8) return false;
+    direction.divideScalar(distance);
+    const base = Math.max(from.z, to.z);
+    for (const height of [0.4, 1.4]) {
+      const origin = new Vector3(from.x, from.y, base + height * scale);
+      if (this.pickRay(new Ray(origin, direction), distance + 0.2 * scale, false)) return true;
+    }
+    return false;
+  }
+
   focusSelection(): void {
     const box = new Box3();
     for (const id of this.selectedIds) box.union(this.componentBounds[this.componentIndex.get(id)!]!);
@@ -660,6 +766,7 @@ export class ModelViewer {
   }
 
   private frameBox(box: Box3): void {
+    this.navigation?.setMode('orbit');
     const sphere = box.getBoundingSphere(new Sphere());
     const radius = Math.max(sphere.radius, 0.001);
     const verticalHalf = this.camera.fov * Math.PI / 360;
@@ -712,6 +819,7 @@ export class ModelViewer {
   }
 
   private updateVisibility(): void {
+    this.navigation?.setMode('orbit');
     for (const batch of this.batches) {
       batch.mesh.visible = batch.componentIndices.some((index) => this.isVisible(index));
       if (batch.ghostMesh) batch.ghostMesh.visible = batch.componentIndices.some(index => this.stateBytes[index * 4] === 128);
@@ -761,6 +869,7 @@ export class ModelViewer {
   setSectionBox(box: WorldBox | null): void {
     if (box !== null && (!box || !coordinateTuple(box.min) || !coordinateTuple(box.max) || box.min.some((value, axis) => value > box.max[axis]!)))
       throw new Error('剖切盒坐标无效。');
+    this.navigation?.setMode('orbit');
     this.sectionBounds = box ? new Box3(new Vector3(...box.min).sub(this.center), new Vector3(...box.max).sub(this.center)) : null;
     this.sectionPlanes = this.sectionBounds ? [
       new Plane(new Vector3(1, 0, 0), -this.sectionBounds.min.x), new Plane(new Vector3(-1, 0, 0), this.sectionBounds.max.x),
@@ -791,8 +900,9 @@ export class ModelViewer {
   }
 
   setMeasurementMode(enabled: boolean): void {
+    if (enabled) this.navigation?.setMode('orbit');
     this.measurementMode = enabled;
-    this.renderer.domElement.style.cursor = enabled ? 'crosshair' : '';
+    this.renderer.domElement.style.cursor = enabled || this.navigation?.getState().needsGroundPlacement ? 'crosshair' : '';
   }
 
   clearMeasurement(): void {
@@ -831,6 +941,7 @@ export class ModelViewer {
   }
 
   captureView(): ViewerViewpoint {
+    this.navigation?.setMode('orbit');
     return { version: 1, position: this.camera.position.clone().add(this.center).toArray() as ViewerViewpoint['position'],
       target: this.controls.target.clone().add(this.center).toArray() as ViewerViewpoint['target'],
       visibleIds: this.getVisibleIds(), selectedIds: this.getSelectedIds(),
@@ -845,6 +956,7 @@ export class ModelViewer {
       || !idList(view.visibleIds) || !idList(view.selectedIds) || (view.ghostedIds !== undefined && !idList(view.ghostedIds))
       || !Number.isFinite(distanceSquared) || distanceSquared < 1e-18)
       throw new Error('视点数据无效或版本不受支持。');
+    this.navigation?.setMode('orbit');
     this.setSectionBox(view.sectionBox);
     this.ghostMode = !!view.ghostMode;
     const visible = new Set(view.visibleIds);
@@ -926,12 +1038,12 @@ export class ModelViewer {
     return this.sectionPlanes.every(plane => plane.distanceToPoint(point) >= -epsilon);
   }
 
-  private pickRay(ray: Ray): { id: string; point: Vector3 } | null {
+  private pickRay(ray: Ray, maxDistance = Infinity, recordStats = true): { id: string; point: Vector3; normal: Vector3 } | null {
     const started = performance.now();
-    const candidates = (this.batchTree?.queryRay(ray) ?? []).map(index => ({ batch: this.batches[index]!, distance: rayBoxDistance(ray, this.batches[index]!.bounds) }))
+    const candidates = (this.batchTree?.queryRay(ray, maxDistance) ?? []).map(index => ({ batch: this.batches[index]!, distance: rayBoxDistance(ray, this.batches[index]!.bounds) }))
       .filter(candidate => candidate.batch.mesh.visible && Number.isFinite(candidate.distance)).sort((a, b) => a.distance - b.distance);
-    let nearest = Infinity;
-    let result: { id: string; point: Vector3 } | null = null;
+    let nearest = maxDistance;
+    let result: { id: string; point: Vector3; normal: Vector3 } | null = null;
     let batches = 0, triangles = 0;
     for (const { batch, distance } of candidates) {
       if (distance > nearest) break;
@@ -949,15 +1061,15 @@ export class ModelViewer {
           if (!hit) continue;
           point.copy(hit.point).applyMatrix4(matrix);
           const distance = point.distanceTo(ray.origin);
-          if (distance < nearest) { nearest = distance; result = { id: this.componentIds[batch.owners[instance.index]!]!, point: point.clone() }; }
+          if (distance <= nearest) { nearest = distance; result = { id: this.componentIds[batch.owners[instance.index]!]!, point: point.clone(), normal: hit.normal.clone().applyNormalMatrix(new Matrix3().getNormalMatrix(matrix)) }; }
         }
       } else {
         const hit = batch.triangleIndex.raycast(ray, (triangle, point) => this.isVisible(batch.owners[triangle]!) && this.pointKept(point), nearest);
         triangles += batch.triangleIndex.lastTriangleTests;
-        if (hit) { nearest = hit.distance; result = { id: this.componentIds[batch.owners[hit.triangle]!]!, point: hit.point }; }
+        if (hit) { nearest = hit.distance; result = { id: this.componentIds[batch.owners[hit.triangle]!]!, point: hit.point, normal: hit.normal }; }
       }
     }
-    this.lastPick = { batches, triangles, milliseconds: performance.now() - started };
+    if (recordStats) this.lastPick = { batches, triangles, milliseconds: performance.now() - started };
     return result;
   }
 
@@ -970,6 +1082,10 @@ export class ModelViewer {
     this.pointer.set((event.clientX - rect.left) / rect.width * 2 - 1, -(event.clientY - rect.top) / rect.height * 2 + 1);
     this.raycaster.setFromCamera(this.pointer, this.camera);
     const hit = this.pickRay(this.raycaster.ray);
+    if (this.navigation.getState().needsGroundPlacement) {
+      if (hit) this.navigation.placeOnGround(hit);
+      return;
+    }
     if (this.measurementMode) { if (hit) this.addMeasurement(hit.point); return; }
     if (hit) this.selectMany([hit.id], event.ctrlKey || event.metaKey ? 'toggle' : 'replace');
     else if (!event.ctrlKey && !event.metaKey) this.select(null);
@@ -977,6 +1093,7 @@ export class ModelViewer {
 
   private readonly handleContextLost = (event: Event): void => {
     event.preventDefault();
+    this.navigation.pause();
     this.unavailable = true;
     this.onProgress?.('显卡上下文已丢失，等待恢复；如画面未恢复请重新打开模型。', 1);
   };
@@ -991,6 +1108,9 @@ export class ModelViewer {
   }
 
   private clearModel(): void {
+    this.navigation?.setModelAvailable(false);
+    this.navigation?.setUnit('unknown');
+    this.clearWalkAvatar();
     if (this.selectedId !== null) this.onSelect(null);
     if (this.selectedIds.size) this.onSelectionChange?.([]);
     this.selectedId = null;
@@ -1050,6 +1170,7 @@ export class ModelViewer {
     cancelAnimationFrame(this.requestedFrame);
     this.requestedFrame = 0;
     this.resizeObserver.disconnect();
+    this.navigation.dispose();
     this.controls.removeEventListener('change', this.requestRender);
     this.controls.dispose();
     const canvas = this.renderer.domElement;

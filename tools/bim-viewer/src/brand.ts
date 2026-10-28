@@ -8,7 +8,7 @@ export const brand = {
   subtitle: '本地BIM工作台',
   subtitleEn: 'Local BIM workspace',
   monogram: 'BV',
-  version: '0.6.0',
+  version: '0.7.0',
 };
 
 export function brandPresentation(language: 'zh' | 'en') {

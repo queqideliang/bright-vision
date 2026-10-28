@@ -11,8 +11,8 @@ permissions:
   contents: read
 jobs:
   source:
-    runs-on: ubuntu-latest
-    timeout-minutes: 15
+    runs-on: ubuntu-24.04
+    timeout-minutes: 20
     steps:
       - uses: actions/checkout@v7
         with:
@@ -34,6 +34,16 @@ jobs:
           npm run typecheck
           npm test
           npm run build
+      - name: Verify navigation and local assistant in a headless browser
+        working-directory: tools/bim-viewer
+        env:
+          BIM_TEST_BROWSER: /usr/bin/google-chrome
+        run: npm run test:background
+      # The background runner serves only the current build over loopback,
+      # uses synthetic models, and fails on external page requests. It never
+      # opens Electron/Revit or sends input to a native desktop window.
+      # Use the hosted Ubuntu image's system Chrome with its normal sandbox;
+      # do not modify AppArmor, user namespaces or browser security policy.
       # Full Revit builds need legally obtained local API references. This job
       # neither redistributes Autodesk DLLs nor claims live Revit acceptance.
       # Do not add signing keys, public release writes, or a self-hosted runner

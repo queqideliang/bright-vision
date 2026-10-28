@@ -70,7 +70,7 @@ export async function exerciseWorkbench(page) {
   assert.equal(await page.locator('.id-row code').textContent(), 'demo-wall');
   await page.locator('#section-tool').click(); await page.locator('#section-clear').click();
   await page.locator('#measurement-tool').click();
-  assert.equal(await page.locator('#source-unit').inputValue(), 'unknown', 'the synthetic/legacy model must not silently assume meters');
+  assert.equal(await page.locator('#source-unit').inputValue(), 'm', 'the owned synthetic demo explicitly declares meters');
   await page.locator('#measurement-start').click();
   const canvas = await page.locator('canvas').boundingBox();
   let measured = false;

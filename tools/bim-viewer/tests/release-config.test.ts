@@ -13,7 +13,7 @@ test('official preview uses only the user-confirmed fixed GitHub repository', ()
 });
 
 test('formal release requires signing and edits metadata without changing the unsigned preview policy', () => {
-  assert.equal(project.version, '0.6.0');
+  assert.match(project.version, /^\d+\.\d+\.\d+$/);
   assert.equal(project.author, '崛亮视觉');
   assert.equal(project.build.win.signAndEditExecutable, true);
   assert.equal(project.build.win.signExecutable, false);

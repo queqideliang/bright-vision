@@ -1,6 +1,6 @@
 {
   "name": "bim-model-viewer",
-  "version": "0.6.0",
+  "version": "0.7.0",
   "private": true,
   "description": "Independent local BIM model ZIP viewer",
   "type": "module",
@@ -18,7 +18,8 @@
     "pack:dir": "npm run build && npm run build:native && node scripts/prepare-revit.mjs && electron-builder --win --dir --publish never",
     "dist:win": "npm run build && npm run build:native && node scripts/prepare-revit.mjs && electron-builder --win nsis --publish never",
     "dist:win:release": "npm run build && npm run build:native && node scripts/prepare-revit.mjs && electron-builder --win nsis --config electron-builder.release.cjs --publish never",
-    "test:browser": "node tests/browser-smoke.mjs"
+    "test:browser": "node tests/browser-smoke.mjs",
+    "test:background": "node scripts/background-smoke.mjs"
   },
   "dependencies": {
     "fflate": "0.8.3",
