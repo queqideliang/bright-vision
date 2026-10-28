@@ -3,7 +3,7 @@
   "draft": false,
   "publicationReady": false,
   "sourcePublicationReady": true,
-  "readinessScope": "Reviewed community viewer 0.7.0 source is prepared locally for the next commit. The repository and earlier viewer 0.6.0 / Revit 1.7.0 previews are already public; this snapshot does not assert that viewer 0.7.0 has been pushed, released or verified by remote CI.",
+  "readinessScope": "Viewer 0.7.0 runtime source and its public preview Release are verified at the recorded commit. The current audit includes a documentation-only follow-up prepared locally for a later push; it does not assert native installation or a rerun of CI for this new documentation snapshot.",
   "repository": {
     "host": "github.com",
     "owner": "queqideliang",
@@ -25,7 +25,7 @@
     "tools/bright-revit-installer"
   ],
   "sourceSnapshotDate": "2026-10-28",
-  "sourceSnapshotSha256": "741bda8445ba40157b4f136dc10bf321f0ec278b1b4b485f16dd631d13d7ef09",
+  "sourceSnapshotSha256": "d98c2660e633a4879b48ba8f1205de6ec294a672f6d52c11e674a738fee7c6af",
   "files": [
     {
       "path": "tools/bim-viewer/.gitignore",
@@ -34,8 +34,8 @@
     },
     {
       "path": "tools/bim-viewer/BACKGROUND_TESTING.md",
-      "bytes": 6197,
-      "sha256": "b8befd1a54c87a03055e20450113f7de75d389467da762c02dff9e63c0b7f927"
+      "bytes": 6680,
+      "sha256": "64dfa33561d0dfde09acdb4b6c58d0abb4307d7580434f49134e49bf2cac4533"
     },
     {
       "path": "tools/bim-viewer/BUILDING.md",
@@ -144,13 +144,13 @@
     },
     {
       "path": "tools/bim-viewer/README.md",
-      "bytes": 9433,
-      "sha256": "a3dd8592b2b41905fce479ea0f6a39dfa0f46c6e7492d599b4c6c96c1d016c13"
+      "bytes": 10147,
+      "sha256": "7ebfd7f19d4bf0be232d5e742692e85c452ce3d601a5d57cd0cfa15c6611605c"
     },
     {
       "path": "tools/bim-viewer/ROADMAP.md",
-      "bytes": 3991,
-      "sha256": "15a4ec97d5ca7563cb892c2ceca78ef41e5c227d7f13e49d5733b1e963dc1d6d"
+      "bytes": 4091,
+      "sha256": "fb07378a835be9809664113e026b1e43bfdea8e4893973ab5cdd312c815d3a0e"
     },
     {
       "path": "tools/bim-viewer/scripts/background-smoke.mjs",
@@ -609,8 +609,8 @@
     },
     {
       "path": "tools/bright-open-source/RELEASE_PLAN.md",
-      "bytes": 7822,
-      "sha256": "3b1ebc3be83cb1569d8c4c6d7c00ea7e6be77554749a437ada9d27af46e43150"
+      "bytes": 8339,
+      "sha256": "52f3b565e15b9791e000a2c84f99f22c1d8307ac14e539b348722a5f02352c50"
     },
     {
       "path": "tools/bright-open-source/templates/public-CONTRIBUTING.md",
@@ -619,8 +619,8 @@
     },
     {
       "path": "tools/bright-open-source/templates/public-README.md",
-      "bytes": 6203,
-      "sha256": "eb0368a0de86690b9bf0af0ac91bb456a7202c54a80582973b8c0a1d0b90ec92"
+      "bytes": 6336,
+      "sha256": "997c843a7f87df1a3497e4bb8fce33de3c954c1692d7085584988e49f14f135b"
     },
     {
       "path": "tools/bright-open-source/templates/public-SECURITY.md",
@@ -1144,8 +1144,8 @@
     {
       "path": "README.md",
       "sourcePath": "tools/bright-open-source/templates/public-README.md",
-      "bytes": 6203,
-      "sha256": "eb0368a0de86690b9bf0af0ac91bb456a7202c54a80582973b8c0a1d0b90ec92"
+      "bytes": 6336,
+      "sha256": "997c843a7f87df1a3497e4bb8fce33de3c954c1692d7085584988e49f14f135b"
     },
     {
       "path": "CONTRIBUTING.md",
@@ -1180,8 +1180,7 @@
   ],
   "excluded": "No original git history, cloud code, research, recovered vendor code, SDK binaries, models, credentials, installation records or compiled artifacts.",
   "outstanding": [
-    "Commit and push this reviewed source snapshot, then inspect the real Ubuntu-24.04 sandboxed headless CI result.",
-    "Publish viewer 0.7.0 assets and independently verify their public download/update flow before claiming availability.",
+    "Commit and push only this documentation follow-up; the runtime source, preview Release and its Linux CI are already public.",
     "Native desktop windows, system installation, arbitrary engineering-model navigation and complete collision remain outside this CLI/headless round.",
     "Extend Revit acceptance beyond the exact earlier build and limited cases in the validation scope document."
   ],
@@ -1298,8 +1297,8 @@
     "revitStarted": false,
     "systemInstallationExecuted": false,
     "remoteCiForThisSnapshotExecuted": false,
-    "viewer070ReleasePublished": false,
-    "viewer070PublicUpdateEndToEndVerified": false,
+    "viewer070ReleasePublished": true,
+    "viewer070PublicUpdateEndToEndVerified": true,
     "localPreparedInstaller": {
       "fileName": "Bright.Vision-0.7.0-Setup.exe",
       "bytes": 122995529,
@@ -1313,7 +1312,103 @@
     },
     "evidenceDigests": {
       "packageAcceptanceReportSha256": "3bcf6d1fb10671147c698fce9c6ecd5ab267284979b61c99c3bd2eefcdc79d1a",
-      "cleanHeadlessReportSha256": "d48879de3cdceff91553379dd6b56a5181eb5f496dac0310a760a950f402908f"
+      "cleanHeadlessReportSha256": "d48879de3cdceff91553379dd6b56a5181eb5f496dac0310a760a950f402908f",
+      "publicReleaseVerificationSha256": "4e97d5466158be52896ed33e5a2d2e6fe918e73a7f29428bef499863e87941f5",
+      "runtimeRemoteCiVerificationSha256": "2f4b7653f20183d9a545061fcd03173880e80d949715bfced0f37b7655c347b5",
+      "publicUpdateDownloadReportSha256": "d562e5dc4650cae0058e37dff899f594f05b3b057bc46429db82774ae1fff467"
+    },
+    "publishedRuntimeSourceCommit": "7f8001d40eaba14cfc2457ba893b36b168c55b82",
+    "remoteCiForPublishedRuntimeExecuted": true,
+    "viewer070PublicUpdateEndToEndScope": "Public version discovery, complete download and staging verification; installation was not executed.",
+    "remoteCi": {
+      "runId": 40710215364,
+      "url": "https://github.com/queqideliang/bright-vision/actions/runs/40710215364",
+      "commit": "7f8001d40eaba14cfc2457ba893b36b168c55b82",
+      "jobs": [
+        {
+          "name": "publisher-contract",
+          "conclusion": "success"
+        },
+        {
+          "name": "source",
+          "conclusion": "success"
+        }
+      ],
+      "linuxRunner": "ubuntu-24.04",
+      "browserPath": "/usr/bin/google-chrome",
+      "browserSandboxEnabled": true,
+      "headlessSyntheticChecks": 14,
+      "externalPageRequests": 0,
+      "nativeDesktopInput": false,
+      "electronStarted": false,
+      "revitStarted": false
+    }
+  },
+  "sourceSnapshotPushMeaning": "This flag refers only to the new documentation-follow-up inventory. The separately recorded runtime commit and Release are already public.",
+  "publishedRuntimeSource": {
+    "commit": "7f8001d40eaba14cfc2457ba893b36b168c55b82",
+    "tag": "viewer-v0.7.0",
+    "sourceSnapshotSha256": "741bda8445ba40157b4f136dc10bf321f0ec278b1b4b485f16dd631d13d7ef09",
+    "repositoryPushed": true,
+    "runtimeReleaseAvailable": true
+  },
+  "documentationFollowUp": {
+    "preparedAtUtc": "2026-10-28T15:01:34.271355+00:00",
+    "pendingPush": true,
+    "scope": "Six public documentation paths and this manifest only",
+    "businessSourceTestsAndCiUnchanged": true
+  },
+  "viewer070Publication": {
+    "recordedAtUtc": "2026-10-28T14:57:31.8256091Z",
+    "sourceCommit": "7f8001d40eaba14cfc2457ba893b36b168c55b82",
+    "tag": "viewer-v0.7.0",
+    "id": 426806011,
+    "url": "https://github.com/queqideliang/bright-vision/releases/tag/viewer-v0.7.0",
+    "draft": false,
+    "prerelease": true,
+    "publishedAt": "2026-10-28T14:56:26Z",
+    "unauthenticatedAssetMetadataVerified": true,
+    "utf8ReleaseNotesVerified": true,
+    "assets": [
+      {
+        "fileName": "Bright.Vision-0.7.0-Setup.exe",
+        "bytes": 122995529,
+        "sha256": "9f322910d6c233a7fa41f6ba260b3fc055da53393ba75c51860f6eb8a35df34b",
+        "url": "https://github.com/queqideliang/bright-vision/releases/download/viewer-v0.7.0/Bright.Vision-0.7.0-Setup.exe"
+      },
+      {
+        "fileName": "release-notes.md",
+        "bytes": 2578,
+        "sha256": "a3e9e26fd9b60f7cc828c3b5873777b288fe1ba5b4a8b2059aa7975562bccb76",
+        "url": "https://github.com/queqideliang/bright-vision/releases/download/viewer-v0.7.0/release-notes.md"
+      },
+      {
+        "fileName": "SHA256SUMS.txt",
+        "bytes": 174,
+        "sha256": "32607e245f2fb40b3221babd6185a6e8f99985c69f883d4c47aeb3caf7b7f401",
+        "url": "https://github.com/queqideliang/bright-vision/releases/download/viewer-v0.7.0/SHA256SUMS.txt"
+      },
+      {
+        "fileName": "update.json",
+        "bytes": 696,
+        "sha256": "67969b447a2cea66c52c6cadcfca627057e4d61e5708e3b36faa490785ad89b6",
+        "url": "https://github.com/queqideliang/bright-vision/releases/download/viewer-v0.7.0/update.json"
+      }
+    ],
+    "downloadVerification": {
+      "completedAtUtc": "2026-10-28T14:57:46.432Z",
+      "transport": "real unauthenticated production updater HTTPS",
+      "checks": 5,
+      "requests": 7,
+      "bytes": 122995529,
+      "sha256": "9f322910d6c233a7fa41f6ba260b3fc055da53393ba75c51860f6eb8a35df34b",
+      "verifyStagedPassed": true,
+      "sameVersionAvoidsDownload": true,
+      "stableExcludesPreview": true,
+      "legacyVersionInput": "0.6.0",
+      "legacyVersionProtocolSimulated": true,
+      "legacyApplicationExecuted": false,
+      "installerExecuted": false
     }
   }
 }

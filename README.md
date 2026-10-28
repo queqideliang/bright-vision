@@ -2,13 +2,15 @@
 
 Bright Vision 是本地 BIM 模型查看器和独立 Revit 导出／计量插件。官方产品由 **崛亮视觉** 维护，自有社区源码采用 **Apache-2.0**，保留适用的公司版权、NOTICE 与第三方许可。衍生项目可以修改品牌。
 
-当前源码目标为查看器 **0.7.0**、插件／安装器 **1.7.0 开发预览**。0.7.0 新增可见人物的第三人称漫游、自由飞行与确定性本地模型助手。实际下载、签名状态、已测 Revit build、已知限制和业务验收以本仓库每次 Release 说明为准；源码或本地包完成不代表 0.7.0 已上传。
+当前公开预览为查看器 **0.7.0**、插件／安装器 **1.7.0**。0.7.0 新增可见人物的第三人称漫游、自由飞行与确定性本地模型助手。实际支持范围、签名状态、已测 Revit build 与已知限制见对应 Release；开发预览不表示所有工程场景均已验收。
 
-官方源码已发布至 [queqideliang/bright-vision](https://github.com/queqideliang/bright-vision)。以下是已经公开的预览版本；0.7.0 的可用附件请查看 [Releases](https://github.com/queqideliang/bright-vision/releases)：
+官方源码和预览附件已发布至 [queqideliang/bright-vision](https://github.com/queqideliang/bright-vision)：
 
-**[下载 Windows 完整安装包 · 0.6.0](https://github.com/queqideliang/bright-vision/releases/download/viewer-v0.6.0/Bright.Vision-0.6.0-Setup.exe)** — 包含查看器与 Revit 插件 1.7.0。[发行说明](https://github.com/queqideliang/bright-vision/releases/tag/viewer-v0.6.0)
+**[下载 Windows 完整安装包 · 0.7.0](https://github.com/queqideliang/bright-vision/releases/download/viewer-v0.7.0/Bright.Vision-0.7.0-Setup.exe)** — 包含查看器与 Revit 插件 1.7.0。[发行说明与 SHA-256](https://github.com/queqideliang/bright-vision/releases/tag/viewer-v0.7.0)
 
 **[仅下载 Revit 插件 · 1.7.0](https://github.com/queqideliang/bright-vision/releases/download/revit-v1.7.0/BV-1.7.0-Setup.exe)** — 适用于已有查看器、只需安装导出／计量插件的电脑。[发行说明](https://github.com/queqideliang/bright-vision/releases/tag/revit-v1.7.0)
+
+历史预览 [查看器 0.6.0](https://github.com/queqideliang/bright-vision/releases/tag/viewer-v0.6.0) 保留原附件与标签。
 
 ## 可以做什么
 
@@ -25,7 +27,7 @@ Bright Vision 是本地 BIM 模型查看器和独立 Revit 导出／计量插件
 
 ## 使用与构建
 
-上方链接对应已公开的开发预览附件，安装前请阅读发行说明中的签名状态及已知限制。官方更新配置采用上述固定仓库的预览频道；生产更新模块的公网检查、完整下载及 SHA-256 核验已通过实际验证，系统安装验收另行记录。旧安装版本需要先安装包含该配置的新客户端。
+上方链接对应已公开的开发预览附件，安装前请阅读发行说明中的签名状态及已知限制。0.7.0 的生产更新模块已通过无认证公网检查、完整下载、独立 SHA-256 与 staging 核验；本次未运行安装器。测试以 `currentVersion:0.6.0` 模拟旧版本协议输入，未运行旧客户端；0.7.0 同版本不重复下载，stable 订阅不接收 preview。旧安装版本需要先安装包含该更新能力的新客户端。
 
 开发者先从 Web 查看器开始，不需要 Revit 或 Autodesk SDK：
 
@@ -39,7 +41,7 @@ npm run serve:web
 
 使用 Node.js 26 和 npm。完整 Windows 包还需本机 .NET 编译工具、合法取得的 Revit API 引用、自己构建并显式审阅的插件模块。公共源码不附带 API DLL、预编译插件或模型；缺少模块时，仅相应集成测试明确 SKIP，不能据此宣称打包通过。
 
-0.7.0 本轮检查仅使用 CLI 与独立的无界面 Chromium，不操作原生桌面、不启动 Electron 窗口或真实 Revit，不读取客户模型。CI 在 Web 构建后使用 `ubuntu-24.04` 的系统 Chrome 运行 `npm run test:background`，保留浏览器沙箱，校验合成模型中的导航、助手与零外部页面请求；实际 CI 结果另行确认。运行方式与覆盖边界见 [后台测试](tools/bim-viewer/BACKGROUND_TESTING.md)。
+0.7.0 本轮检查仅使用 CLI 与独立的无界面 Chromium，不操作原生桌面、不启动 Electron 窗口或真实 Revit，不读取客户模型。[实际 CI](https://github.com/queqideliang/bright-vision/actions/runs/40710215364) 两个 job 已通过；Linux 使用 `ubuntu-24.04` 的系统 Chrome，保留浏览器沙箱，完成导航、助手等 14 项合成场景与零外部页面请求检查。运行方式与覆盖边界见 [后台测试](tools/bim-viewer/BACKGROUND_TESTING.md)。
 
 | 模块 | 说明 |
 |---|---|

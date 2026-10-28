@@ -8,9 +8,9 @@ GitHub 公共仓库放经审计的自有源代码。安装包放 Releases 附件
 
 GitHub 每个 Release 文件必须小于 2 GiB，不能把大型安装包当作 Git 源文件提交；详见[官方 Releases 说明](https://docs.github.com/en/repositories/releasing-projects-on-github/about-releases)。官方 API 的 `latest` 排除草稿和预发布；本产品独立区分 `viewer-vX.Y.Z` 与 `revit-vX.Y.Z`，客户端按固定仓库、标签前缀和预览／稳定标识筛选，见[官方 Releases API](https://docs.github.com/en/rest/releases/releases)。
 
-客户端显式使用 `X-GitHub-Api-Version: 2026-03-10`，该版本在准备时为官方支持版本，见 [API 版本说明](https://docs.github.com/en/rest/about-the-rest-api/api-versions)。0.6.0 公开预览已经完成生产更新模块的无认证检查、完整下载、SHA-256 和 staging 核验；未执行系统安装。后续每版附件仍需逐次验证，不能以 mock 或上一版结果代替。
+客户端显式使用 `X-GitHub-Api-Version: 2026-03-10`，该版本在准备时为官方支持版本，见 [API 版本说明](https://docs.github.com/en/rest/about-the-rest-api/api-versions)。0.6.0 与 0.7.0 公开预览已分别完成生产更新模块的无认证检查、完整下载、独立 SHA-256 和 staging 核验；均未执行系统安装。后续每版附件仍需逐次验证，不能以 mock 或上一版结果代替。
 
-当前源代码预览目标是查看器 **0.7.0**、内嵌 Revit 插件 **1.7.0**。0.6.0 与独立 1.7.0 预览已公开；0.7.0 的上传、远程附件和更新验收以本次实际发布记录为准，不由本地源码或构建成功推断。两端版本不强行保持同一数字。
+当前公开预览是查看器 **0.7.0**、内嵌 Revit 插件 **1.7.0**。[viewer-v0.7.0](https://github.com/queqideliang/bright-vision/releases/tag/viewer-v0.7.0) 的源码提交为 `7f8001d40eaba14cfc2457ba893b36b168c55b82`，四个 Release 附件的长度与远程 SHA-256 已核对。生产更新线上测试通过 5 项检查、7 次无认证 HTTPS 请求，完整下载 122,995,529 字节并通过 `verifyStaged`；同版本不重复下载、stable 排除 preview。旧版本测试是 `currentVersion:0.6.0` 的协议输入模拟，未运行旧客户端或安装器。0.6.0 与独立 1.7.0 的原 Release／标签保留，两端版本不强行保持同一数字。
 
 稳定订阅只接受非 `prerelease` 发布；预览订阅接受更高版本的预览或正式发布。schema 2 的 `channel` 对应实际 Release 标记，客户端分别暴露 `subscriptionChannel` 与 `releaseChannel`；同版本不重复安装。
 
@@ -30,7 +30,7 @@ node tools/bright-open-source/prepare-github-release.mjs `
 node tools/bright-open-source/prepare-github-release.mjs --verify PREPARED_DIRECTORY
 ```
 
-schema 2 固定保留公司署名：
+schema 2 固定保留公司署名。以下以历史 0.6.0 展示字段，大小与散列是示意占位值，不是已发布附件的实际数据：
 
 ```json
 {

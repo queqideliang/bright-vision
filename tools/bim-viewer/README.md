@@ -2,7 +2,7 @@
 
 独立的 Windows / Web BIM 查看器，直接读取 Bright Vision 导出的模型 ZIP。接收者无需安装 Revit；导出 RVT 时才需要对应版本的 Revit 与自有插件。
 
-当前源码为 **0.7.0 开发预览**，统一桌面包继续内含已冻结的 **BV 1.7.0** 导出插件。官方仓库为 [queqideliang/bright-vision](https://github.com/queqideliang/bright-vision)，Windows 更新器固定订阅该仓库的 preview 通道。0.6.0 查看器与 1.7.0 插件已公开发布；0.7.0 的发布状态以 [Releases](https://github.com/queqideliang/bright-vision/releases) 为准，本页不把本地构建或测试等同于已上传。
+当前公开版本为 **0.7.0 开发预览**，统一桌面包继续内含已冻结的 **BV 1.7.0** 导出插件。[下载 Windows 安装包](https://github.com/queqideliang/bright-vision/releases/download/viewer-v0.7.0/Bright.Vision-0.7.0-Setup.exe)，[发行说明与 SHA-256](https://github.com/queqideliang/bright-vision/releases/tag/viewer-v0.7.0)。官方仓库为 [queqideliang/bright-vision](https://github.com/queqideliang/bright-vision)，Windows 更新器固定订阅该仓库的 preview 通道；历史 0.6.0 与独立 1.7.0 预览保持不变。
 
 ## 当前功能
 
@@ -67,9 +67,13 @@ npm run serve:web
 
 后台浏览器验收在构建后执行 `npm run test:background`。它只启动独立的无界面 Chromium，使用合成演示模型与脚本生成的安全测试 ZIP；不连接用户浏览器、不发送原生桌面输入、不启动 Electron 或 Revit。公开 CI 使用 `ubuntu-24.04` 的系统 Chrome；其他环境可在安装依赖后执行 `npx playwright install --with-deps chromium` 准备浏览器。范围、资源占用及报告位置见 [BACKGROUND_TESTING.md](BACKGROUND_TESTING.md)。0.7.0 本轮验证仅覆盖 CLI／headless，不代表原生窗口、系统安装或真实工程导航已验收。
 
+发布源码提交 `7f8001d40eaba14cfc2457ba893b36b168c55b82` 的 [GitHub CI](https://github.com/queqideliang/bright-vision/actions/runs/40710215364) 两个 job 已通过，包括 Linux 上的 14 项导航／本地助手合成场景；没有扩大为客户模型或原生宿主验收。
+
 ## 更新与发布
 
 当前 `electron/update-release.json` 已固定 `queqideliang/bright-vision`、`enabled:true`、`channel:preview`，Windows 主进程可检查该仓库公开的查看器 Releases；仍可选择可信本地更新目录。没有兼容公开 Release 时会明确提示尚无可用发布，不把仓库存在当作有新版本。界面不能提供任意 URL、访问令牌、脚本或运行命令。若衍生构建禁用配置且不填写仓库，则不会发起官方更新请求。
+
+0.7.0 发布后已用生产更新模块完成 7 次真实无认证 HTTPS 请求，下载 122,995,529 字节安装包并通过独立 SHA-256 与 `verifyStaged` 核验。测试使用 0.6.0 版本号输入模拟升级协议，未运行旧客户端或安装器；0.7.0 同版本输入不重复下载，stable 频道排除预览发布。
 
 本地更新保留 `update.json` 与安装包同目录的方式。创建 GitHub 仓库本身不会更新旧的已安装程序；旧版需要先安装包含新更新器的版本。预览与稳定通道分开，当前稳定 0.4 更新源和历史冻结预览包不由本轮源码准备自动替换。
 

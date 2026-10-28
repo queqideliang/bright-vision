@@ -55,7 +55,9 @@ node scripts/background-smoke.mjs --baseline-only
 
 公开 CI 模板固定使用 GitHub 托管的 `ubuntu-24.04`，按 `npm ci`、`npm test`、`npm run build` 的顺序验证源码，再以 `BIM_TEST_BROWSER=/usr/bin/google-chrome` 执行 `npm run test:background`。脚本通过 Playwright 启动该系统浏览器的独立临时配置，不复用用户浏览器。runner 已有 Chrome 时不必额外下载 Playwright Chromium；其他环境可在依赖安装后显式执行 `npx playwright install --with-deps chromium` 准备浏览器。
 
-安装依赖或额外准备浏览器需要访问软件分发源；模型测试页面只访问本轮的本地 HTTP 服务，任何外部页面请求都被拦截并导致验收失败。无需 xvfb、Electron、API Key 或自托管 runner。脚本保留 Chromium 沙箱，不修改 AppArmor、用户命名空间或其他系统安全策略。首次 Linux runner 兼容性须由实际 CI 确认，不把 Windows 上的 headless 结果写成 Linux 已通过。
+安装依赖或额外准备浏览器需要访问软件分发源；模型测试页面只访问本轮的本地 HTTP 服务，任何外部页面请求都被拦截并导致验收失败。无需 xvfb、Electron、API Key 或自托管 runner。脚本保留 Chromium 沙箱，不修改 AppArmor、用户命名空间或其他系统安全策略。
+
+2026-10-28 的 [实际 GitHub CI](https://github.com/queqideliang/bright-vision/actions/runs/40710215364) 已在发布源码提交 `7f8001d40eaba14cfc2457ba893b36b168c55b82` 上通过两个 job，其中 Linux source job 使用上述系统 Chrome 完成 14 项 headless 检查，外部页面请求与浏览器错误为零。算例仅限内置四构件演示模型及脚本生成的一构件安全 ZIP，覆盖导航、人物可见与移动、本地规则助手、输入焦点、模型切换、英文窄屏和恶意文字输入；没有运行 Electron、真实 Revit、客户模型或系统安装。
 
 截图／报告可作为受审查的 workflow artifact 保存；默认输出不随源码发布。不要上传客户模型、用户配置、私钥或本机 Revit SDK 文件。
 

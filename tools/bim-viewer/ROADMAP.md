@@ -11,7 +11,7 @@
 | 0.7 人物漫游与飞行 | 可见人形与第三人称跟随视角、手动地面起点、基础地面采样和射线阻挡、自由飞行、速度／眼高与明确单位 | 本轮只做 CLI／独立 headless 浏览器；不是完整人体碰撞、复杂楼梯通行、自动寻路或疏散分析 |
 | 0.7 本地模型助手 | 确定性规则查询模型概览、类别、楼层、所选属性、缺失字段、原始量；明确语法查找、缺少参数检查及构件定位依据 | 本地执行，不是大语言模型，不请求云端 AI；不理解任意自然语言条件、不判断规范合规、不计算地区扣减 |
 
-查询语法和统计口径见 [README](README.md)。0.7.0 本轮不启动原生 Electron 窗口或真实 Revit；后台测试只使用内置合成演示模型及脚本生成的安全 ZIP。入口与证据边界见 [BACKGROUND_TESTING.md](BACKGROUND_TESTING.md)。远程 CI 的 Chromium 安装与沙箱兼容性由实际运行结果确认。
+查询语法和统计口径见 [README](README.md)。0.7.0 本轮不启动原生 Electron 窗口或真实 Revit；后台测试只使用内置合成演示模型及脚本生成的安全 ZIP。[实际 CI](https://github.com/queqideliang/bright-vision/actions/runs/40710215364) 已在固定 Linux runner 的系统 Chrome 中通过 14 项 headless 场景，保留沙箱。入口与证据边界见 [BACKGROUND_TESTING.md](BACKGROUND_TESTING.md)。
 
 ## 后续交付方向
 
