@@ -2,6 +2,8 @@
 
 本目录只提供当前墙体试算的开发用单次 SDK 驱动，不是产品功能入口。源码公开不附带 Autodesk API DLL、Revit 安装程序、官方样例、用户 RVT 或历史实机日志；这些工具也不会进入产品 DLL 和安装器。
 
+Revit 2020 指定 build 的受限墙体 SDK／独立数据核验已通过，具体算例、证据门槛和未覆盖项见 [验证范围](REVIT2020_VALIDATION.md)。
+
 ## 前提与范围
 
 需要合法安装的 Revit 2020、对应 API 和 .NET Framework 参考程序集。默认安装路径使用系统 Program Files 下的 Autodesk/Revit 2020；其他位置可显式传 `-RevitPath`。构建使用编译引用，不运行厂商 API 程序集。

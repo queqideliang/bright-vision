@@ -82,6 +82,7 @@ namespace BrightVision.CivilWallHostAcceptance
                 "revitYear", application.Application.VersionNumber, "revitBuild", application.Application.VersionBuild,
                 "sourceSaved", false, "activeViewWritten", false, "fixtureRollbackRequired", true,
                 "ribbonClickVerified", false, "nativeWallWindowVerified", false,
+                "nativeSnapshotComparisonMethod", "exact-structural-json-v1",
                 "driver", Fields("path", Assembly.GetExecutingAssembly().Location, "sha256", Hash(Assembly.GetExecutingAssembly().Location)));
             try
             {
@@ -279,8 +280,19 @@ namespace BrightVision.CivilWallHostAcceptance
             Status("reading-" + name); ui.Selection.SetElementIds(new List<ElementId> { wall.Id });
             object request = Call(nativeReader, "DefaultRequest", ui); Set(request, "Scope", "selection"); Set(request, "PhaseId", Id(phase.Id)); Set(request, "DesignOptionId", "-1");
             object native = Call(nativeReader, "Read", ui, request); string before = json.Serialize(native);
+            string comparisonFile = name + "-native-comparison.json";
+            Dictionary<string, object> comparison = Fields("schemaVersion", 1, "method", "exact-structural-json-v1", "result", "pending",
+                "beforeFile", name + "-native-before.json", "afterReaderFile", name + "-native-after-reader.json", "afterCalculationFile", name + "-native-after-calculation.json",
+                "objectKeyOrderIgnored", true, "arrayOrderPreserved", true, "scalarTypeAndValueExact", true,
+                "readerDifferencePath", null, "calculationDifferencePath", null, "firstDifferencePath", null);
+            SaveText(name + "-native-before.json", before);
             IList nativeRows = (IList)Get(native, "Elements"); Require(nativeRows.Count == 1 && (string)Get(nativeRows[0], "UniqueId") == wall.UniqueId, "Fixture native reader selection is not exact.");
             object facts = Call(wallReader, "Read", ui, native, request, view);
+            string afterReader = json.Serialize(native); SaveText(name + "-native-after-reader.json", afterReader);
+            string readerDifference = CivilSnapshotComparison.CompareJson(json, before, afterReader);
+            comparison["readerDifferencePath"] = comparison["firstDifferencePath"] = readerDifference;
+            comparison["result"] = readerDifference == null ? "reader-unchanged" : "FAIL"; Save(comparisonFile, comparison);
+            Require(readerDifference == null, "Wall reader mutated native source snapshot at " + readerDifference + ".");
             IList walls = (IList)Get(facts, "Walls"); Require(walls.Count == 1, "Fixture wall source was lost or repeated.");
             object fact = walls[0];
             Require((bool)Get(fact, "GeometryVerified") && (string)Get(fact, "Status") == "verified", "Native Boolean shape verification failed: " + json.Serialize(Get(fact, "Issues")));
@@ -293,7 +305,13 @@ namespace BrightVision.CivilWallHostAcceptance
             Near(actualGeometry, expectedVolume, "Actual geometry volume differs from independent rectangular fixture");
             double difference = Convert.ToDouble(Get(fact, "SymmetricDifferenceMetres3"), CultureInfo.InvariantCulture), tolerance = Convert.ToDouble(Get(fact, "GeometryToleranceMetres3"), CultureInfo.InvariantCulture);
             Require(difference >= 0 && difference <= tolerance && tolerance <= 1e-6, "Recorded geometry proof/tolerance invalid.");
-            object batch = Call(calculator, "Calculate", facts); IList results = (IList)Get(batch, "Results"); Require(results.Count == 1, "Fixture calculation count differs."); object result = results[0];
+            object batch = Call(calculator, "Calculate", facts);
+            string afterCalculation = json.Serialize(native); SaveText(name + "-native-after-calculation.json", afterCalculation);
+            string calculationDifference = CivilSnapshotComparison.CompareJson(json, before, afterCalculation);
+            comparison["calculationDifferencePath"] = comparison["firstDifferencePath"] = calculationDifference;
+            comparison["result"] = calculationDifference == null ? "PASS" : "FAIL"; Save(comparisonFile, comparison);
+            Require(calculationDifference == null, "Wall calculator mutated native source snapshot at " + calculationDifference + ".");
+            IList results = (IList)Get(batch, "Results"); Require(results.Count == 1, "Fixture calculation count differs."); object result = results[0];
             Require((string)Get(result, "Status") == "calculated", "Verified fixture did not produce its project-method result.");
             Near(Convert.ToDouble(Get(result, "BasisVolumeMetres3"), CultureInfo.InvariantCulture), 6, "Parameter-prism basis must remain 6m3, not native volume.");
             Near(Convert.ToDouble(Get(result, "OpeningUnionAreaMetres2"), CultureInfo.InvariantCulture), expectedOpeningArea, "Opening union area differs from independent fixture");
@@ -302,13 +320,13 @@ namespace BrightVision.CivilWallHostAcceptance
             Near(ledger, expectedVolume, "Signed ledger is not conserved.");
             double nativeRaw = wall.get_Parameter(BuiltInParameter.HOST_VOLUME_COMPUTED).AsDouble();
             Near(Convert.ToDouble(Get(Get(fact, "NativeVolume"), "Value"), CultureInfo.InvariantCulture), nativeRaw * Math.Pow(0.3048, 3), "Native quantity must remain separately recorded.");
-            Require(json.Serialize(native) == before, "Wall facts or calculator mutated native source snapshot.");
             Save(name + "-native.json", native); Save(name + "-facts.json", facts); Save(name + "-calculation.json", batch);
             string csv = (string)Call(calculator, "ToCsv", batch, Get(batch, "Results")); SaveText(name + ".csv", csv);
             cases.Add(Fields("name", name, "wallUniqueId", wall.UniqueId, "expectedBasisMetres3", 6.0, "expectedOpeningUnionAreaMetres2", expectedOpeningArea,
                 "expectedResultMetres3", expectedVolume, "geometryVolumeMetres3", actualGeometry, "symmetricDifferenceMetres3", difference, "geometryToleranceMetres3", tolerance,
                 "nativeRawVolumeFeet3", nativeRaw, "nativeVolumeMetres3", nativeRaw * Math.Pow(0.3048, 3), "nativeIsNotSubtractionBasis", true,
-                "openingCount", ((IList)Get(fact, "Inserts")).Count, "ledgerCount", ((IList)Get(result, "Ledger")).Count, "nativeSnapshotUnchanged", true));
+                "openingCount", ((IList)Get(fact, "Inserts")).Count, "ledgerCount", ((IList)Get(result, "Ledger")).Count, "nativeSnapshotUnchanged", true,
+                "nativeComparisonFile", comparisonFile, "nativeComparisonMethod", "exact-structural-json-v1"));
             return fact;
         }
 

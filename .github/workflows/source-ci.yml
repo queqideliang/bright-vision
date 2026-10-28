@@ -23,6 +23,8 @@ jobs:
           package-manager-cache: false
       - name: Verify release preparation tooling
         run: node --test tools/bright-open-source/tests/prepare-github-release.test.mjs
+      - name: Verify civil wall evidence gates without Revit
+        run: node --test tools/bright-revit-exporter/tests/civil-wall-host-verifier.test.mjs
       - name: Install locked viewer dependencies
         working-directory: tools/bim-viewer
         run: npm ci
@@ -50,5 +52,8 @@ jobs:
       - name: Verify draft arguments and signing gate with an inert recording tool
         shell: powershell
         run: '& tools/bright-open-source/tests/Test-PublishGitHubDraft.ps1'
+      - name: Verify native snapshot comparer with a pure Framework DLL fixture
+        shell: powershell
+        run: '& tools/bright-revit-exporter/tests/host/Test-CivilSnapshotComparison.ps1'
       # This test resolves gh.exe only to its own recording PowerShell script.
       # It never contacts GitHub, creates a tag, uploads or starts an installer.

@@ -1,7 +1,8 @@
 // Copyright 2026 崛亮视觉 (Bright Vision). SPDX-License-Identifier: Apache-2.0
 import assert from 'node:assert/strict';
+import { createHash } from 'node:crypto';
 import test from 'node:test';
-import { openingUnion,verifyWallCase } from './verify-civil-wall-host.mjs';
+import { openingUnion,verifyWallCase,verifyNativeSnapshots,verifyHostCompletion,verifyRejectedOverlapShape } from './verify-civil-wall-host.mjs';
 const IDS=['wall-uid','type-uid','view-uid','opening-a','opening-b','profile-uid'];
 const SOURCES=['CURVE_ELEM_LENGTH','WALL_USER_HEIGHT_PARAM','WallType.Width'];
 const MAIN=['墙ElementId','墙UniqueId','名称','类型UniqueId','状态','长度m','高度m','厚度m','基准体积m3','洞口并集面积m2','扣减体积m3','项目试算体积m3','Revit原生体积m3','原生体积状态','原生体积来源','基底标高m','基底来源','实际实体体积m3','双向差集体积m3','几何容差m3','墙间检查完整','重叠候选数','相交墙ElementIds','方法','状态说明'];
@@ -42,3 +43,30 @@ for(const [label,edit] of [
   ['CSV selected member changed',f=>{f.csv=f.csv.replace('"10","wall-uid"','"10","foreign-wall"');}],
   ['CSV number changed',f=>{f.csv=f.csv.replace('"5.6","5.6"','"5.2","5.6"');}],
 ])test(`synthetic tamper rejected: ${label}`,()=>{const f=fixture('one-opening');edit(f);assert.throws(()=>check(f));});
+
+function snapshotFixture(){const native=fixture('one-opening').native;return {native,before:structuredClone(native),afterReader:structuredClone(native),afterCalculation:structuredClone(native),comparison:{schemaVersion:1,method:'exact-structural-json-v1',result:'PASS',beforeFile:'one-opening-native-before.json',afterReaderFile:'one-opening-native-after-reader.json',afterCalculationFile:'one-opening-native-after-calculation.json',objectKeyOrderIgnored:true,arrayOrderPreserved:true,scalarTypeAndValueExact:true,readerDifferencePath:null,calculationDifferencePath:null,firstDifferencePath:null}};}
+const checkSnapshots=f=>verifyNativeSnapshots('one-opening',f.before,f.afterReader,f.afterCalculation,f.native,f.comparison);
+test('snapshot object property reordering preserves exact values',()=>{const f=snapshotFixture();f.afterReader=Object.fromEntries(Object.entries(f.afterReader).reverse());assert.equal(checkSnapshots(f).beforeAfterReaderVerified,true);});
+for(const [label,edit] of [
+  ['numeric value changed',f=>{f.afterReader.Elements[0].Volume.Value+=0.1;}],
+  ['field added',f=>{f.afterCalculation.NewField='unexpected';}],
+  ['field deleted',f=>{delete f.afterReader.Elements[0].UniqueId;}],
+  ['scalar type changed',f=>{f.afterCalculation.Elements[0].Volume.Value='5.6';}],
+  ['array reordered',f=>{f.before.Notices=['first','second'];f.native.Notices=['first','second'];f.afterReader.Notices=['second','first'];f.afterCalculation.Notices=['first','second'];}],
+  ['recorded difference ignored',f=>{f.comparison.firstDifferencePath='$.Elements[0].Volume.Value';}],
+])test(`snapshot tamper rejected: ${label}`,()=>{const f=snapshotFixture();edit(f);assert.throws(()=>checkSnapshots(f));});
+
+function terminalFixture(){return {report:{result:'PASS',runId:'owned-run',finishedUtc:'2026-10-28T13:02:00.000Z',elapsedSeconds:100},status:{phase:'completed',runId:'owned-run',utc:'2026-10-28T13:02:00.100Z'},launch:{runId:'owned-run',startedAtUtc:'2026-10-28T13:00:00.000Z'}};}
+const checkTerminal=f=>verifyHostCompletion(f.report,f.status,f.launch,Date.parse('2026-10-28T13:03:00.000Z'));
+test('matching completed terminal evidence is accepted',()=>assert.equal(checkTerminal(terminalFixture()).phase,'completed'));
+for(const [label,edit] of [
+  ['missing status',f=>{delete f.status;}],
+  ['failed status beside PASS report',f=>{f.status.phase='failed';}],
+  ['wrong nonce status',f=>{f.status.runId='another-run';}],
+  ['status older than report',f=>{f.status.utc='2026-10-28T13:01:59.999Z';}],
+  ['finish before launch',f=>{f.report.finishedUtc='2026-10-28T12:59:59.999Z';}],
+  ['missing finish timestamp',f=>{delete f.report.finishedUtc;}],
+])test(`terminal evidence rejected: ${label}`,()=>{const f=terminalFixture();edit(f);assert.throws(()=>checkTerminal(f));});
+
+test('rejected overlap retains a valid independently known own-shape proof',()=>assert.equal(verifyRejectedOverlapShape(fixture('one-opening').facts.Walls[0],5.6),true));
+for(const key of ['SymmetricDifferenceMetres3','GeometryToleranceMetres3','GeometryVolumeMetres3'])test(`rejected overlap null ${key} with recomputed hash is rejected`,()=>{const fact=structuredClone(fixture('one-opening').facts.Walls[0]);fact[key]=null;const bytes=Buffer.from(JSON.stringify(fact));assert.match(createHash('sha256').update(bytes).digest('hex'),/^[a-f0-9]{64}$/u);assert.throws(()=>verifyRejectedOverlapShape(JSON.parse(bytes.toString('utf8')),5.6));});

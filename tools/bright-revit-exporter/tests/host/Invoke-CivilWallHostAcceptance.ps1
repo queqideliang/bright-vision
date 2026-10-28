@@ -51,6 +51,9 @@ if(!$driverBuild.testOnly -or $driverBuild.expectedProductionVersion -ne '1.7.0.
     [IO.Path]::GetFullPath($driverBuild.assemblyPath) -ne $driver -or $driverBuild.assemblySha256 -ne $driverHash) { throw 'Driver build manifest does not match the exact compiled phase3 test driver.' }
 $driverSource=Child $workspace $driverBuild.sourcePath
 if((Hash $driverSource) -ne $driverBuild.sourceSha256) { throw 'Acceptance driver source changed since its recorded build.' }
+if($driverBuild.PSObject.Properties.Name -contains 'supportSources') {
+    foreach($support in $driverBuild.supportSources) { $supportPath=Child $workspace $support.path; if((Hash $supportPath) -ne $support.sha256) { throw 'Acceptance driver support source changed since its recorded build.' } }
+}
 foreach($api in $driverBuild.api) { if((Hash $api.path) -ne $api.sha256) { throw 'Acceptance reference API changed since compilation.' } }
 $frozenManifestPath=Child $workspace $ProductionBuildManifestPath
 $frozenBuild=Get-Content -LiteralPath $frozenManifestPath -Encoding UTF8 -Raw|ConvertFrom-Json

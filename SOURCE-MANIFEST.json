@@ -25,7 +25,7 @@
     "tools/bright-revit-installer"
   ],
   "sourceSnapshotDate": "2026-10-28",
-  "sourceSnapshotSha256": "9439a5f087f184524c44e919c1509408473326eaa0411f7f9e022bd2fb4d8c1d",
+  "sourceSnapshotSha256": "83a12073a56818b486ce419240ea1bacd8a5175a4007a6cf8c5420b5c89118c2",
   "files": [
     {
       "path": "tools/bim-viewer/.gitignore",
@@ -559,8 +559,8 @@
     },
     {
       "path": "tools/bright-open-source/templates/public-README.md",
-      "bytes": 4757,
-      "sha256": "11f8dc9657e4916bf074bc9e9d83c3748409c8941a3ea5a6e475c9f57cae1456"
+      "bytes": 4969,
+      "sha256": "ae4953df0304e5fed10977db06951ffd46178cf06ec212b72698ec2a4c15f29b"
     },
     {
       "path": "tools/bright-open-source/templates/public-SECURITY.md",
@@ -579,8 +579,8 @@
     },
     {
       "path": "tools/bright-open-source/templates/source-ci.yml.example",
-      "bytes": 1973,
-      "sha256": "51fd5de36676cce854c59664e48bb2435cfaa7c8aaafe46b62a22e1d159ed6ca"
+      "bytes": 2322,
+      "sha256": "1ec0adf2f471d7b5ce5274f41324d3d73fb1203fe493848666deeca20c5a41e4"
     },
     {
       "path": "tools/bright-open-source/tests/prepare-github-release.test.mjs",
@@ -629,8 +629,8 @@
     },
     {
       "path": "tools/bright-revit-exporter/CIVIL_QUANTITY_ROADMAP.md",
-      "bytes": 12127,
-      "sha256": "858ec6b59708bb1930b2b161f2666166b9a3f5b42078c7671d453df1c77d183f"
+      "bytes": 12374,
+      "sha256": "b99262fa41ccf05925ba014df794eb51f681c8827b276627c8bf94601439d1be"
     },
     {
       "path": "tools/bright-revit-exporter/CivilLevelResolver.cs",
@@ -734,8 +734,8 @@
     },
     {
       "path": "tools/bright-revit-exporter/README.md",
-      "bytes": 7993,
-      "sha256": "56dba376438fa58539d6b652cd211ad2509c3c9532a9bc3ad843b88169aeec97"
+      "bytes": 8182,
+      "sha256": "3c77dc985cb7f67c0c0e6ef61954dc1f96bee4e868ba6b139c4f7d11b26fea5d"
     },
     {
       "path": "tools/bright-revit-exporter/reference-paths.example.json",
@@ -779,8 +779,8 @@
     },
     {
       "path": "tools/bright-revit-exporter/tests/civil-wall-host-verifier.test.mjs",
-      "bytes": 6389,
-      "sha256": "eb375e67e5fec0f80a1ac05a335018fd2524dbd9b827b3dd074bce11c421db3f"
+      "bytes": 9923,
+      "sha256": "a34c62c117a1e899715cc2360523a81a3ae50bbcbbc6462f279a79a8db4f92bc"
     },
     {
       "path": "tools/bright-revit-exporter/tests/CivilProjectFixture.cs",
@@ -834,23 +834,43 @@
     },
     {
       "path": "tools/bright-revit-exporter/tests/host/Build-CivilWallHostAcceptance.ps1",
-      "bytes": 3056,
-      "sha256": "5ed5b6580ec1e8794543fd30408209d555ad8b4883b90e46ad20d1ee79f155ec"
+      "bytes": 3621,
+      "sha256": "3174fd5f7175ea772bbe282a6174c65bad0bd1d3597c263c5ce628449273154f"
+    },
+    {
+      "path": "tools/bright-revit-exporter/tests/host/CivilSnapshotComparison.cs",
+      "bytes": 5402,
+      "sha256": "b5fc4242d6dfc93a1a88115c3b1bdb4dacc7bf4c51afae3d658b8263b4d662e3"
+    },
+    {
+      "path": "tools/bright-revit-exporter/tests/host/CivilSnapshotComparisonFixture.cs",
+      "bytes": 13421,
+      "sha256": "c3729458d83ff64026035907fdd120f01cb5387ba09927ac2b061989f86a4eda"
     },
     {
       "path": "tools/bright-revit-exporter/tests/host/CivilWallHostAcceptanceApp.cs",
-      "bytes": 36745,
-      "sha256": "48d034ceebe475ac947bfcb5466ab0e34d7cf4bfc8b09cd994abe9cf03a31d1f"
+      "bytes": 38676,
+      "sha256": "cbb71fe9825e96d609c3239a45666c5dcb5714b394345c4705bdefe349e99b58"
     },
     {
       "path": "tools/bright-revit-exporter/tests/host/Invoke-CivilWallHostAcceptance.ps1",
-      "bytes": 11503,
-      "sha256": "77bfac24e2190fda064d5e2f7dc26b58438dca31c91479efdc813094737929fb"
+      "bytes": 11804,
+      "sha256": "129f95f8e0de6a4b6876f5989f2163dccf31490bcbde132563e8dbb112db2dfe"
     },
     {
       "path": "tools/bright-revit-exporter/tests/host/README.md",
-      "bytes": 4314,
-      "sha256": "9aa3ce9a2d048274d1a9fbcecb05f15b285c9d56628de1ae06605c843d7d3fdf"
+      "bytes": 4480,
+      "sha256": "e67843dda3e3a4bf58ddbf9c21ec81da260524d77fd99c19670f7c20a518b9a6"
+    },
+    {
+      "path": "tools/bright-revit-exporter/tests/host/REVIT2020_VALIDATION.md",
+      "bytes": 3823,
+      "sha256": "b79a5f24e6dc003db2d27050c3f86e36fc1e286f166fb2d406f198f86ed5d223"
+    },
+    {
+      "path": "tools/bright-revit-exporter/tests/host/Test-CivilSnapshotComparison.ps1",
+      "bytes": 4860,
+      "sha256": "4af3dff80ed2f83d9e84e910b259f9570bdfce52d0f067c7b8b58d122f0230c8"
     },
     {
       "path": "tools/bright-revit-exporter/tests/QuantityApiStubs.cs",
@@ -944,8 +964,8 @@
     },
     {
       "path": "tools/bright-revit-exporter/tests/verify-civil-wall-host.mjs",
-      "bytes": 24649,
-      "sha256": "0d60fd108e08481fc4f279ad3b16389d0098d01c459ba828386f06bd8602a9eb"
+      "bytes": 29288,
+      "sha256": "91a8d34254773f52ffd7b5141bc1df5d08e216d7157d54b7b824f41fe91de4a7"
     },
     {
       "path": "tools/bright-revit-exporter/tests/verify-viewer.mjs",
@@ -1064,8 +1084,8 @@
     {
       "path": "README.md",
       "sourcePath": "tools/bright-open-source/templates/public-README.md",
-      "bytes": 4757,
-      "sha256": "11f8dc9657e4916bf074bc9e9d83c3748409c8941a3ea5a6e475c9f57cae1456"
+      "bytes": 4969,
+      "sha256": "ae4953df0304e5fed10977db06951ffd46178cf06ec212b72698ec2a4c15f29b"
     },
     {
       "path": "CONTRIBUTING.md",
@@ -1094,14 +1114,15 @@
     {
       "path": ".github/workflows/source-ci.yml",
       "sourcePath": "tools/bright-open-source/templates/source-ci.yml.example",
-      "bytes": 1973,
-      "sha256": "51fd5de36676cce854c59664e48bb2435cfaa7c8aaafe46b62a22e1d159ed6ca"
+      "bytes": 2322,
+      "sha256": "1ec0adf2f471d7b5ce5274f41324d3d73fb1203fe493848666deeca20c5a41e4"
     }
   ],
   "excluded": "No original git history, cloud code, research, recovered vendor code, SDK binaries, models, credentials, installation records or compiled artifacts.",
   "outstanding": [
+    "Observe remote CI for the newly added Node evidence and pure Framework comparison gates after the follow-up source push.",
     "Verify system installation independently of public updater download and staging checks.",
-    "Extend and document native Revit/model acceptance by build and supported function."
+    "Extend native window and Revit/model acceptance beyond the exact build and cases in the validation scope document."
   ],
   "publicationReadyMeaning": "The legacy publicationReady=false field does not deny source publication or preview availability; it does not assert a stable release or complete runtime/update acceptance.",
   "initialPublicationSnapshot": {
@@ -1147,6 +1168,40 @@
       "stableExcludesPreview": true,
       "legacyVersionProtocolSimulated": true,
       "legacyApplicationExecuted": false
+    }
+  },
+  "testToolValidation": {
+    "recordedAtUtc": "2026-10-28T14:01:37.871943+00:00",
+    "scopeDocument": "tools/bright-revit-exporter/tests/host/REVIT2020_VALIDATION.md",
+    "pluginVersion": "1.7.0",
+    "revitYear": "2020",
+    "revitBuild": "20190327_2315(x64)",
+    "hostSdkAssertions": 81,
+    "independentArtifactsVerified": 28,
+    "knownCaseResultsMetres3": [
+      6,
+      5.6,
+      5.4
+    ],
+    "allThreeRawNativeStagesEqualInThisRun": true,
+    "structuralComparisonMethod": "exact-structural-json-v1",
+    "terminalStatusNonceAndTimeVerified": true,
+    "physicalUnjoinedOverlapRefused": true,
+    "independentIntersectionMetres3": 2.7,
+    "rollbackSourceSelectionAndViewChecksPassed": true,
+    "pureNodeRegressionPass": 33,
+    "pureFrameworkComparisonAssertions": 50,
+    "pureFrameworkUsesDefaultSystemRuntime": true,
+    "freshSourceChecksUseNoRevitOrPrivateCache": true,
+    "production24SourceHashesUnchanged": true,
+    "packagedInstallersAndLockUnchanged": true,
+    "nativeRibbonAndWindowVerified": false,
+    "otherRevitYearsVerified": false,
+    "priorTextComparisonFailureCause": "Not established by this successful run.",
+    "remoteCiForThisFollowUpExecuted": false,
+    "evidenceDigests": {
+      "hostReportSha256": "d47f984454399602133b05a526b3d34ad22dc0403d1a9bd064d4862c99fda437",
+      "independentDataReportSha256": "ae0416d408d5e6c186819ff75c079c3d3d3184f440f4a55fd2ec0f526cbbe874"
     }
   }
 }
