@@ -1,12 +1,19 @@
 #requires -Version 5.1
 [CmdletBinding()]
-param([string]$OutputPath = (Join-Path $PSScriptRoot '..\artifacts\tests\civil-wall-domain-1.7'))
+param(
+    [string]$OutputPath = (Join-Path $PSScriptRoot ('..\artifacts\tests\civil-wall-domain-1.8-' + [guid]::NewGuid().ToString('N'))),
+    [string]$FrameworkDirectory
+)
 $ErrorActionPreference='Stop'
 Set-StrictMode -Version Latest
 $module=Split-Path $PSScriptRoot -Parent
 $output=[IO.Path]::GetFullPath($OutputPath)
 [void][IO.Directory]::CreateDirectory($output)
-$framework=Join-Path (Split-Path $module -Parent) 'revit-reference-cache\framework\net45'
+$framework=if($FrameworkDirectory) { [IO.Path]::GetFullPath($FrameworkDirectory) } else { Join-Path (Split-Path $module -Parent) 'revit-reference-cache\framework\net45' }
+if(!$FrameworkDirectory -and !(Test-Path -LiteralPath (Join-Path $framework 'mscorlib.dll'))) {
+    # Pure managed facts only; no Autodesk reference or API execution is needed.
+    $framework=Join-Path $env:WINDIR 'Microsoft.NET\Framework64\v4.0.30319'
+}
 $dll=Join-Path $output 'CivilWallCalculationFixture.dll'
 $argsList=@('/nologo','/noconfig','/target:library','/platform:anycpu','/optimize+','/codepage:65001','/langversion:5','/nostdlib+',('/out:'+$dll))
 foreach($name in @('mscorlib.dll','System.dll','System.Core.dll')) { $argsList+='/reference:'+(Join-Path $framework $name) }

@@ -65,5 +65,13 @@ jobs:
       - name: Verify native snapshot comparer with a pure Framework DLL fixture
         shell: powershell
         run: '& tools/bright-revit-exporter/tests/host/Test-CivilSnapshotComparison.ps1'
+      - name: Verify wall projected area and quantity attribution without Revit
+        shell: powershell
+        run: |
+          & tools/bright-revit-exporter/tests/Test-CivilWallCalculation.ps1
+          & tools/bright-revit-exporter/tests/Test-CivilWallReport.ps1
+      - name: Verify wall workbench in offscreen WPF without desktop input
+        shell: powershell
+        run: '& tools/bright-revit-exporter/tests/Test-CivilWallUi.ps1'
       # This test resolves gh.exe only to its own recording PowerShell script.
       # It never contacts GitHub, creates a tag, uploads or starts an installer.

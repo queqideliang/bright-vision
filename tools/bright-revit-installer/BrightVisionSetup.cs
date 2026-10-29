@@ -16,9 +16,9 @@ using System.Windows.Forms;
 [assembly: AssemblyCompany("崛亮视觉")]
 [assembly: AssemblyCopyright("Copyright 2026 崛亮视觉 (Bright Vision)")]
 [assembly: AssemblyDescription("Installs the Revit export plugin for the current Windows user")]
-[assembly: AssemblyVersion("1.7.0.0")]
-[assembly: AssemblyFileVersion("1.7.0.0")]
-[assembly: AssemblyInformationalVersion("1.7.0")]
+[assembly: AssemblyVersion("1.8.0.0")]
+[assembly: AssemblyFileVersion("1.8.0.0")]
+[assembly: AssemblyInformationalVersion("1.8.0")]
 
 internal sealed class SetupOptions
 {
@@ -207,7 +207,7 @@ internal sealed class SetupForm : Form
     internal SetupForm(SetupEngine engine)
     {
         this.engine = engine;
-        Text = "BV · 崛亮视觉 · Bright Vision · Revit 插件安装 1.7.0";
+        Text = "BV · 崛亮视觉 · Bright Vision · Revit 插件安装 1.8.0";
         Font = new Font("Microsoft YaHei UI", 10F);
         BackColor = Color.FromArgb(246, 248, 251);
         StartPosition = FormStartPosition.CenterScreen;

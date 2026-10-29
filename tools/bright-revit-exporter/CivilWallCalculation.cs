@@ -16,6 +16,8 @@ namespace BrightVision.Civil
         public string Description { get; set; }
         public string Formula { get; set; }
         public double AreaMetres2 { get; set; }
+        public double DeltaAreaMetres2 { get; set; }
+        public string AreaFormula { get; set; }
         public double DeltaVolumeMetres3 { get; set; }
         public string Source { get; set; }
     }
@@ -25,6 +27,8 @@ namespace BrightVision.Civil
         public CivilWallFact Fact { get; set; }
         public string Status { get; set; }
         public string Message { get; set; }
+        public double? BasisAreaMetres2 { get; set; }
+        public double? ResultAreaMetres2 { get; set; }
         public double? BasisVolumeMetres3 { get; set; }
         public double? OpeningUnionAreaMetres2 { get; set; }
         public double? DeductionVolumeMetres3 { get; set; }
@@ -46,6 +50,9 @@ namespace BrightVision.Civil
     internal static class CivilWallCalculator
     {
         public const string RuleId = "BV.Wall.RectSolid/1";
+        // One side in the wall axis/vertical plane. This is not exposed-face,
+        // formwork, finish, building area or a regional bill/quota measurement.
+        public const string AreaRuleId = "BV.Wall.AxisProjection/1";
         public const int MaxInserts = 200;
 
         public static CivilWallCalculationBatch Calculate(CivilWallSnapshot input)
@@ -93,6 +100,7 @@ namespace BrightVision.Civil
                 result.Ledger.Add(new CivilWallLedgerEntry {
                     Kind = "basis", ElementId = fact.ElementId, UniqueId = fact.UniqueId,
                     Description = "几何校验通过的矩形基准体积", AreaMetres2 = faceArea, DeltaVolumeMetres3 = basis,
+                    DeltaAreaMetres2 = faceArea, AreaFormula = F(length) + " × " + F(height),
                     Formula = F(length) + " × " + F(height) + " × " + F(width),
                     Source = fact.ParameterLength.Source + "; " + fact.ParameterHeight.Source + "; " + fact.ParameterWidth.Source
                 });
@@ -110,6 +118,7 @@ namespace BrightVision.Civil
                         Kind = "deduction", ElementId = insert.ElementId, UniqueId = insert.UniqueId,
                         Description = "明确矩形洞口：裁剪到墙域后的新增并集面积（重叠不重复扣）",
                         AreaMetres2 = incremental, DeltaVolumeMetres3 = -Finite(incremental * width),
+                        DeltaAreaMetres2 = -incremental, AreaFormula = "−(" + F(next) + " − " + F(union) + ")",
                         Formula = "(" + F(next) + " − " + F(union) + ") × " + F(width), Source = insert.Source
                     });
                     union = next;
@@ -117,6 +126,7 @@ namespace BrightVision.Civil
                 double deduction = Finite(union * width), remaining = Math.Max(0, Finite(basis - deduction));
                 if (union > faceArea + 1e-10 || Math.Abs(remaining - fact.GeometryVolumeMetres3.Value) > tolerance)
                     throw new UnsupportedWall("独立矩形并集结果与实际实体体积不一致；不输出试算量。");
+                result.BasisAreaMetres2 = faceArea; result.ResultAreaMetres2 = Math.Max(0, Finite(faceArea - union));
                 result.BasisVolumeMetres3 = basis; result.OpeningUnionAreaMetres2 = union;
                 result.DeductionVolumeMetres3 = deduction; result.ResultVolumeMetres3 = remaining;
                 result.Status = "calculated"; result.Message = "项目约定矩形墙试算；不是地区清单／定额量。原生量单列，未参与再次扣减。";
@@ -125,6 +135,7 @@ namespace BrightVision.Civil
             {
                 result.Status = fact.Status == "failed" ? "failed" : "unsupported";
                 result.Message = error.Message; result.Ledger.Clear();
+                result.BasisAreaMetres2 = result.ResultAreaMetres2 = null;
                 result.BasisVolumeMetres3 = result.OpeningUnionAreaMetres2 = result.DeductionVolumeMetres3 = result.ResultVolumeMetres3 = null;
             }
             return result;

@@ -1,18 +1,22 @@
-# BV / 崛亮视觉 · Bright Vision Revit 插件安装器 1.7.0
+# BV / 崛亮视觉 · Bright Vision Revit 插件安装器 1.8.0
 
 本工具为当前 Windows 用户安装 Bright Vision 社区导出与土建工作台插件。官方署名为 **崛亮视觉 · Bright Vision**，自有社区源码采用 **Apache-2.0**；第三方组件保留各自许可。标准源码仓库根目录和安装模块包含 LICENSE／NOTICE，安装器不会将 Autodesk 软件、API DLL、旧第三方导出引擎或用户模型重新许可或附带分发。
+
+本目录面向 **BV 1.8.0 开发预览／第三期第二批**。当前正在开发和后台验证，不表示已在本机安装、已公开发布或已经真实 Revit 验收。已发布的 1.7.0 安装包与历史证据保留；1.7 的指定 Revit 2020 SDK 结果不能作为 1.8 新功能的验收。是否可以分发以本次构建、隔离包测试与发行记录为准，本文不随后台测试数字变化反复改写。
 
 ## 使用与功能范围
 
 1. 保存工程并退出全部 Revit。安装器要求关闭 Revit，不会替用户结束进程。
 2. 运行 `Bright.Vision-Setup.exe`，核对自动检测且有匹配负载的年份，点击“安装插件”。
-3. 重启 Revit，进入 **BV → bright vision**。保留“本地导出模型 ZIP”和“土建原始量工作台”；1.7 增加“墙体试算与台账”。
+3. 重启 Revit，进入 **BV → bright vision**。保留“本地导出模型 ZIP”“土建原始量工作台”和“墙体试算与台账”。下述流程用于具备相应版本的安装包，不是本轮已执行安装的记录。
 4. 导出时选择模型名、三维视图、目录和内容。接收 ZIP 的独立查看器无需安装 Revit；插件本身必须在 Revit 内使用，不能独立读取 RVT。
 5. 卸载使用本安装器的“卸载插件”，或下述管理器的 Uninstall 动作。不要通过删除整个 Revit 插件目录卸载。
 
 1.6 的工程设置继续提供计量层映射、单一施工段归属、本地工程 JSON 存取、筛选汇总与 CSV；只改变报表归属，不写回 RVT 或切分几何。
 
 1.7 首批墙体试算采用项目约定 `BV.Wall.RectSolid/1`：对部分普通直墙构造参数矩形基准，扣除明确矩形 Opening 的并集，再与实际墙实体作双向差集校验；校验通过才生成基准、扣减、结果和逐条台账。Revit 原生量单列，不把原生净量当毛量重复扣减。门窗族的名义宽高不代替实际切洞；弧墙、附着／顶部约束、显式交接、未确认切洞及不一致几何会显示未支持或失败。它不是完整地区清单／定额规则、模板量或全类型墙算量。详细数据合同与范围见相邻的 `bright-revit-exporter` 源码说明。
+
+1.8 的增量范围是同一几何门槛之上的 **单侧轴向投影面积与工程归属报表**：面积采用 `BV.Wall.AxisProjection/1`，以长×高减矩形洞口并集，台账保留带符号面积变化；不是抹灰、模板、外露表面、双面墙或建筑面积。新 `BV.Wall.Report/2` 面向完整来源绑定、计量层／施工段／原生楼层／类型分组、覆盖及失败状态、面积与体积／原生量对照和 CSV。工程设置继续只改变归属，不切分几何、不参与重新扣洞。旧体积规则和旧版 CSV 合同保留；领域、报表、离屏界面、API 编译及实机应分层验收，不能用安装器测试替代。完整类型映射、几何分段、真实族切洞、交接增扣及地区规则仍未完成。
 
 ## 年份与运行时
 
@@ -50,12 +54,12 @@
 ```powershell
 # 在 tools/bright-revit-exporter 中运行；local-references.json 是自行填写的本地配置
 .\Build-Exporter.ps1 -HostConfigPath .\local-references.json `
-  -OutputPath .\artifacts\BV-1.7.0 -SkipFixture
+  -OutputPath .\artifacts\BV-1.8.0 -SkipFixture
 
 # 在 tools/bright-revit-installer 中运行；仅构建，不安装
 .\Build-BrightVisionInstaller.ps1 `
-  -BuildManifestPath '..\bright-revit-exporter\artifacts\BV-1.7.0\build-manifest.json' `
-  -OutputPath '.\artifacts\BV-1.7.0'
+  -BuildManifestPath '..\bright-revit-exporter\artifacts\BV-1.8.0\build-manifest.json' `
+  -OutputPath '.\artifacts\BV-1.8.0'
 ```
 
 构建器读取已审阅的 LICENSE／NOTICE（社区仓库根目录或显式 `-LegalDirectory`），将其纳入负载和散列；不会把编译引用拷入分发包。输出目录必须不存在并与导出负载分离。若只构建本机一个目标，可在导出器指定 `-TargetIds`，再用安装器 `-AllowPartial` 显式构建局部包；局部包不能宣传为完整年份支持。

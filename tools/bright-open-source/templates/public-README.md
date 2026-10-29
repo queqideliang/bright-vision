@@ -4,6 +4,8 @@ Bright Vision 是本地 BIM 模型查看器和独立 Revit 导出／计量插件
 
 当前公开预览为查看器 **0.7.0**、插件／安装器 **1.7.0**。0.7.0 新增可见人物的第三人称漫游、自由飞行与确定性本地模型助手。实际支持范围、签名状态、已测 Revit build 与已知限制见对应 Release；开发预览不表示所有工程场景均已验收。
 
+当前 main 另在开发 **BV 1.8.0 独立插件／第三期第二批**：单侧轴向投影面积、带符号面积台账、完整来源及计量层／施工段／原生楼层／类型报表。尚未据此声明 1.8 已安装、公开发布或取得新实机证据；它不是第三期全部完成，不含地区规则、真实族切洞或交接增扣。下方已发布的 **0.7.0 统一包仍内置 1.7.0**，不会因 main 开发 1.8 自动改变附件或组件锁。
+
 官方源码和预览附件已发布至 [queqideliang/bright-vision](https://github.com/queqideliang/bright-vision)：
 
 **[下载 Windows 完整安装包 · 0.7.0](https://github.com/queqideliang/bright-vision/releases/download/viewer-v0.7.0/Bright.Vision-0.7.0-Setup.exe)** — 包含查看器与 Revit 插件 1.7.0。[发行说明与 SHA-256](https://github.com/queqideliang/bright-vision/releases/tag/viewer-v0.7.0)
@@ -25,6 +27,8 @@ Bright Vision 是本地 BIM 模型查看器和独立 Revit 导出／计量插件
 
 **Revit 2020 指定 build 的受限墙体 SDK／独立数据验收已通过**，算例与未覆盖项见 [验证范围](tools/bright-revit-exporter/tests/host/REVIT2020_VALIDATION.md)。真实窗口及其他年份／build 仍需另验。
 
+上面的受限 Revit 2020 SDK 记录仅属于 **BV 1.7**，不验证 1.8 新面积或工程报表；本轮 1.8 不启动真实 Revit。
+
 ## 使用与构建
 
 上方链接对应已公开的开发预览附件，安装前请阅读发行说明中的签名状态及已知限制。0.7.0 的生产更新模块已通过无认证公网检查、完整下载、独立 SHA-256 与 staging 核验；本次未运行安装器。测试以 `currentVersion:0.6.0` 模拟旧版本协议输入，未运行旧客户端；0.7.0 同版本不重复下载，stable 订阅不接收 preview。旧安装版本需要先安装包含该更新能力的新客户端。
@@ -41,7 +45,9 @@ npm run serve:web
 
 使用 Node.js 26 和 npm。完整 Windows 包还需本机 .NET 编译工具、合法取得的 Revit API 引用、自己构建并显式审阅的插件模块。公共源码不附带 API DLL、预编译插件或模型；缺少模块时，仅相应集成测试明确 SKIP，不能据此宣称打包通过。
 
-0.7.0 本轮检查仅使用 CLI 与独立的无界面 Chromium，不操作原生桌面、不启动 Electron 窗口或真实 Revit，不读取客户模型。[实际 CI](https://github.com/queqideliang/bright-vision/actions/runs/40710215364) 两个 job 已通过；Linux 使用 `ubuntu-24.04` 的系统 Chrome，保留浏览器沙箱，完成导航、助手等 14 项合成场景与零外部页面请求检查。运行方式与覆盖边界见 [后台测试](tools/bim-viewer/BACKGROUND_TESTING.md)。
+Windows 构建请使用对应版本的独立 checkout：重建查看器 0.7.0 统一包使用 `viewer-v0.7.0` 标签及其 BV 1.7.0／24 源码链；开发当前 1.8 独立插件使用另一目录的 1.8／25 源码链。0.7 的审核器与 lock 明确只接受旧 1.7 模块，不接受以新版本或修改字节替换。步骤见 [版本对应的构建说明](tools/bim-viewer/BUILDING.md)。当前没有新版统一包自动内置 1.8 的承诺。
+
+0.7.0 的已有检查仅使用 CLI 与独立的无界面 Chromium，不操作原生桌面、不启动 Electron 窗口或真实 Revit，不读取客户模型。[实际 CI](https://github.com/queqideliang/bright-vision/actions/runs/40710215364) 两个 job 已通过；Linux 使用 `ubuntu-24.04` 的系统 Chrome，保留浏览器沙箱，完成导航、助手等 14 项合成场景与零外部页面请求检查。运行方式与覆盖边界见 [后台测试](tools/bim-viewer/BACKGROUND_TESTING.md)。
 
 | 模块 | 说明 |
 |---|---|

@@ -15,8 +15,8 @@ using BrightVision.Export;
 [assembly: AssemblyProduct("bright vision")]
 [assembly: AssemblyCompany("崛亮视觉")]
 [assembly: AssemblyCopyright("Copyright 2026 崛亮视觉 (Bright Vision)")]
-[assembly: AssemblyVersion("1.7.0.0")]
-[assembly: AssemblyFileVersion("1.7.0.0")]
+[assembly: AssemblyVersion("1.8.0.0")]
+[assembly: AssemblyFileVersion("1.8.0.0")]
 #if BRIGHT_NET10
 [assembly: TargetFramework(".NETCoreApp,Version=v10.0")]
 #elif BRIGHT_NET8
@@ -45,7 +45,7 @@ namespace BrightVision.Revit
                 quantities.LargeImage = Branding.Icon(32);
                 panel.AddItem(quantities);
                 PushButtonData wall = new PushButtonData("BrightVision.CivilWallTrial", "墙体试算\n与台账", Assembly.GetExecutingAssembly().Location, typeof(CivilWallCommand).FullName);
-                wall.ToolTip = "崛亮视觉 · Bright Vision：对部分普通直墙构造矩形基准实体、明确矩形洞口并集与逐条台账；实际实体双向差集通过后才出量。不是地区清单／定额量。";
+                wall.ToolTip = "崛亮视觉 · Bright Vision：部分普通直墙的单侧轴向投影面积、体积、洞口并集台账，按计量层／施工段汇总并导出。实体校验通过才出量；不是模板、抹灰或地区清单／定额量。";
                 wall.AvailabilityClassName = typeof(ProjectAvailability).FullName; wall.Image = Branding.Icon(16); wall.LargeImage = Branding.Icon(32); panel.AddItem(wall);
                 PushButtonData button = new PushButtonData("BrightVision.Export", "本地导出\n模型 ZIP", Assembly.GetExecutingAssembly().Location, typeof(ExportCommand).FullName);
                 button.ToolTip = "选择三维视图、保存位置和导出内容，生成独立本地模型 ZIP；按 Esc 取消导出。";
@@ -89,7 +89,7 @@ namespace BrightVision.Revit
     {
         public Result Execute(ExternalCommandData data, ref string message, ElementSet elements)
         {
-            TaskDialog.Show("崛亮视觉 · Bright Vision", "BV 1.7.0 社区版开发预览\nCopyright 2026 崛亮视觉 (Bright Vision)\n\n自有社区源码采用 Apache License 2.0；保留版权、NOTICE 及第三方许可。品牌不代表分支版本获得官方背书。\n\n包含模型导出、原生量核对、工程归属设置和部分普通墙试算。尚不是完整地区清单／定额算量产品。\n\n已安装许可文件：" + Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location));
+            TaskDialog.Show("崛亮视觉 · Bright Vision", "BV 1.8.0 社区版开发预览\nCopyright 2026 崛亮视觉 (Bright Vision)\n\n自有社区源码采用 Apache License 2.0；保留版权、NOTICE 及第三方许可。品牌不代表分支版本获得官方背书。\n\n包含模型导出、原生量核对、工程归属设置和部分普通墙的面积／体积试算、分组与台账。尚不是完整地区清单／定额算量产品。\n\n已安装许可文件：" + Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location));
             return Result.Succeeded;
         }
     }
@@ -214,7 +214,7 @@ namespace BrightVision.Revit
 
         internal Dictionary<string, object> Manifest()
         {
-            return PackageWriter.Fields("schema", "Bright.Vision.Model/1", "product", "bright vision", "publisher", "崛亮视觉", "exporterVersion", "1.7.0",
+            return PackageWriter.Fields("schema", "Bright.Vision.Model/1", "product", "bright vision", "publisher", "崛亮视觉", "exporterVersion", "1.8.0",
                 "revitVersion", root.Application.VersionNumber, "revitBuild", root.Application.VersionBuild,
                 "modelName", options.ModelName, "sourceDocument", root.Title, "documentScope", DocumentScope(root), "viewUniqueId", view.UniqueId,
                 "viewName", view.Name, "scope", "visible-selected-3d-view", "linkedModels", completeLinks,

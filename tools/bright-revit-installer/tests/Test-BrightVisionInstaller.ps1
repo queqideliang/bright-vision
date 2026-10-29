@@ -343,7 +343,7 @@ $null=Legacy (Join-Path $machine '2020')
 $result=@(& $manager -Action Install -BundlePath $case.Bundle -RevitVersions 2020 -AddinsRoot $case.Target -MachineAddinsRoot $machine -ReplaceLegacy:$false -Confirm:$false)[0]
 Assert ($result.BridgeBackedUp -and !$result.LegacyReplacementEnabled -and !(Test-Path -LiteralPath (Join-Path $case.Target '2020\BOSRevitExplore.addin'))) 'Legacy opt-out preserves original product but still removes this product bridge dependency.'
 
-foreach ($upgrade in @(@{From='1.3.0';To='1.3.1'},@{From='1.3.1';To='1.4.0'},@{From='1.4.0';To='1.5.0'},@{From='1.5.0';To='1.6.0'},@{From='1.6.0';To='1.7.0'})) {
+foreach ($upgrade in @(@{From='1.3.0';To='1.3.1'},@{From='1.3.1';To='1.4.0'},@{From='1.4.0';To='1.5.0'},@{From='1.5.0';To='1.6.0'},@{From='1.6.0';To='1.7.0'},@{From='1.7.0';To='1.8.0'})) {
 $case=Fixture ('upgrade-preserves-original-recovery-'+$upgrade.From+'-'+$upgrade.To)
 Set-BundleVersion $case $upgrade.From
 Bridge $case.Target '2020'
@@ -372,7 +372,11 @@ Assert ($result.Status -ceq 'Upgraded' -and $stateAfter.packageVersion -ceq $upg
 Assert (($stateAfter.bridgeBackups | ConvertTo-Json -Depth 10 -Compress) -ceq $bridgeBefore -and (Snapshot $backupRoot) -ceq $backupBefore) 'Upgrade keeps the original bridge recovery record and bytes.'
 Assert (($stateAfter.legacyMasks | ConvertTo-Json -Depth 10 -Compress) -ceq $masksBefore -and (Snapshot $machine) -ceq $machineBefore) 'Upgrade keeps machine mask ownership and leaves original machine files untouched.'
 if ([version]$upgrade.To -ge [version]'1.7.0') {
-    Assert (@($stateBefore.files).Count -eq 2 -and @($stateAfter.files).Count -eq 4) 'The 1.6 two-file owner state upgrades to four owned files.'
+    if ([version]$upgrade.From -lt [version]'1.7.0') {
+        Assert (@($stateBefore.files).Count -eq 2 -and @($stateAfter.files).Count -eq 4) 'The 1.6 two-file owner state upgrades to four owned files.'
+    } else {
+        Assert (@($stateBefore.files).Count -eq 4 -and @($stateAfter.files).Count -eq 4) 'A legal-aware owner upgrades with all four managed files preserved.'
+    }
     foreach ($name in @('Bright.Vision.LICENSE','Bright.Vision.NOTICE')) {
         $path=Join-Path $case.Target ('2020\'+$name)
         $record=@($stateAfter.files | Where-Object name -eq $name)

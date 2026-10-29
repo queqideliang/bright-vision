@@ -3,7 +3,7 @@
   "draft": false,
   "publicationReady": false,
   "sourcePublicationReady": true,
-  "readinessScope": "Viewer 0.7.0 runtime source and its public preview Release are verified at the recorded commit. The current audit includes a documentation-only follow-up prepared locally for a later push; it does not assert native installation or a rerun of CI for this new documentation snapshot.",
+  "readinessScope": "Existing viewer 0.7.0 and standalone plugin 1.7.0 previews remain public. This reviewed snapshot prepares standalone plugin 1.8.0 source and background-only evidence for a later source push/CI, not a new viewer bundle, release or real Revit acceptance.",
   "repository": {
     "host": "github.com",
     "owner": "queqideliang",
@@ -24,8 +24,8 @@
     "tools/bright-revit-exporter",
     "tools/bright-revit-installer"
   ],
-  "sourceSnapshotDate": "2026-10-28",
-  "sourceSnapshotSha256": "d98c2660e633a4879b48ba8f1205de6ec294a672f6d52c11e674a738fee7c6af",
+  "sourceSnapshotDate": "2026-10-29",
+  "sourceSnapshotSha256": "15c49c208be1023e239353d0785092feb79676f67f61aa6e971df4afd23aea60",
   "files": [
     {
       "path": "tools/bim-viewer/.gitignore",
@@ -39,8 +39,8 @@
     },
     {
       "path": "tools/bim-viewer/BUILDING.md",
-      "bytes": 4065,
-      "sha256": "8a164952415638d83ff410333acda25f5f53a537203be877a700accbb955a5da"
+      "bytes": 5284,
+      "sha256": "b1c9ddc51a7615646d085847b33df511a798835dfb4855f3ac10931253625d6d"
     },
     {
       "path": "tools/bim-viewer/electron/archive-extractor.cjs",
@@ -619,8 +619,8 @@
     },
     {
       "path": "tools/bright-open-source/templates/public-README.md",
-      "bytes": 6336,
-      "sha256": "997c843a7f87df1a3497e4bb8fce33de3c954c1692d7085584988e49f14f135b"
+      "bytes": 7402,
+      "sha256": "ac1dc2155cc865dbc8adcafa9e0f928abd64151dd11510235b6c21d4dc2bc399"
     },
     {
       "path": "tools/bright-open-source/templates/public-SECURITY.md",
@@ -639,8 +639,8 @@
     },
     {
       "path": "tools/bright-open-source/templates/source-ci.yml.example",
-      "bytes": 2917,
-      "sha256": "6ce403f2de308c5668a2f3944c8509f10d54133370ea7ef1935234f108cffd53"
+      "bytes": 3358,
+      "sha256": "769de60d999471a89f64a78d15578b380f2360d833730614cefc1b47218407b8"
     },
     {
       "path": "tools/bright-open-source/tests/prepare-github-release.test.mjs",
@@ -679,18 +679,18 @@
     },
     {
       "path": "tools/bright-revit-exporter/Build-Exporter.ps1",
-      "bytes": 10423,
-      "sha256": "672ca3b65ad25e5a985646b1768483505860a1e7659ac4e906f1f9ab58ee2ca7"
+      "bytes": 10447,
+      "sha256": "67c6b6ca3ba8f5e0bc93a5123ce70f8d22d83aac143fdf4fe0238bdce93ebd53"
     },
     {
       "path": "tools/bright-revit-exporter/BUILDING.md",
-      "bytes": 2459,
-      "sha256": "45c425fdd72f710892cbe127785abb1ff2bab49ebc6529de12c050f7ab2cb297"
+      "bytes": 4092,
+      "sha256": "543c8d742a08fec547a409fcde4fb6b5f6be2324f7487fd5d7afcc64040549f8"
     },
     {
       "path": "tools/bright-revit-exporter/CIVIL_QUANTITY_ROADMAP.md",
-      "bytes": 12374,
-      "sha256": "b99262fa41ccf05925ba014df794eb51f681c8827b276627c8bf94601439d1be"
+      "bytes": 14298,
+      "sha256": "43f069751c51ea04dd55c0a01d070ea90ebf9cc1993d0185b4a252bc398fc6ad"
     },
     {
       "path": "tools/bright-revit-exporter/CivilLevelResolver.cs",
@@ -724,8 +724,8 @@
     },
     {
       "path": "tools/bright-revit-exporter/CivilWallCalculation.cs",
-      "bytes": 16651,
-      "sha256": "7c38703b9d900d733b9a142591042e0b9d1a689d3915f9a26f82111660ee0ce8"
+      "bytes": 17494,
+      "sha256": "318e4beaa02c6150111d462cd5f8241ffc4259be25bbb7740f53ce10cfc57e63"
     },
     {
       "path": "tools/bright-revit-exporter/CivilWallCommand.cs",
@@ -738,9 +738,14 @@
       "sha256": "39e05a44ad40d430bd639eaa465c64f207eb2993cd4bcf583e11e70e0de5df21"
     },
     {
+      "path": "tools/bright-revit-exporter/CivilWallReport.cs",
+      "bytes": 26077,
+      "sha256": "a59d6fceca10977606372aabca68511752a34a3e71316f5ca4a48453192d9fd9"
+    },
+    {
       "path": "tools/bright-revit-exporter/CivilWallWindow.cs",
-      "bytes": 19123,
-      "sha256": "3ee8bf0c832746f516a5030197383a8905b9a5d329ab8e0716e806be57943cea"
+      "bytes": 32637,
+      "sha256": "587bcc5f56c2b3535ec487ac6ad5f5efd1711a45065466749fcf0d3b34f76c7f"
     },
     {
       "path": "tools/bright-revit-exporter/ExportAttachments.cs",
@@ -794,8 +799,8 @@
     },
     {
       "path": "tools/bright-revit-exporter/README.md",
-      "bytes": 8182,
-      "sha256": "3c77dc985cb7f67c0c0e6ef61954dc1f96bee4e868ba6b139c4f7d11b26fea5d"
+      "bytes": 10902,
+      "sha256": "22b36605476730139ae3b81d3803c276b8676c94a3d070e3bd232f9dc39e574a"
     },
     {
       "path": "tools/bright-revit-exporter/reference-paths.example.json",
@@ -804,8 +809,8 @@
     },
     {
       "path": "tools/bright-revit-exporter/RevitApp.cs",
-      "bytes": 32244,
-      "sha256": "edd85676fd0a743e9c2898c071e40265f8d72470b5b825574f99440c9e548a12"
+      "bytes": 32313,
+      "sha256": "adb9b37fc9375850134bdb5b012f4d46d62240df00d380a1e6984bb5ff3a3702"
     },
     {
       "path": "tools/bright-revit-exporter/RevitCivilQuantityReader.cs",
@@ -874,8 +879,8 @@
     },
     {
       "path": "tools/bright-revit-exporter/tests/CivilWallCalculationFixture.cs",
-      "bytes": 10014,
-      "sha256": "43505d05877b655b69126847d94f1bb9011461863ffb0b46191f74908b66fe23"
+      "bytes": 15669,
+      "sha256": "4976fe171ae58faa8cfdda4460b0812b22e9ed452a98d031ea780e7ed3b7be00"
     },
     {
       "path": "tools/bright-revit-exporter/tests/CivilWallReaderFixture.cs",
@@ -883,9 +888,14 @@
       "sha256": "c0e014db5b846c2e85c129fea8dc76c452450f9d01c79ce06b92bd6a978a8738"
     },
     {
+      "path": "tools/bright-revit-exporter/tests/CivilWallReportFixture.cs",
+      "bytes": 21902,
+      "sha256": "2f52bbf32a7401650d1774c199dc743b1491882594ecdbeeac514da8d20796c9"
+    },
+    {
       "path": "tools/bright-revit-exporter/tests/CivilWallUiFixture.cs",
-      "bytes": 6423,
-      "sha256": "7c26ac3479323657ad5d674b45a74d5594499c579f20ca9c0f319ace177cac34"
+      "bytes": 22486,
+      "sha256": "d9fee5461d9930b27452ef23ac6f7204c44eed3f0034cb0d3bbea65446e82bcd"
     },
     {
       "path": "tools/bright-revit-exporter/tests/ExportOptionsUiFixture.cs",
@@ -984,8 +994,8 @@
     },
     {
       "path": "tools/bright-revit-exporter/tests/Test-CivilWallCalculation.ps1",
-      "bytes": 1526,
-      "sha256": "0218441de863623614c36063eff5d7d89c3fe2814dc58b4c0620901a5e378532"
+      "bytes": 1938,
+      "sha256": "ba6694307abf6d88c2e0040feab17eda37a156ad173d7a26b6084303b904575e"
     },
     {
       "path": "tools/bright-revit-exporter/tests/Test-CivilWallReader.ps1",
@@ -993,9 +1003,14 @@
       "sha256": "f2958176df862eb4c2b2d8f0f00c27633caeee690391b98834cde3f8ebd3a442"
     },
     {
+      "path": "tools/bright-revit-exporter/tests/Test-CivilWallReport.ps1",
+      "bytes": 1926,
+      "sha256": "e84af8893a4b1946994791c9cf715487212db2136bb41085cae6f1cfd0f867a0"
+    },
+    {
       "path": "tools/bright-revit-exporter/tests/Test-CivilWallUi.ps1",
-      "bytes": 1580,
-      "sha256": "31b027b26d6995ac207cd0110a481d4693045dc410d46005ea1c5aa37bd10e83"
+      "bytes": 3859,
+      "sha256": "3e181c830132627af58927f94e6c69ef392ef57bfd5e6f93277cbd41fc271d0d"
     },
     {
       "path": "tools/bright-revit-exporter/tests/Test-ExportOptionsDialog.ps1",
@@ -1045,7 +1060,7 @@
     {
       "path": "tools/bright-revit-installer/BrightVisionSetup.cs",
       "bytes": 19105,
-      "sha256": "c7784b54946e6ade5165e31b5a679e6e0ebae758554efa6b2f0065689597cb00"
+      "sha256": "21371f99c04b8439b9e772c0c8b9a6eec2f88a1cba865ae6a4394691703b3b94"
     },
     {
       "path": "tools/bright-revit-installer/BrightVisionSetup.manifest",
@@ -1055,7 +1070,7 @@
     {
       "path": "tools/bright-revit-installer/Build-BrightVisionInstaller.ps1",
       "bytes": 8725,
-      "sha256": "f32a30e3333fde516789676b8ed55fcd0e0575ef8846f1a72c1ac16baa17b58a"
+      "sha256": "c9a2ecfa64fc61d32eb29523c7b469c9f36f9269542b9a3eaba293f806417364"
     },
     {
       "path": "tools/bright-revit-installer/Invoke-BrightVisionSetup.ps1",
@@ -1074,8 +1089,8 @@
     },
     {
       "path": "tools/bright-revit-installer/README.md",
-      "bytes": 7482,
-      "sha256": "d4312678224259b6e6ef6e9257154b325048ccb73ea842b166000b9fa9971111"
+      "bytes": 8765,
+      "sha256": "d93197c9d48326f76aaec1b4aafce8969e697755cdb876f91cb768a462689de1"
     },
     {
       "path": "tools/bright-revit-installer/Restore-BosExport.ps1",
@@ -1089,13 +1104,13 @@
     },
     {
       "path": "tools/bright-revit-installer/tests/Test-BrightVisionInstaller.ps1",
-      "bytes": 38400,
-      "sha256": "373805f947e9062f1e60a5cd5e6f962d1ad864cfe97ab5faf9a586cc820f7141"
+      "bytes": 38664,
+      "sha256": "168d444fd50536e3a55cf9acbdab21821b23708c76e176fb79e23f7acb957119"
     },
     {
       "path": "tools/bright-revit-installer/tests/Test-PackagedInstaller.ps1",
       "bytes": 8460,
-      "sha256": "d3be4a4c82e36b6b0b5c7a3d115d81688946f2c9de656df4a87d0090a9f49174"
+      "sha256": "d30c5554170ae3aaacdea47c13898c9f02f3c4a1f7ad3e29df87f696192a20a2"
     },
     {
       "path": "tools/bright-revit-installer/tests/Test-RestoreBosExport.ps1",
@@ -1144,8 +1159,8 @@
     {
       "path": "README.md",
       "sourcePath": "tools/bright-open-source/templates/public-README.md",
-      "bytes": 6336,
-      "sha256": "997c843a7f87df1a3497e4bb8fce33de3c954c1692d7085584988e49f14f135b"
+      "bytes": 7402,
+      "sha256": "ac1dc2155cc865dbc8adcafa9e0f928abd64151dd11510235b6c21d4dc2bc399"
     },
     {
       "path": "CONTRIBUTING.md",
@@ -1174,15 +1189,15 @@
     {
       "path": ".github/workflows/source-ci.yml",
       "sourcePath": "tools/bright-open-source/templates/source-ci.yml.example",
-      "bytes": 2917,
-      "sha256": "6ce403f2de308c5668a2f3944c8509f10d54133370ea7ef1935234f108cffd53"
+      "bytes": 3358,
+      "sha256": "769de60d999471a89f64a78d15578b380f2360d833730614cefc1b47218407b8"
     }
   ],
   "excluded": "No original git history, cloud code, research, recovered vendor code, SDK binaries, models, credentials, installation records or compiled artifacts.",
   "outstanding": [
-    "Commit and push only this documentation follow-up; the runtime source, preview Release and its Linux CI are already public.",
-    "Native desktop windows, system installation, arbitrary engineering-model navigation and complete collision remain outside this CLI/headless round.",
-    "Extend Revit acceptance beyond the exact earlier build and limited cases in the validation scope document."
+    "Push this reviewed source snapshot and inspect its actual hosted Node/Framework/offscreen WPF CI before publishing a new standalone plugin preview.",
+    "No new Revit host, native-window or real-user installation acceptance was executed for 1.8.0; do not inherit the old 1.7 SDK scope.",
+    "Keep viewer 0.7.0 and its frozen embedded 1.7.0 component on their separate tagged build chain."
   ],
   "publicationReadyMeaning": "The legacy publicationReady=false field does not deny source publication or preview availability; it does not assert a stable release or complete runtime/update acceptance.",
   "initialPublicationSnapshot": {
@@ -1344,7 +1359,7 @@
       "revitStarted": false
     }
   },
-  "sourceSnapshotPushMeaning": "This flag refers only to the new documentation-follow-up inventory. The separately recorded runtime commit and Release are already public.",
+  "sourceSnapshotPushMeaning": "This new 1.8.0 source inventory has not yet been pushed; prior public versions and their original evidence remain separately recorded.",
   "publishedRuntimeSource": {
     "commit": "7f8001d40eaba14cfc2457ba893b36b168c55b82",
     "tag": "viewer-v0.7.0",
@@ -1410,5 +1425,86 @@
       "legacyApplicationExecuted": false,
       "installerExecuted": false
     }
+  },
+  "revit180Candidate": {
+    "recordedAtUtc": "2026-10-29T00:22:51.208134+00:00",
+    "pluginVersion": "1.8.0",
+    "delivery": "Standalone Revit plugin candidate only; viewer 0.7.0 still embeds frozen plugin 1.7.0",
+    "status": "Source frozen, all 14 targets compiled, domain/report/reader/offscreen and isolated package checks passed; not installed in the real user profile or publicly released",
+    "productionSourceFiles": 25,
+    "compiledYearRuntimeTargets": 14,
+    "sourceFreezeHashesVerified": true,
+    "producerManifestSha256": "cceaebaadb65262965426d7b8c1741fa9df467dba4df482987e430b9d0dd27c0",
+    "volumeRuleId": "BV.Wall.RectSolid/1",
+    "areaRuleId": "BV.Wall.AxisProjection/1",
+    "areaMeaning": "Single-side wall-axis projection L*H minus the union of supported rectangular openings; not plaster, formwork, exposed surface or regional quantity",
+    "reportSchema": "BV.Wall.Report/2",
+    "reportColumns": {
+      "group": 11,
+      "wall": 38,
+      "ledger": 14
+    },
+    "legacyCsvColumnsPreserved": {
+      "wall": 25,
+      "ledger": 11
+    },
+    "wallReaderBytesUnchangedSince17": true,
+    "wallReaderSha256": "103b96253ae0af6fa6e3789ff1e8caf947bdd765dc0e29d75fc247f89e5cbeb2",
+    "domainAssertions": 435,
+    "reportAssertions": 68,
+    "readerStubAssertions": 79,
+    "offscreenWpfAssertions": 70,
+    "offscreenReferencePaths": "Same 70 cases rerun with local references and system Framework/WPF; not 140 cases",
+    "freshSourceSystemFrameworkChecksPassed": true,
+    "freshSourceHasNoSdkOrPrivateReferenceCache": true,
+    "freshSourceAssertions": {
+      "domain": 435,
+      "report": 68,
+      "offscreenWpf": 70
+    },
+    "evidenceDigests": {
+      "domainReportSha256": "20cf98c55f20fd53583739f2a8338e42f41f1e5ca9706cc401c8ace2830c8ca4",
+      "reportReportSha256": "89d8241d1ecf25925b3d87282fef6808c0899e3dfe7383da4e1b10880faf160b",
+      "readerReportSha256": "44f5e6f63c14503cbff20a210e84f546dffbae02edca0d2c5cfdfb233c318483",
+      "uiReportSha256": "8aa7940b5ef29086b707fcbefcb614ca3e3ead825c27dd4c4c2e9dda5632654c",
+      "packagedValidationReportSha256": "7f25964d35b8b3bc51ea61774b6d4538e8c7044694920307e60c8564b3f4cdaa",
+      "isolatedPackageCliReportSha256": "5392eb61116273635d0b6435ad2c4ded17487ca3e980f5a925e18af1f875c0b8"
+    },
+    "freshSourceEvidenceDigests": {
+      "domain": "20cf98c55f20fd53583739f2a8338e42f41f1e5ca9706cc401c8ace2830c8ca4",
+      "report": "89d8241d1ecf25925b3d87282fef6808c0899e3dfe7383da4e1b10880faf160b",
+      "ui": "8aa7940b5ef29086b707fcbefcb614ca3e3ead825c27dd4c4c2e9dda5632654c"
+    },
+    "localInstallerCandidate": {
+      "fileName": "Bright.Vision-Setup.exe",
+      "bytes": 1674752,
+      "sha256": "73283e37ade3cd9832412fdb6ba2c7e4084e8048eb9be0b9e9376c6f76f6cf53",
+      "executionPerformed": true,
+      "executionScope": "Own CLI Validate/Detect/Install/Uninstall against test-created isolated roots only; no native window or real-user installation"
+    },
+    "packageQaPassed": true,
+    "sourceSnapshotPushed": false,
+    "remoteCiForThisSnapshotExecuted": false,
+    "installedToRealUserProfile": false,
+    "publicReleaseAvailable": false,
+    "realRevitSdkFor18Executed": false,
+    "nativeWindowOrDesktopInputUsed": false,
+    "old17SdkAssertionsInherited": false,
+    "viewerVersion": "0.7.0",
+    "viewerEmbeddedPluginVersion": "1.7.0",
+    "viewerRuntimeAndLockUnchanged": true,
+    "openScope": "Phase 3 batch 2 only; phase 2 complete type mapping/geometric segmentation and phase 3 family voids, joins and regional rules remain incomplete",
+    "managerRegressionAssertions": 216,
+    "packageQaIsolatedCliAssertions": 107,
+    "packageQaStaticAndEvidenceAssertions": 1263,
+    "packageQaAllModuleFilesVerified": 65,
+    "packageQaOfficialManifestParserUsed": true,
+    "packageQaRealUserAddinsChanged": false,
+    "packageQaRevitStarted": false
+  },
+  "sourceFollowUp": {
+    "kind": "Standalone BV 1.8.0 source candidate",
+    "pendingPush": true,
+    "viewerAndOldRevitReleaseTagsChanged": false
   }
 }

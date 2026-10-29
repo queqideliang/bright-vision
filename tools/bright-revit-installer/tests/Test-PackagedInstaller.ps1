@@ -3,7 +3,7 @@
 param(
     [Parameter(Mandatory=$true)][string]$InstallerPath,
     [Parameter(Mandatory=$true)][string]$AddInUtilityPath,
-    [string]$ExpectedVersion='1.7.0',
+    [string]$ExpectedVersion='1.8.0',
     [string]$LegalDirectory
 )
 Set-StrictMode -Version Latest

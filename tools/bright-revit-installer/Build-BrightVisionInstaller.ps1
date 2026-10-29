@@ -2,7 +2,7 @@
 [CmdletBinding(SupportsShouldProcess = $true)]
 param(
     [Parameter(Mandatory = $true)][string]$BuildManifestPath,
-    [string]$OutputPath = (Join-Path $PSScriptRoot 'artifacts\BV-1.7.0'),
+    [string]$OutputPath = (Join-Path $PSScriptRoot 'artifacts\BV-1.8.0'),
     [string]$LegalDirectory,
     [switch]$AllowPartial
 )
@@ -18,7 +18,7 @@ for ($cursor=$output;$cursor;$cursor=[IO.Path]::GetDirectoryName($cursor)) {
 }
 $manifest = [IO.File]::ReadAllText($source) | ConvertFrom-Json
 if ($manifest.packageId -ne 'BrightVision.RevitExporter' -or $manifest.addinId -ne '6F12FA44-368B-4E47-9197-3DE316D5392A' -or $manifest.fullClassName -ne 'BrightVision.Revit.App') { throw 'Unexpected source-built exporter identity.' }
-if ($manifest.packageVersion -cne '1.7.0') { throw 'This installer source requires the 1.7.0 exporter build manifest.' }
+if ($manifest.packageVersion -cne '1.8.0') { throw 'This installer source requires the 1.8.0 exporter build manifest.' }
 if ([string]::IsNullOrWhiteSpace($LegalDirectory)) {
     $legalCandidates = @((Join-Path (Split-Path $PSScriptRoot -Parent) 'bright-open-source\legal'), (Split-Path (Split-Path $PSScriptRoot -Parent) -Parent))
     $LegalDirectory = @($legalCandidates | Where-Object { (Test-Path -LiteralPath (Join-Path $_ 'LICENSE') -PathType Leaf) -and (Test-Path -LiteralPath (Join-Path $_ 'NOTICE') -PathType Leaf) } | Select-Object -First 1)

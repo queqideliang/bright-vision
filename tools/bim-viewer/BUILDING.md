@@ -17,6 +17,21 @@ Web 构建不需要 Revit 或 Autodesk SDK。公开源代码中不附带 Revit �
 
 ## Windows 完整预览包
 
+### 先选择对应版本的独立工作目录
+
+**查看器 0.7.0 统一安装包内置冻结的 BV 1.7.0；当前 main 的 Revit 插件则在开发 1.8.0。** 两条构建链不可混用。Web 构建继续使用本目录当前源码；要重建历史 0.7.0 Windows 统一包，应从 `viewer-v0.7.0` 标签准备独立 checkout，让查看器、导出器、安装器、法律文件和自有助手都来自该版本，例如：
+
+```powershell
+git clone --branch viewer-v0.7.0 --single-branch `
+  https://github.com/queqideliang/bright-vision.git bright-vision-viewer-0.7
+```
+
+在该 checkout 中构建旧版 BV 1.7.0 的 24 份源码／14 个目标，再执行下面的审核和打包步骤。1.8 独立插件使用另一个目录的 1.8 源码，按 [导出器构建](../bright-revit-exporter/BUILDING.md)与[独立安装器](../bright-revit-installer/README.md)操作；不能把 1.8 的 25 源码负载塞入 0.7 的旧 lock，也不能跳过校验或重命名伪装版本。此处不更改 0.7 的运行时代码、审核脚本或组件锁。
+
+### 构建 0.7.0 标签的完整包
+
+以下流程均在上述 **0.7.0 标签 checkout** 中执行。相邻的导出器、安装器与法律文件都须来自该标签。
+
 准备 Windows、本机 .NET Framework 编译器以及依法取得的目标 Revit API 引用；按 `../bright-revit-exporter/BUILDING.md` 和 `../bright-revit-installer/README.md` 从当前自有源码构建插件和安装模块。不要提交或分发 Autodesk SDK DLL。完整预览需要 2015–2026 的 14 个 year/runtime 目标；编译通过不表示已逐版本在 Revit 中验收。
 
 `prepare-revit.mjs` 默认读取 `installer/revit-component-lock.json`，检查审查过的 1.7.0 模块全部 65 个文件：9 个根文件、14 个变体各 4 个文件（DLL、addin、LICENSE、NOTICE）。改变目录或下载一个同名包不会自动建立信任。
