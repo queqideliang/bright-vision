@@ -13,7 +13,7 @@ namespace BrightVision.Civil
         public CivilWallCalculationBatch Batch { get; internal set; }
         public CivilSnapshot Snapshot { get; internal set; }
         public List<CivilWallReportRow> Rows { get; internal set; }
-        internal string DocumentScope, SourcePath;
+        internal string DocumentScope, SourcePath, SnapshotFingerprint;
         internal long SourceRevision;
     }
 
@@ -61,6 +61,7 @@ namespace BrightVision.Civil
 
         public static CivilWallReportData Create(CivilWallCalculationBatch batch, CivilProjectSettings project = null)
         {
+            CivilWallBatchIntegrity.Validate(batch);
             if (batch == null || batch.Input == null || batch.Input.NativeSnapshot == null || batch.Input.Walls == null || batch.Results == null)
                 throw new InvalidDataException("缺少完整的墙体计算批次。");
             CivilSnapshot native = batch.Input.NativeSnapshot;
@@ -105,6 +106,7 @@ namespace BrightVision.Civil
                 ValidateRow(row);
                 data.Rows.Add(row);
             }
+            data.SnapshotFingerprint = CivilWallBatchIntegrity.SnapshotFingerprint(applied);
             return data;
         }
 
@@ -124,6 +126,10 @@ namespace BrightVision.Civil
         {
             Dimension(dimension);
             List<CivilWallReportRow> list = UniqueRows(rows);
+            return GroupCore(list, dimension);
+        }
+        private static List<CivilWallReportGroup> GroupCore(List<CivilWallReportRow> list, string dimension)
+        {
             var grouped = new Dictionary<string, CivilWallReportGroup>(StringComparer.Ordinal);
             foreach (CivilWallReportRow row in list)
             {
@@ -145,16 +151,24 @@ namespace BrightVision.Civil
 
         public static string ToCsv(CivilWallReportData data, IEnumerable<CivilWallReportRow> selected, string groupBy)
         {
-            ValidateData(data); Dimension(groupBy);
-            List<CivilWallReportRow> rows = UniqueRows(selected ?? data.Rows);
+            if (data == null) throw new ArgumentNullException("data");
+            Dimension(groupBy);
+            // Materialize caller enumeration before validating the snapshot.
+            // The remainder invokes only private helpers over owned DTOs.
+            List<CivilWallReportRow> rows = UniqueRows(selected ?? data.Rows, false);
+            ValidateData(data);
             var allowed = new HashSet<CivilWallReportRow>(data.Rows);
             if (rows.Any(row => !allowed.Contains(row))) throw new InvalidDataException("导出行不属于本次报表；未混入其他批次或重复来源。");
-            List<CivilWallReportGroup> groups = Group(rows, groupBy);
+            List<CivilWallReportGroup> groups = GroupCore(rows, groupBy);
             var total = new CivilWallReportGroup { Key = "total", Name = "当前范围合计", Rows = rows }; FillTotals(total);
             CivilSnapshot native = data.Snapshot; CivilWallSnapshot input = data.Batch.Input;
             var text = new StringBuilder();
             Csv(text, "产品", "崛亮视觉 · Bright Vision"); Csv(text, "报表格式", SchemaId);
-            Csv(text, "体积方法", CivilWallCalculator.RuleId); Csv(text, "面积方法", CivilWallCalculator.AreaRuleId);
+            Csv(text, "体积方法", data.Batch.RuleTemplate.MethodId); Csv(text, "面积方法", data.Batch.RuleTemplate.AreaMethodId);
+            Csv(text, "计算批次", data.Batch.BatchId); Csv(text, "规则模板Id", data.Batch.RuleTemplate.TemplateId);
+            Csv(text, "规则模板", data.Batch.RuleTemplate.Name); Csv(text, "规则修订", data.Batch.RuleTemplate.Revision);
+            Csv(text, "规则指纹SHA256", data.Batch.RuleFingerprint); Csv(text, "事实指纹SHA256", data.Batch.InputFingerprint);
+            Csv(text, "切洞策略", data.Batch.RuleTemplate.OpeningPolicy); Csv(text, "交接策略", data.Batch.RuleTemplate.JoinPolicy);
             Csv(text, "面积口径", "单侧墙轴向投影：L×H 减矩形洞口并集；不是抹灰、模板、外露表面积、建筑面积或地区清单／定额面积。");
             Csv(text, "体积口径", "独立矩形基准扣明确洞口并集；原生面积与体积单列，不进入扣减公式。");
             Csv(text, "工程归属边界", "计量层和施工段仅为整构件报表归属，不执行几何切层或切段。");
@@ -199,10 +213,14 @@ namespace BrightVision.Civil
                 if (source == null || String.IsNullOrWhiteSpace(source.UniqueId) || String.IsNullOrWhiteSpace(source.ElementId) || !uids.Add(source.UniqueId) || !ids.Add(source.ElementId))
                     throw new InvalidDataException("原生快照来源身份缺失或重复，未生成墙体归属报表。");
         }
+        internal static void Validate(CivilWallReportData data) { ValidateData(data); }
         private static void ValidateData(CivilWallReportData data)
         {
             if (data == null || data.Batch == null || data.Batch.Input == null || data.Batch.Input.NativeSnapshot == null || data.Snapshot == null || data.Rows == null)
                 throw new InvalidDataException("墙体报表数据不完整。");
+            CivilWallBatchIntegrity.Validate(data.Batch);
+            if (CivilWallBatchIntegrity.SnapshotFingerprint(data.Snapshot) != data.SnapshotFingerprint)
+                throw new InvalidDataException("报表工程归属或原生参照量在生成后已变化，请重新生成报表。");
             CivilSnapshot original = data.Batch.Input.NativeSnapshot;
             if (original.DocumentScope != data.DocumentScope || original.SourcePath != data.SourcePath || original.Revision != data.SourceRevision ||
                 data.Snapshot.DocumentScope != data.DocumentScope || data.Snapshot.SourcePath != data.SourcePath || data.Snapshot.Revision != data.SourceRevision)
@@ -212,18 +230,24 @@ namespace BrightVision.Civil
                 throw new InvalidDataException("报表来源集合或计算覆盖数已变化，请重新读取。");
             var results = new HashSet<CivilWallResult>(data.Batch.Results);
             var sources = new HashSet<CivilElementRecord>(data.Snapshot.Elements);
-            foreach (CivilWallReportRow row in UniqueRows(data.Rows))
+            foreach (CivilWallReportRow row in UniqueRows(data.Rows, false))
             {
                 if (!Object.ReferenceEquals(row.Owner, data) || !results.Contains(row.Result) || !sources.Contains(row.Source))
                     throw new InvalidDataException("报表行已被外来来源或其他计算批次替换。");
                 ValidateRow(row);
             }
         }
-        private static List<CivilWallReportRow> UniqueRows(IEnumerable<CivilWallReportRow> rows)
+        private static List<CivilWallReportRow> UniqueRows(IEnumerable<CivilWallReportRow> rows, bool validateOwner = true)
         {
             if (rows == null) throw new ArgumentNullException("rows");
             List<CivilWallReportRow> result = rows.ToList(); var identities = new HashSet<string>(StringComparer.Ordinal);
             CivilWallReportData owner = result.Count == 0 ? null : result[0] == null ? null : result[0].Owner;
+            if (validateOwner && result.Count > 0)
+            {
+                ValidateData(owner);
+                var owned = new HashSet<CivilWallReportRow>(owner.Rows);
+                if (result.Any(row => !owned.Contains(row))) throw new InvalidDataException("分组行不属于其声明的原始报表。");
+            }
             var elementIds = new HashSet<string>(StringComparer.Ordinal);
             foreach (CivilWallReportRow row in result)
             {

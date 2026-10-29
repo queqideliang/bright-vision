@@ -27,14 +27,21 @@ namespace BrightVision.Revit
                 // A model view is an explicit user choice when starting on a
                 // sheet. Never change ActiveView to perform geometry reads.
                 var window=new CivilWallWindow(initial,RevitCivilQuantityReader.GetPhases(document),RevitCivilQuantityReader.GetDesignOptions(document),views.Select(v=>new CivilChoice {Id=v.UniqueId,Label=v.Name}).ToList(),selected,
-                    delegate(CivilReadRequest request,string viewId){RequireDocument(commandData.Application,document);View3D view=document.GetElement(viewId) as View3D;
+                    null,
+                    delegate{return document.IsValidObject?RevitCivilQuantityReader.Revision(document):-1;}, null,
+                    delegate(CivilReadRequest request,string viewId,CivilWallRuleTemplate rule,CivilWallReadControl control){RequireDocument(commandData.Application,document);View3D view=document.GetElement(viewId) as View3D;
                         if(view==null||view.IsTemplate||!view.IsValidObject)throw new InvalidOperationException("几何校验视图失效，请重新打开工作台。");
-                        CivilSnapshot native=RevitCivilQuantityReader.Read(ui,request);return RevitCivilWallReader.Read(ui,native,request,view);},
-                    delegate{return document.IsValidObject?RevitCivilQuantityReader.Revision(document):-1;});
+                        if(control!=null)control.Checkpoint("读取原生构件参数",0,0);
+                        RequireDocument(commandData.Application,document);
+                        CivilSnapshot native=RevitCivilQuantityReader.Read(ui,request);
+                        if(control!=null)control.Checkpoint("原生参数已读取",native.Elements.Count,native.Elements.Count);
+                        RequireDocument(commandData.Application,document);
+                        return RevitCivilWallReader.Read(ui,native,request,view,rule,control);});
                 IntPtr owner=Process.GetCurrentProcess().MainWindowHandle;if(owner!=IntPtr.Zero)new WindowInteropHelper(window).Owner=owner;
                 window.ShowDialog();
                 if(window.SelectedFocusElements.Count>0){RequireDocument(commandData.Application,document);
                     if(window.LastBatch==null||window.LastBatch.Input.NativeSnapshot.Revision!=RevitCivilQuantityReader.Revision(document))throw new InvalidOperationException("模型已变化，请重新试算后再定位。");
+                    CivilWallBatchIntegrity.Validate(window.LastBatch);
                     IList<ElementId> ids=CivilQuantityCommand.ResolveFocus(document,window.SelectedFocusElements);ui.Selection.SetElementIds(ids);
                     try{ui.ShowElements(ids);}catch(Autodesk.Revit.Exceptions.InvalidOperationException){TaskDialog.Show("BV · 墙体试算","关联构件已选中，当前视图暂不能缩放到该对象。");}}
                 return Result.Succeeded;

@@ -1,69 +1,36 @@
 # 崛亮视觉 · Bright Vision
 
-Bright Vision 是本地 BIM 模型查看器和独立 Revit 导出／计量插件。官方产品由 **崛亮视觉** 维护，自有社区源码采用 **Apache-2.0**，保留适用的公司版权、NOTICE 与第三方许可。衍生项目可以修改品牌。
+BV 是面向 Revit 的社区插件，提供模型 ZIP 导出、土建原始量核对、工程归属设置及部分普通墙的面积／体积试算。独立查看器可在没有 Revit 的电脑上打开导出的 ZIP；查看器不能直接读取 RVT。
 
-当前公开预览为查看器 **0.7.0** 和独立 Revit 插件 **1.8.0**。查看器 0.7.0 的统一包仍内置冻结的 **BV 1.7.0**；最新插件请单独下载安装。实际支持范围、签名状态、已测 Revit build 与已知限制见对应 Release；开发预览不表示所有工程场景均已验收。
+1.11 在 **BV → bright vision** 增加 **检查更新** 和 **功能介绍／使用指南** 两个入口。使用指南包含从安装、导出到计量工作台的入门说明；检查更新访问固定的官方 GitHub 仓库，不上传模型或工程资料。
 
-**BV 1.8.0／第三期第二批**已独立发布：单侧轴向投影面积、带符号面积台账、完整来源及计量层／施工段／原生楼层／类型报表。源码 CI 与后台验证通过，本机四年份 CLI 升级已核对；没有新的 Revit 宿主／窗口验证。它不是第三期全部完成，不含地区规则、真实族切洞或交接增扣，也不改变 0.7.0 的附件、运行时或组件锁。
+## 下载与入门
 
-官方源码和预览附件已发布至 [queqideliang/bright-vision](https://github.com/queqideliang/bright-vision)：
+- [独立 Revit 插件 1.11.0 安装包](https://github.com/queqideliang/bright-vision/releases/download/revit-v1.11.0/BV-1.11.0-Setup.exe) · [1.11 发行说明、发布状态与 SHA-256](https://github.com/queqideliang/bright-vision/releases/tag/revit-v1.11.0)
+- [Windows 查看器 0.7.0 安装包](https://github.com/queqideliang/bright-vision/releases/download/viewer-v0.7.0/Bright.Vision-0.7.0-Setup.exe) · [查看器发行说明](https://github.com/queqideliang/bright-vision/releases/tag/viewer-v0.7.0)
 
-**[下载 Windows 完整安装包 · 0.7.0](https://github.com/queqideliang/bright-vision/releases/download/viewer-v0.7.0/Bright.Vision-0.7.0-Setup.exe)** — 包含查看器与 Revit 插件 1.7.0。[发行说明与 SHA-256](https://github.com/queqideliang/bright-vision/releases/tag/viewer-v0.7.0)
+本次发布状态、附件是否可下载、签名状态和已知问题，以对应发行页为准。查看器 0.7.0 内置旧插件 1.7.0；需要两者时，先安装查看器，再安装独立插件 1.11，二者版本号分别维护。
 
-**[仅下载 Revit 插件 · 1.8.0](https://github.com/queqideliang/bright-vision/releases/download/revit-v1.8.0/BV-1.8.0-Setup.exe)** — 适用于已有查看器、只需安装导出／计量插件的电脑。[发行说明与 SHA-256](https://github.com/queqideliang/bright-vision/releases/tag/revit-v1.8.0)
+1. 首次获得新入口，需要手动下载并安装一次独立插件 1.11。保存模型并退出全部 Revit，在安装器中选择检测到的年份并安装；重新启动 Revit 后生效。旧版本中没有此更新入口。
+2. 在 **BV → bright vision → 功能介绍／使用指南** 阅读对应操作；导出模型时选择非模板三维视图和输出位置，生成 ZIP 后用查看器打开。原始量和墙体工作台直接在 Revit 内使用。
+3. 后续进入 **检查更新**。默认包含开发预览版本，可取消勾选以只检查稳定版；尚无稳定版或网络失败会分别提示，本机比线上版本新时不提供降级。
 
-历史预览 [查看器 0.6.0](https://github.com/queqideliang/bright-vision/releases/tag/viewer-v0.6.0) 与 [独立插件 1.7.0](https://github.com/queqideliang/bright-vision/releases/tag/revit-v1.7.0) 保留原附件与标签。
+详细步骤见 [插件使用说明](tools/bright-revit-exporter/USER_GUIDE.md)。
 
-## 可以做什么
+## 检查、下载与安装
 
-- **接收和查看模型：** 从 ZIP 查看几何、构件属性、模型结构和原始量，筛选、隔离、剖切、测量与保存视点。接收者无需安装 Revit；不能直接打开 RVT。
-- **0.7 人物漫游与飞行：** 可见人形、第三人称跟随、手动地面起点、基础地面采样与射线阻挡；自由飞行和移动速度／眼高。需核对长度单位；不是完整人体碰撞，没有自动寻路或疏散计算。
-- **0.7 本地模型助手：** 查询模型概览、类别、楼层、所选属性、缺失项与原始量，附构件定位依据。使用明确语法，例如 `查找：墙`、`缺少参数：防火等级`，不理解任意自然语言。它是本地规则程序，不是大语言模型，不调用云端 AI 或上传模型。
-- **从 Revit 导出：** 选择模型名、三维视图、输出目录及内容，生成模型 ZIP，显示耗时和源文件／输出包大小。ZIP 是显示与交换包，不是完整 RVT 的无损压缩备份。
-- **在 Revit 核查原始量：** 墙梁柱板量表、阶段／设计选项、问题状态、定位和 CSV；计量层映射、单一施工段归属及本地工程设置。
-- **首批墙体试算：** 明确范围内的普通直墙与矩形 Opening 并集扣量、实际实体一致性验证和台账。同阶段主模型墙体的正体积交集会被拒绝，未 join 的重复墙也不能独立相加。
+在更新窗口核对版本与渠道，并打开官方发行页阅读更新说明。发现新版后可下载，文件大小与 SHA-256 校验通过后才可打开安装器。**下载并校验完成、安装器已打开，均不表示插件已经更新。** 请保存并退出全部 Revit，再在安装器中升级，重新打开 Revit 后使用新版本；运行中的插件 DLL 不作热替换。
 
-完整土建规则算量、地区清单／定额、模板量、任意门窗切洞、链接与梁柱板交接扣减、云端重算和完整计算书仍属后续范围。参见 [功能分期](tools/bright-revit-exporter/CIVIL_QUANTITY_ROADMAP.md)。
+开发预览可能有待完成的能力或验证范围。SHA-256 用于完整性检查，不能代替发布者签名；请核对发行说明。
 
-**Revit 2020 指定 build 的受限墙体 SDK／独立数据验收已通过**，算例与未覆盖项见 [验证范围](tools/bright-revit-exporter/tests/host/REVIT2020_VALIDATION.md)。真实窗口及其他年份／build 仍需另验。
+## 功能范围与源码
 
-上面的受限 Revit 2020 SDK 记录仅属于 **BV 1.7**，不验证 1.8 新面积或工程报表；本轮 1.8 不启动真实 Revit。
+计量功能仍有明确边界：只处理已实现并通过几何证明的普通直墙及限定交接体积，未支持项和失败项单列；交接体积不能除以厚度冒充新的面积。完整地区清单／定额、模板量、任意族、链接及墙梁柱板完整扣减仍属后续范围。参见 [分期路线](tools/bright-revit-exporter/CIVIL_QUANTITY_ROADMAP.md)。
 
-1.8 的源码提交 `997b1c2df62f67452b0165485c202d24f7284093` 已通过 [CI 40793987502](https://github.com/queqideliang/bright-vision/actions/runs/40793987502)，包括 Windows 领域／报表／离屏 WPF 与 Linux 查看器 headless。公开 Release 的四个附件通过 9 次无认证 HTTPS 请求逐字节核对，安装包为 1,674,752 字节；下载缓存的 EXE 未执行。此前四年份 CLI 升级是单独的部署核验，未启动 Revit。
+1.11 的生产清单为 42 份 C# 源码、2015—2026 共 14 个年份／运行时编译目标。编译、纯协议测试与离屏 WPF 不等于每个 Revit 宿主的实机验收；1.10 及更早版本的实机证据不能继承为 1.11 结论。具体版本的验证范围以发行说明为准。
 
-## 使用与构建
+开发者见 [插件构建](tools/bright-revit-exporter/BUILDING.md)、[查看器构建](tools/bim-viewer/BUILDING.md)和[安装器](tools/bright-revit-installer/README.md)。构建需自行合法取得 Revit API 与相应 .NET 引用；本仓库不附带 Autodesk DLL、厂商程序、客户模型、SDK 运行报告或本机配置。查看器 0.7 的 105 份运行文件和内嵌插件组件锁保持其版本范围。
 
-上方链接对应已公开的开发预览附件，安装前请阅读发行说明中的签名状态及已知限制。0.7.0 的生产更新模块已通过无认证公网检查、完整下载、独立 SHA-256 与 staging 核验；本次未运行安装器。测试以 `currentVersion:0.6.0` 模拟旧版本协议输入，未运行旧客户端；0.7.0 同版本不重复下载，stable 订阅不接收 preview。旧安装版本需要先安装包含该更新能力的新客户端。
+## 开源与署名
 
-查看器更新器只订阅 `viewer-v*`，**独立插件 1.8.0 没有自动更新器**。其公开附件下载核验不等同于插件自动更新 E2E；插件按独立安装包／受保护的 CLI 流程升级。
-
-开发者先从 Web 查看器开始，不需要 Revit 或 Autodesk SDK：
-
-```sh
-cd tools/bim-viewer
-npm ci
-npm test
-npm run build
-npm run serve:web
-```
-
-使用 Node.js 26 和 npm。完整 Windows 包还需本机 .NET 编译工具、合法取得的 Revit API 引用、自己构建并显式审阅的插件模块。公共源码不附带 API DLL、预编译插件或模型；缺少模块时，仅相应集成测试明确 SKIP，不能据此宣称打包通过。
-
-Windows 构建请使用对应版本的独立 checkout：重建查看器 0.7.0 统一包使用 `viewer-v0.7.0` 标签及其 BV 1.7.0／24 源码链；开发当前 1.8 独立插件使用另一目录的 1.8／25 源码链。0.7 的审核器与 lock 明确只接受旧 1.7 模块，不接受以新版本或修改字节替换。步骤见 [版本对应的构建说明](tools/bim-viewer/BUILDING.md)。当前没有新版统一包自动内置 1.8 的承诺。
-
-0.7.0 的已有检查仅使用 CLI 与独立的无界面 Chromium，不操作原生桌面、不启动 Electron 窗口或真实 Revit，不读取客户模型。[实际 CI](https://github.com/queqideliang/bright-vision/actions/runs/40710215364) 两个 job 已通过；Linux 使用 `ubuntu-24.04` 的系统 Chrome，保留浏览器沙箱，完成导航、助手等 14 项合成场景与零外部页面请求检查。运行方式与覆盖边界见 [后台测试](tools/bim-viewer/BACKGROUND_TESTING.md)。
-
-| 模块 | 说明 |
-|---|---|
-| [本地查看器](tools/bim-viewer/README.md) | [Web／Windows 构建、模块审核与更新配置](tools/bim-viewer/BUILDING.md) |
-| [Revit 插件](tools/bright-revit-exporter/README.md) | [合法 API 引用构建](tools/bright-revit-exporter/BUILDING.md)、[原始量格式合同](tools/bright-revit-exporter/QUANTITY_SNAPSHOT.md) |
-| [独立安装器](tools/bright-revit-installer/README.md) | 检测 Revit、版本升级、受管理文件、回滚及卸载 |
-| [发行工具](tools/bright-open-source/RELEASE_PLAN.md) | 离线发行清单、草稿发布与更新配置，发布操作需维护者明确执行 |
-
-Revit 编译目标为 2015—2026 共 14 个年份／运行时变体，逐宿主兼容性另验。构建产物可能因环境改变，不承诺逐字节可重现。文件 SHA 用于完整性检查，不能替代发布者签名。
-
-## 开源与后续服务
-
-本仓库只包含上述社区模块。云端平台、客户数据、厂商软件、私有配置和本机验证材料不随源码公开。基础社区源码可按 Apache-2.0 使用、修改、商业使用和分发；后续独立托管、支持或专业组件的范围与收费另行说明，不收回已有社区许可。
-
-参见 [LICENSE](LICENSE)、[NOTICE](NOTICE)、[第三方通知](THIRD-PARTY-NOTICES.md)、[品牌说明](BRANDING.md)与[社区／服务边界](COMMUNITY-AND-SERVICES.md)。参与开发见 [CONTRIBUTING](CONTRIBUTING.md)，安全问题见 [SECURITY](SECURITY.md)。
+Copyright 2026 崛亮视觉（Bright Vision）。自有社区源码采用 [Apache License 2.0](LICENSE)，使用、修改与分发请保留适用的版权及 [NOTICE](NOTICE)；第三方组件保留各自许可，见 [第三方通知](THIRD-PARTY-NOTICES.md)。另见 [品牌说明](BRANDING.md)、[社区与服务边界](COMMUNITY-AND-SERVICES.md)、[参与开发](CONTRIBUTING.md)及[安全说明](SECURITY.md)。

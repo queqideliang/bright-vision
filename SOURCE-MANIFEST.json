@@ -1,9 +1,9 @@
 {
   "schemaVersion": 1,
-  "draft": false,
+  "draft": true,
   "publicationReady": false,
-  "sourcePublicationReady": true,
-  "readinessScope": "BV 1.8.0 runtime source, actual hosted CI, independent public preview and four-asset download are verified at the recorded commit; four local years were CLI-upgraded separately. This new inventory is a documentation-only follow-up pending its own push, with no new live Revit host verification.",
+  "sourcePublicationReady": false,
+  "readinessScope": "Historical state captured during offline BV 1.11 source preparation: inventory, privacy, license and final build-source checks only. The captured flags below describe actions not performed by this preparation; they are not a statement of the repository, CI or release state after capture. Current publication status is authoritative at the GitHub revit-v1.11.0 Release page. Earlier version evidence remains historical and is not inherited as 1.11 live-host acceptance.",
   "repository": {
     "host": "github.com",
     "owner": "queqideliang",
@@ -25,7 +25,7 @@
     "tools/bright-revit-installer"
   ],
   "sourceSnapshotDate": "2026-10-29",
-  "sourceSnapshotSha256": "71aa83040dd4ca170511dda2c781bd67e818bb9b02dcb7e5474461a6e8dc7142",
+  "sourceSnapshotSha256": "d61875e28fe49d20a2a0046c91f99023dc1977ee0fff337097a374a337aa0c8a",
   "files": [
     {
       "path": "tools/bim-viewer/.gitignore",
@@ -41,6 +41,36 @@
       "path": "tools/bim-viewer/BUILDING.md",
       "bytes": 5291,
       "sha256": "46e79923f406d3270eae35e1829ca4ddf7c765ea7dfb47b53be1349e72819a96"
+    },
+    {
+      "path": "tools/bim-viewer/LICENSE",
+      "bytes": 11358,
+      "sha256": "cfc7749b96f63bd31c3c42b5c471bf756814053e847c10f3eb003417bc523d30"
+    },
+    {
+      "path": "tools/bim-viewer/NOTICE",
+      "bytes": 1126,
+      "sha256": "825c409809562dc01049528d26ce4ec3606775457fe8685ba34c25eaf4d07067"
+    },
+    {
+      "path": "tools/bim-viewer/README.md",
+      "bytes": 10147,
+      "sha256": "7ebfd7f19d4bf0be232d5e742692e85c452ce3d601a5d57cd0cfa15c6611605c"
+    },
+    {
+      "path": "tools/bim-viewer/ROADMAP.md",
+      "bytes": 4091,
+      "sha256": "fb07378a835be9809664113e026b1e43bfdea8e4893973ab5cdd312c815d3a0e"
+    },
+    {
+      "path": "tools/bim-viewer/THIRD-PARTY-NOTICES.md",
+      "bytes": 2137,
+      "sha256": "a7a8b98b913ce1b9e5e14773e2a7c1e37b247ebe176b97d551ea327008a72a0c"
+    },
+    {
+      "path": "tools/bim-viewer/electron-builder.release.cjs",
+      "bytes": 528,
+      "sha256": "c0ff3e692f1306cf79719798364844c83859091be871db3bb908e3b38462bb32"
     },
     {
       "path": "tools/bim-viewer/electron/archive-extractor.cjs",
@@ -88,11 +118,6 @@
       "sha256": "6ef5d90a98d3f6d2ff6c649dfc5ee43ca851926b4c22f36977f3920fb69ab959"
     },
     {
-      "path": "tools/bim-viewer/electron-builder.release.cjs",
-      "bytes": 528,
-      "sha256": "c0ff3e692f1306cf79719798364844c83859091be871db3bb908e3b38462bb32"
-    },
-    {
       "path": "tools/bim-viewer/index.html",
       "bytes": 779,
       "sha256": "a21ae7851ca08b65df2b4b8017d61afad58e4662f0b1d36f29f43c7b5b9257e3"
@@ -118,19 +143,9 @@
       "sha256": "fe1613de0dc8860283f1aaf109cf163376eafa7a7ddd77171f37b0a56d9b4e12"
     },
     {
-      "path": "tools/bim-viewer/LICENSE",
-      "bytes": 11358,
-      "sha256": "cfc7749b96f63bd31c3c42b5c471bf756814053e847c10f3eb003417bc523d30"
-    },
-    {
       "path": "tools/bim-viewer/native/ArchiveExtractor.cs",
       "bytes": 4768,
       "sha256": "d39955f873bb4337777a1870a149b15764f9f72a4cccf57c09202ac8f36ad31e"
-    },
-    {
-      "path": "tools/bim-viewer/NOTICE",
-      "bytes": 1126,
-      "sha256": "825c409809562dc01049528d26ce4ec3606775457fe8685ba34c25eaf4d07067"
     },
     {
       "path": "tools/bim-viewer/package-lock.json",
@@ -141,16 +156,6 @@
       "path": "tools/bim-viewer/package.json",
       "bytes": 3641,
       "sha256": "ff9b93a173b097f476784ed927a909eef3300c1734bb2cca0eeab58f29f6ede0"
-    },
-    {
-      "path": "tools/bim-viewer/README.md",
-      "bytes": 10147,
-      "sha256": "7ebfd7f19d4bf0be232d5e742692e85c452ce3d601a5d57cd0cfa15c6611605c"
-    },
-    {
-      "path": "tools/bim-viewer/ROADMAP.md",
-      "bytes": 4091,
-      "sha256": "fb07378a835be9809664113e026b1e43bfdea8e4893973ab5cdd312c815d3a0e"
     },
     {
       "path": "tools/bim-viewer/scripts/background-smoke.mjs",
@@ -373,6 +378,11 @@
       "sha256": "9a7ba628d776558e2ba0b7489cb1a9ad191a56676206326ba2fb7e49a01b9d7b"
     },
     {
+      "path": "tools/bim-viewer/tests/Test-ReleaseTrust.ps1",
+      "bytes": 4138,
+      "sha256": "8648ec41338224eb88404d554d27f040d5903daac26e1f032055178115895032"
+    },
+    {
       "path": "tools/bim-viewer/tests/archive-extractor.test.ts",
       "bytes": 14018,
       "sha256": "2cbca22a55295e7ce5a242817380f989d95b1d86d2bd8f0af9a1457f61918170"
@@ -538,11 +548,6 @@
       "sha256": "143cf950f24b2491e8afde35613ec4c38e46063594ed29e5ed85349f6550d406"
     },
     {
-      "path": "tools/bim-viewer/tests/Test-ReleaseTrust.ps1",
-      "bytes": 4138,
-      "sha256": "8648ec41338224eb88404d554d27f040d5903daac26e1f032055178115895032"
-    },
-    {
       "path": "tools/bim-viewer/tests/updater.test.ts",
       "bytes": 14989,
       "sha256": "dc3d2b8ac36c27e5625b71831fcd9d8c85f20e0510dc5b91ef71c5b5b40ee95c"
@@ -563,11 +568,6 @@
       "sha256": "b851283de39d8549b4b06a5a18a2f24ffafb53adaf0f6c2b6c91f5f1174b8a76"
     },
     {
-      "path": "tools/bim-viewer/THIRD-PARTY-NOTICES.md",
-      "bytes": 2137,
-      "sha256": "a7a8b98b913ce1b9e5e14773e2a7c1e37b247ebe176b97d551ea327008a72a0c"
-    },
-    {
       "path": "tools/bim-viewer/tsconfig.json",
       "bytes": 422,
       "sha256": "1e7b02e332322287734f990056853fe346fb4053daff4cb8612af4471d24b781"
@@ -576,6 +576,21 @@
       "path": "tools/bim-viewer/vite.config.ts",
       "bytes": 303,
       "sha256": "48524cc169dcd5e08b155b50746694fd448afce9c3afbcd22b2bd347db1d8363"
+    },
+    {
+      "path": "tools/bright-open-source/Publish-GitHubDraft.ps1",
+      "bytes": 3649,
+      "sha256": "a584f55f27eae497d015d828053e83d17a67cdf45f7f58ead631ac143a597081"
+    },
+    {
+      "path": "tools/bright-open-source/RELEASE_PLAN.md",
+      "bytes": 9558,
+      "sha256": "7d9b0fd866193b76cd6b96354900a4c05d2c036aff8131050471c981a5f4c27e",
+      "publicTransform": {
+        "kind": "versioned-1.11-scope-note",
+        "inputSha256": "3a616ea1166aed7a9cf888658fab41d76665400766063fe42f2bae589987a6b5",
+        "outputSha256": "7d9b0fd866193b76cd6b96354900a4c05d2c036aff8131050471c981a5f4c27e"
+      }
     },
     {
       "path": "tools/bright-open-source/legal/BRANDING.md",
@@ -603,24 +618,19 @@
       "sha256": "fb0b1ac0c583c86c1a2a44cc06958614bc8955b6b29eb6d1076eb753621e0f62"
     },
     {
-      "path": "tools/bright-open-source/Publish-GitHubDraft.ps1",
-      "bytes": 3649,
-      "sha256": "a584f55f27eae497d015d828053e83d17a67cdf45f7f58ead631ac143a597081"
-    },
-    {
-      "path": "tools/bright-open-source/RELEASE_PLAN.md",
-      "bytes": 9001,
-      "sha256": "3a616ea1166aed7a9cf888658fab41d76665400766063fe42f2bae589987a6b5"
-    },
-    {
       "path": "tools/bright-open-source/templates/public-CONTRIBUTING.md",
       "bytes": 2727,
       "sha256": "bce2ec0e63c5146fd84887c6c5e4f61db1279b8175675c7726ac776acceed254"
     },
     {
       "path": "tools/bright-open-source/templates/public-README.md",
-      "bytes": 8148,
-      "sha256": "e505c5e8d62cadd948cbd181b006a18c47bf4fe803e346a9c64ba169ae2c5296"
+      "bytes": 4226,
+      "sha256": "8b56d86035a1386c5fa3ec685a8834419c09422f3d72b9434ab290a4e532ccda",
+      "publicTransform": {
+        "kind": "synchronize-versioned-public-readme-template",
+        "inputSha256": "e505c5e8d62cadd948cbd181b006a18c47bf4fe803e346a9c64ba169ae2c5296",
+        "outputSha256": "8b56d86035a1386c5fa3ec685a8834419c09422f3d72b9434ab290a4e532ccda"
+      }
     },
     {
       "path": "tools/bright-open-source/templates/public-SECURITY.md",
@@ -643,19 +653,29 @@
       "sha256": "769de60d999471a89f64a78d15578b380f2360d833730614cefc1b47218407b8"
     },
     {
-      "path": "tools/bright-open-source/tests/prepare-github-release.test.mjs",
-      "bytes": 7541,
-      "sha256": "2c54111b86c0d4c514f07294b4102673a6b0d9e5408b456b21b1ea23032eebab"
-    },
-    {
       "path": "tools/bright-open-source/tests/Test-PublishGitHubDraft.ps1",
       "bytes": 4722,
       "sha256": "7f186b3541f79b2f35deb2f14966d881b1f5fed4341e7d447ffc0b7f2954f355"
     },
     {
+      "path": "tools/bright-open-source/tests/prepare-github-release.test.mjs",
+      "bytes": 7541,
+      "sha256": "2c54111b86c0d4c514f07294b4102673a6b0d9e5408b456b21b1ea23032eebab"
+    },
+    {
       "path": "tools/bright-revit-exporter/.gitignore",
       "bytes": 12,
       "sha256": "defc758c6720f3e63dbe47182a9c485a47eeed2999b3903f8dbfbdca4c906499"
+    },
+    {
+      "path": "tools/bright-revit-exporter/BUILDING.md",
+      "bytes": 4871,
+      "sha256": "ee7db2f16a67b1e25ebf60ed33c828b93b3d50e18ce3fb243f60555fcc703bfa",
+      "publicTransform": {
+        "kind": "versioned-1.11-scope-note",
+        "inputSha256": "01ccd2ef325a52f87b15fdce8c980f67399b0ae33c05722eb3777dc91265d6f3",
+        "outputSha256": "ee7db2f16a67b1e25ebf60ed33c828b93b3d50e18ce3fb243f60555fcc703bfa"
+      }
     },
     {
       "path": "tools/bright-revit-exporter/Benchmark-Exporter.ps1",
@@ -668,29 +688,42 @@
       "sha256": "c4bd7b3befd4b0a0e1b3cbe0dd2fa17c2cd1f6ffa3fb7bc4ad0073054dd73342"
     },
     {
-      "path": "tools/bright-revit-exporter/Branding.cs",
-      "bytes": 408,
-      "sha256": "99b6145d71fd0ded0efa4ff00500f9baafa8174a89b61f7f153835969f0b8d14"
-    },
-    {
       "path": "tools/bright-revit-exporter/BrandPixels.cs",
       "bytes": 2609,
       "sha256": "09e559a5d19d1f36ec5085a02d725b160b2a58f1eb2abe12de45488a542e15ea"
     },
     {
-      "path": "tools/bright-revit-exporter/Build-Exporter.ps1",
-      "bytes": 10447,
-      "sha256": "67c6b6ca3ba8f5e0bc93a5123ce70f8d22d83aac143fdf4fe0238bdce93ebd53"
+      "path": "tools/bright-revit-exporter/Branding.cs",
+      "bytes": 408,
+      "sha256": "99b6145d71fd0ded0efa4ff00500f9baafa8174a89b61f7f153835969f0b8d14"
     },
     {
-      "path": "tools/bright-revit-exporter/BUILDING.md",
-      "bytes": 4227,
-      "sha256": "01ccd2ef325a52f87b15fdce8c980f67399b0ae33c05722eb3777dc91265d6f3"
+      "path": "tools/bright-revit-exporter/Build-Exporter.ps1",
+      "bytes": 10901,
+      "sha256": "ea68d4c1c3598011b26a3300bf4137446e5a1cd3641ef793c64192a6974fc229"
     },
     {
       "path": "tools/bright-revit-exporter/CIVIL_QUANTITY_ROADMAP.md",
-      "bytes": 14426,
-      "sha256": "cf5a9e20726488f2ef1998f6042d7ef095c1ef60c148c2128d280691f7e1142c"
+      "bytes": 17780,
+      "sha256": "cc038debd00e5fdcbdf1e9832244a1c646f79deeee4773e7659eb21131972ff8",
+      "publicTransform": {
+        "kind": "sequential-public-source-transformations",
+        "inputSha256": "33abdcd6c281206c10cb7745155e0c2eddda2e1cc0f9360d2154ecf21e9608ad",
+        "outputSha256": "cc038debd00e5fdcbdf1e9832244a1c646f79deeee4773e7659eb21131972ff8",
+        "steps": [
+          {
+            "kind": "versioned-1.11-scope-note",
+            "inputSha256": "33abdcd6c281206c10cb7745155e0c2eddda2e1cc0f9360d2154ecf21e9608ad",
+            "outputSha256": "3f9af7378030286b381c2cf048b5d282498fd72b43b8632d28fe86630abada17"
+          },
+          {
+            "kind": "local-validation-links-to-public-scope-text",
+            "linksReplaced": 2,
+            "inputSha256": "3f9af7378030286b381c2cf048b5d282498fd72b43b8632d28fe86630abada17",
+            "outputSha256": "cc038debd00e5fdcbdf1e9832244a1c646f79deeee4773e7659eb21131972ff8"
+          }
+        ]
+      }
     },
     {
       "path": "tools/bright-revit-exporter/CivilLevelResolver.cs",
@@ -699,8 +732,8 @@
     },
     {
       "path": "tools/bright-revit-exporter/CivilProject.cs",
-      "bytes": 24931,
-      "sha256": "14703321103775091cf72fadf8fe0dc7a5ba6c4911c150b41643a35cb3317108"
+      "bytes": 30683,
+      "sha256": "e72a44805edb49d87ca7fbd08c1ca1eee45fb531efc9e00397ca1eaf57727264"
     },
     {
       "path": "tools/bright-revit-exporter/CivilProjectWindow.cs",
@@ -723,29 +756,79 @@
       "sha256": "c27ba49be1c73716accb73b9998def402f1ec028392a108fce940f86955a28c0"
     },
     {
+      "path": "tools/bright-revit-exporter/CivilWallBatchIntegrity.cs",
+      "bytes": 9904,
+      "sha256": "7e3fbb4532e0f527a9dc9afb5d0bf3610652218e44d0d069c6035791a7813508"
+    },
+    {
       "path": "tools/bright-revit-exporter/CivilWallCalculation.cs",
-      "bytes": 17494,
-      "sha256": "318e4beaa02c6150111d462cd5f8241ffc4259be25bbb7740f53ce10cfc57e63"
+      "bytes": 19110,
+      "sha256": "2b603ab6b8166cf8bd07310886348465096775ce16c332ac3e3104483ac2c0d7"
     },
     {
       "path": "tools/bright-revit-exporter/CivilWallCommand.cs",
-      "bytes": 3795,
-      "sha256": "613f94904fa0d717e890d7cc6066f2ea366066cc4ac85e9c28ce41a71211a0e8"
+      "bytes": 4366,
+      "sha256": "0d1c3929698ebb2b06adf00031542f6b7b49371af6a69beafebd46c1040fa864"
     },
     {
       "path": "tools/bright-revit-exporter/CivilWallFacts.cs",
-      "bytes": 4029,
-      "sha256": "39e05a44ad40d430bd639eaa465c64f207eb2993cd4bcf583e11e70e0de5df21"
+      "bytes": 4175,
+      "sha256": "ae2f118f01bb55ec7795566930fc13226689daceec0b3d695735eb181c00d878"
+    },
+    {
+      "path": "tools/bright-revit-exporter/CivilWallJoinCommand.cs",
+      "bytes": 4236,
+      "sha256": "aeb9563eec5db0d6532fddd58c20f93c342f62adc4adc0ac81d10b119f026332"
+    },
+    {
+      "path": "tools/bright-revit-exporter/CivilWallJoinCore.cs",
+      "bytes": 21455,
+      "sha256": "a64c749f3d02d2f2db97d1a9f4ba97d4f8afae7abe42e6f128b3337c5671e678"
+    },
+    {
+      "path": "tools/bright-revit-exporter/CivilWallJoinPlan.cs",
+      "bytes": 21457,
+      "sha256": "6b65c67911ad19463094f287c243bece10032bdda07e19eff6f44848a7fd3e3a"
+    },
+    {
+      "path": "tools/bright-revit-exporter/CivilWallJoinPlanWindow.cs",
+      "bytes": 14892,
+      "sha256": "5925050c24f9ae53e5e117713cfe7a6974405b8063788d6416ab075e28c7093d"
+    },
+    {
+      "path": "tools/bright-revit-exporter/CivilWallJoinSession.cs",
+      "bytes": 25956,
+      "sha256": "60f137ced64fb6440af61f1697dec7647b55a0a428ab2a60a9cb8c0d0ad130c8"
+    },
+    {
+      "path": "tools/bright-revit-exporter/CivilWallJoinWindow.cs",
+      "bytes": 35038,
+      "sha256": "7c3325c1d2bafb6ea5fbcc929f2abe80ade2100b02d94cb2ef3ba0f06484a89f"
+    },
+    {
+      "path": "tools/bright-revit-exporter/CivilWallReadControl.cs",
+      "bytes": 918,
+      "sha256": "521104307e01a7b67eaa368d940f9341e41c58a3f33135906c1b1fd59e6d759a"
     },
     {
       "path": "tools/bright-revit-exporter/CivilWallReport.cs",
-      "bytes": 26077,
-      "sha256": "a59d6fceca10977606372aabca68511752a34a3e71316f5ca4a48453192d9fd9"
+      "bytes": 27960,
+      "sha256": "bb6c1f9c8afcb69dc0354bfb5cfe7d70238ebe8a4346ddacf64b5e2d8b645d69"
+    },
+    {
+      "path": "tools/bright-revit-exporter/CivilWallRuleTemplates.cs",
+      "bytes": 21099,
+      "sha256": "86f4c405e09c23b4d43c34440e9f927697fc7aefc54ac591fa798b1435176c67"
+    },
+    {
+      "path": "tools/bright-revit-exporter/CivilWallRuleWindow.cs",
+      "bytes": 14598,
+      "sha256": "082106935da3db786a0c88f02e715f7202b081bdc5a4caa991ef51964895db42"
     },
     {
       "path": "tools/bright-revit-exporter/CivilWallWindow.cs",
-      "bytes": 32637,
-      "sha256": "587bcc5f56c2b3535ec487ac6ad5f5efd1711a45065466749fcf0d3b34f76c7f"
+      "bytes": 45746,
+      "sha256": "a08f963ba971dc70d992deb03647cd9f3ffee54f22ccfda67518a00355afc550"
     },
     {
       "path": "tools/bright-revit-exporter/ExportAttachments.cs",
@@ -778,14 +861,39 @@
       "sha256": "2ffe46676d6dc974aa50f1c0140433ee2dae69ece9b618491529b20270d8cc1d"
     },
     {
+      "path": "tools/bright-revit-exporter/PERFORMANCE_REVIEW.md",
+      "bytes": 8417,
+      "sha256": "05df9b0b22be9a55f0ba0d775579db69716692027711d3be337cc896b39d9963"
+    },
+    {
       "path": "tools/bright-revit-exporter/PackageWriter.cs",
       "bytes": 16695,
       "sha256": "1ff8d5bbccf88f5a9267a6b9a4aac248bd4d9bb5be446bdc0f84dcf3dcae6e30"
     },
     {
-      "path": "tools/bright-revit-exporter/PERFORMANCE_REVIEW.md",
-      "bytes": 8417,
-      "sha256": "05df9b0b22be9a55f0ba0d775579db69716692027711d3be337cc896b39d9963"
+      "path": "tools/bright-revit-exporter/PluginHelpWindow.cs",
+      "bytes": 23451,
+      "sha256": "709e80272b8c01fa900f234964bfa9abd9dce1bba3f6e09cfe9d5f282966a620"
+    },
+    {
+      "path": "tools/bright-revit-exporter/PluginSupportCommands.cs",
+      "bytes": 1965,
+      "sha256": "632f27a3d3c777958f6ee15190a7a33fc1197fae67f6afcee70a08ba2c1b3e06"
+    },
+    {
+      "path": "tools/bright-revit-exporter/PluginUpdateClient.cs",
+      "bytes": 17955,
+      "sha256": "96e9133b5228b627ba7452035dc9b162431135e043bdb4827de1b37940691a10"
+    },
+    {
+      "path": "tools/bright-revit-exporter/PluginUpdateCore.cs",
+      "bytes": 25706,
+      "sha256": "c1b6a7d81ad8948d60fffc1374c9da720b60308a2f70822ccb82c15443b79bdc"
+    },
+    {
+      "path": "tools/bright-revit-exporter/PluginUpdateWindow.cs",
+      "bytes": 12321,
+      "sha256": "636c1f29f72cb938693312491edc5e9c9e991cc4f2c2c39842a07a34b56c6735"
     },
     {
       "path": "tools/bright-revit-exporter/QUANTITY_SNAPSHOT.md",
@@ -799,18 +907,31 @@
     },
     {
       "path": "tools/bright-revit-exporter/README.md",
-      "bytes": 11428,
-      "sha256": "85cb1014bf86ccb00936c3ed26b15d6796e53dbddf21b8de44ece363232fcccb"
-    },
-    {
-      "path": "tools/bright-revit-exporter/reference-paths.example.json",
-      "bytes": 393,
-      "sha256": "3eb2c613e4310e4e2895bd81e89f55cc8cb0c66663e8ba0143db918fe2389313"
+      "bytes": 15422,
+      "sha256": "549a873d986b096316f71def4569045f71adb60cd3c6bc3f5c7f82b15bf0e746",
+      "publicTransform": {
+        "kind": "sequential-public-source-transformations",
+        "inputSha256": "4099492dde8094bebb3a68a3fbc0044a492ef51feb7424709ad8c7515b36c59a",
+        "outputSha256": "549a873d986b096316f71def4569045f71adb60cd3c6bc3f5c7f82b15bf0e746",
+        "steps": [
+          {
+            "kind": "versioned-1.11-scope-note",
+            "inputSha256": "4099492dde8094bebb3a68a3fbc0044a492ef51feb7424709ad8c7515b36c59a",
+            "outputSha256": "968196f0df527b64e45bef5d87f31aa0a6a0cea0b99e88d6d77cc7e38e083d77"
+          },
+          {
+            "kind": "local-validation-links-to-public-scope-text",
+            "linksReplaced": 1,
+            "inputSha256": "968196f0df527b64e45bef5d87f31aa0a6a0cea0b99e88d6d77cc7e38e083d77",
+            "outputSha256": "549a873d986b096316f71def4569045f71adb60cd3c6bc3f5c7f82b15bf0e746"
+          }
+        ]
+      }
     },
     {
       "path": "tools/bright-revit-exporter/RevitApp.cs",
-      "bytes": 32313,
-      "sha256": "adb9b37fc9375850134bdb5b012f4d46d62240df00d380a1e6984bb5ff3a3702"
+      "bytes": 33912,
+      "sha256": "5ee0f28c272c4b6b30e99e7e7a2e02ee37509aeec9ccccf7228176ea1fa97e65"
     },
     {
       "path": "tools/bright-revit-exporter/RevitCivilQuantityReader.cs",
@@ -819,8 +940,8 @@
     },
     {
       "path": "tools/bright-revit-exporter/RevitCivilWallReader.cs",
-      "bytes": 35331,
-      "sha256": "103b96253ae0af6fa6e3789ff1e8caf947bdd765dc0e29d75fc247f89e5cbeb2"
+      "bytes": 39002,
+      "sha256": "ffcd5a781dff2aa5d438d63f9178d0a2f1931cf839a401b2178b3dca3f3ff95c"
     },
     {
       "path": "tools/bright-revit-exporter/RevitQuantityReader.cs",
@@ -828,24 +949,49 @@
       "sha256": "3dcb162e9780f422b286eb6fc5432515b8351401e39ed16963198ee82ca724ce"
     },
     {
+      "path": "tools/bright-revit-exporter/RevitWallCutoutReader.cs",
+      "bytes": 20394,
+      "sha256": "5143c151ccfa85ba1722897a4ce4a91af9166b834bfcdb748bc8fc47f7716a7c"
+    },
+    {
+      "path": "tools/bright-revit-exporter/RevitWallJoinReader.cs",
+      "bytes": 51038,
+      "sha256": "bf3df8189600029feee6379744478629f510ba4a904883df981fdc6cb5d716fa"
+    },
+    {
       "path": "tools/bright-revit-exporter/SelectedViewResolver.cs",
       "bytes": 1933,
       "sha256": "d0d350308bae43a439bd66d7460aae36cf6f64aa8f6d4334964b056bdab23cbc"
     },
     {
-      "path": "tools/bright-revit-exporter/tests/civil-host-verifier.test.mjs",
-      "bytes": 13961,
-      "sha256": "f016b3e6c779c1218f9c82ded36c0e330357cf604970eadabd35c0a78cbae3f5"
+      "path": "tools/bright-revit-exporter/USER_GUIDE.md",
+      "bytes": 14929,
+      "sha256": "88d8685ea74957706e527b02e99bf41ed3d0ec6fbeb93292c11473175721574a"
     },
     {
-      "path": "tools/bright-revit-exporter/tests/civil-project-host-verifier.test.mjs",
-      "bytes": 11447,
-      "sha256": "ee23aa72061bae18540331dd5d9a1085117bbd6febb834422643c456ffceedd0"
+      "path": "tools/bright-revit-exporter/reference-paths.example.json",
+      "bytes": 393,
+      "sha256": "3eb2c613e4310e4e2895bd81e89f55cc8cb0c66663e8ba0143db918fe2389313"
     },
     {
-      "path": "tools/bright-revit-exporter/tests/civil-wall-host-verifier.test.mjs",
-      "bytes": 9923,
-      "sha256": "a34c62c117a1e899715cc2360523a81a3ae50bbcbbc6462f279a79a8db4f92bc"
+      "path": "tools/bright-revit-exporter/rule-templates/README.md",
+      "bytes": 1933,
+      "sha256": "e86a4aad6a15874571404506b35f705f82594fd8e9483d5efd5bde612c76c010"
+    },
+    {
+      "path": "tools/bright-revit-exporter/rule-templates/index.json",
+      "bytes": 1250,
+      "sha256": "1416fc38069956b70371037ed4afe0100ce924683a49de7a63545f2b745772ed"
+    },
+    {
+      "path": "tools/bright-revit-exporter/rule-templates/native-opening-only.bvwallrules.json",
+      "bytes": 528,
+      "sha256": "97542b5f6b0fb8ff5353812a754b4290b79660586369a0ea1fd8524c789f1c00"
+    },
+    {
+      "path": "tools/bright-revit-exporter/rule-templates/project-geometry.bvwallrules.json",
+      "bytes": 508,
+      "sha256": "5b9d0142822804afed4607d823f74f5593194df55038228c933ff2c3c3677d06"
     },
     {
       "path": "tools/bright-revit-exporter/tests/CivilProjectFixture.cs",
@@ -874,8 +1020,8 @@
     },
     {
       "path": "tools/bright-revit-exporter/tests/CivilWallApiStubs.cs",
-      "bytes": 10451,
-      "sha256": "5f573fd8685bd3fd3d193fa0121ec83a251d80f3caf9e07462f31fbeae5e89cf"
+      "bytes": 10937,
+      "sha256": "5b524ae30cc6048db8a858175e2cae6f050af5130949f150a469e3b6cce88cc3"
     },
     {
       "path": "tools/bright-revit-exporter/tests/CivilWallCalculationFixture.cs",
@@ -883,19 +1029,84 @@
       "sha256": "4976fe171ae58faa8cfdda4460b0812b22e9ed452a98d031ea780e7ed3b7be00"
     },
     {
+      "path": "tools/bright-revit-exporter/tests/CivilWallCutoutFixture.cs",
+      "bytes": 16019,
+      "sha256": "5806d53cdfcae2b601d063833a3ec50a80b22fbd2f6753de7053f9bc6edca44a"
+    },
+    {
+      "path": "tools/bright-revit-exporter/tests/CivilWallIntegrityFixture.cs",
+      "bytes": 28060,
+      "sha256": "5c7334d544a9a09a85376d48851fafc6ec898728d4af29a72208e14ae93c759b"
+    },
+    {
+      "path": "tools/bright-revit-exporter/tests/CivilWallJoinCoreFixture.cs",
+      "bytes": 20630,
+      "sha256": "7c49bf17f454fb396095c48b81366c8dc30daaf8ef42f01b19553f45355e743c"
+    },
+    {
+      "path": "tools/bright-revit-exporter/tests/CivilWallJoinPlanFixture.cs",
+      "bytes": 15144,
+      "sha256": "7ba7395536763161bbb43a5bb06a123fb5e1d36fa35bb4a820a494971f91acaf"
+    },
+    {
+      "path": "tools/bright-revit-exporter/tests/CivilWallJoinPlanUiFixture.cs",
+      "bytes": 14641,
+      "sha256": "fa758f0aa0b7e814134f0d593e5d6ecc89ad53d0d3e9d755f8af04766bab50c6"
+    },
+    {
+      "path": "tools/bright-revit-exporter/tests/CivilWallJoinReaderFixture.cs",
+      "bytes": 19603,
+      "sha256": "fc2ff3a071e9343317956be60aee5f91732ae6983ee651211a04ce5faa8d19a1"
+    },
+    {
+      "path": "tools/bright-revit-exporter/tests/CivilWallJoinSessionFixture.cs",
+      "bytes": 26490,
+      "sha256": "976895cb17ad3c197edd1749dd89d848c2d2c1ec60ec903fc9964e397871a693"
+    },
+    {
+      "path": "tools/bright-revit-exporter/tests/CivilWallJoinUiFixture.cs",
+      "bytes": 30201,
+      "sha256": "a67425693d3439b5d2452c34bad1536f6a755192b38f4e4f5636e9319da3bbf9"
+    },
+    {
+      "path": "tools/bright-revit-exporter/tests/CivilWallPerformanceFixture.cs",
+      "bytes": 13974,
+      "sha256": "1d42eba387d6f6b156f120fe72b432c5a7d209c7f3695338648edfad6bcf6406"
+    },
+    {
+      "path": "tools/bright-revit-exporter/tests/CivilWallProjectRulesFixture.cs",
+      "bytes": 15507,
+      "sha256": "4500c85e4879d9765870d50bc55fde5eedcfe7ef4119ae84342a9ad6f5aac372"
+    },
+    {
       "path": "tools/bright-revit-exporter/tests/CivilWallReaderFixture.cs",
-      "bytes": 15754,
-      "sha256": "c0e014db5b846c2e85c129fea8dc76c452450f9d01c79ce06b92bd6a978a8738"
+      "bytes": 25247,
+      "sha256": "21a52a7765ad489994b8c3e256b3792548a2fc82b70768f96d80234593ce391c"
     },
     {
       "path": "tools/bright-revit-exporter/tests/CivilWallReportFixture.cs",
-      "bytes": 21902,
-      "sha256": "2f52bbf32a7401650d1774c199dc743b1491882594ecdbeeac514da8d20796c9"
+      "bytes": 24704,
+      "sha256": "540ce2af0d64aefc14391b4414085e51a2e3a61333144a8479ce5f2f2e8b6381"
+    },
+    {
+      "path": "tools/bright-revit-exporter/tests/CivilWallRuleCalculationFixture.cs",
+      "bytes": 15354,
+      "sha256": "f184b7acc9e32eea1b06d22f4b02a6bcad9646dfd4b26957ea90c1e11e267b4d"
+    },
+    {
+      "path": "tools/bright-revit-exporter/tests/CivilWallRuleTemplateFixture.cs",
+      "bytes": 17804,
+      "sha256": "ecac2d7f5773a0518b5cb963abb6f8416173a39df24dfe2ed71c064b41082a5c"
+    },
+    {
+      "path": "tools/bright-revit-exporter/tests/CivilWallRuleUiFixture.cs",
+      "bytes": 15430,
+      "sha256": "77edb70559992011bc59eeebcebe6cb0fffe6a8792300a3987f8de2be8165ea1"
     },
     {
       "path": "tools/bright-revit-exporter/tests/CivilWallUiFixture.cs",
-      "bytes": 22486,
-      "sha256": "d9fee5461d9930b27452ef23ac6f7204c44eed3f0034cb0d3bbea65446e82bcd"
+      "bytes": 42988,
+      "sha256": "0730ac7a4b7f54631b1f3c0d75930f42385ac9b829dc936998f72a812a76debe"
     },
     {
       "path": "tools/bright-revit-exporter/tests/ExportOptionsUiFixture.cs",
@@ -903,44 +1114,24 @@
       "sha256": "19bc0059fdb0b300f5ddec56a39dbcd292fe7de56b9f317c1b9837923e76c019"
     },
     {
-      "path": "tools/bright-revit-exporter/tests/host/Build-CivilWallHostAcceptance.ps1",
-      "bytes": 3621,
-      "sha256": "3174fd5f7175ea772bbe282a6174c65bad0bd1d3597c263c5ce628449273154f"
+      "path": "tools/bright-revit-exporter/tests/JoinUiReaderStubs.cs",
+      "bytes": 4563,
+      "sha256": "8f46ab67b1f63a90a02da2fbac34981e3bd9dbd494330eb30e8d7f7d5fc51d78"
     },
     {
-      "path": "tools/bright-revit-exporter/tests/host/CivilSnapshotComparison.cs",
-      "bytes": 5402,
-      "sha256": "b5fc4242d6dfc93a1a88115c3b1bdb4dacc7bf4c51afae3d658b8263b4d662e3"
+      "path": "tools/bright-revit-exporter/tests/PluginSupportUiFixture.cs",
+      "bytes": 20354,
+      "sha256": "ebb583df497901a82f42e0869bc69ca809584bad0dcce463ca1e5cd2eb036e1d"
     },
     {
-      "path": "tools/bright-revit-exporter/tests/host/CivilSnapshotComparisonFixture.cs",
-      "bytes": 13421,
-      "sha256": "c3729458d83ff64026035907fdd120f01cb5387ba09927ac2b061989f86a4eda"
+      "path": "tools/bright-revit-exporter/tests/PluginUpdateClientFixture.cs",
+      "bytes": 21145,
+      "sha256": "4fe9945c2669d309734bc394624db289fb8f6f6da7893b4b2b73aa130a0ecbfd"
     },
     {
-      "path": "tools/bright-revit-exporter/tests/host/CivilWallHostAcceptanceApp.cs",
-      "bytes": 38676,
-      "sha256": "cbb71fe9825e96d609c3239a45666c5dcb5714b394345c4705bdefe349e99b58"
-    },
-    {
-      "path": "tools/bright-revit-exporter/tests/host/Invoke-CivilWallHostAcceptance.ps1",
-      "bytes": 11804,
-      "sha256": "129f95f8e0de6a4b6876f5989f2163dccf31490bcbde132563e8dbb112db2dfe"
-    },
-    {
-      "path": "tools/bright-revit-exporter/tests/host/README.md",
-      "bytes": 4480,
-      "sha256": "e67843dda3e3a4bf58ddbf9c21ec81da260524d77fd99c19670f7c20a518b9a6"
-    },
-    {
-      "path": "tools/bright-revit-exporter/tests/host/REVIT2020_VALIDATION.md",
-      "bytes": 3823,
-      "sha256": "b79a5f24e6dc003db2d27050c3f86e36fc1e286f166fb2d406f198f86ed5d223"
-    },
-    {
-      "path": "tools/bright-revit-exporter/tests/host/Test-CivilSnapshotComparison.ps1",
-      "bytes": 4860,
-      "sha256": "4af3dff80ed2f83d9e84e910b259f9570bdfce52d0f067c7b8b58d122f0230c8"
+      "path": "tools/bright-revit-exporter/tests/PluginUpdateCoreFixture.cs",
+      "bytes": 21847,
+      "sha256": "c3aaa96793636aa2d288f6b24c47a99b78ea51ad6263f1230342f0e881bf4181"
     },
     {
       "path": "tools/bright-revit-exporter/tests/QuantityApiStubs.cs",
@@ -969,8 +1160,8 @@
     },
     {
       "path": "tools/bright-revit-exporter/tests/Test-CivilProjects.ps1",
-      "bytes": 3282,
-      "sha256": "d3b2d21d900b82272436bc08ccb4c033e8ab0acf5aab4ee5ea9e7ed3d7b73fdd"
+      "bytes": 3516,
+      "sha256": "20d0053689269e1eab52f7191849e27b842cdd30b5a914452d2eda20169c8d14"
     },
     {
       "path": "tools/bright-revit-exporter/tests/Test-CivilQuantities.ps1",
@@ -984,38 +1175,128 @@
     },
     {
       "path": "tools/bright-revit-exporter/tests/Test-CivilQuantityUi.ps1",
-      "bytes": 4757,
-      "sha256": "3c59270f03d3b8d326336a57dfa30d44e70314b19be5b7497029b1e4976389ec"
+      "bytes": 4785,
+      "sha256": "1c067c045f484eef3fdeec14322c7996cf7835091964113f94ed9861bb39fc2d"
     },
     {
       "path": "tools/bright-revit-exporter/tests/Test-CivilWallApi.ps1",
-      "bytes": 3994,
-      "sha256": "ccc8513bbe94ef0262f1739a3eef216e6dbd5c8ba893de380054f5cd1ec0bb4c"
+      "bytes": 4401,
+      "sha256": "4eb783bddf5bdac3c9ecee0d4e62f55d8e90ee57e8856493bd442774f9502da3"
     },
     {
       "path": "tools/bright-revit-exporter/tests/Test-CivilWallCalculation.ps1",
-      "bytes": 1938,
-      "sha256": "ba6694307abf6d88c2e0040feab17eda37a156ad173d7a26b6084303b904575e"
+      "bytes": 2047,
+      "sha256": "0454f5b2d6f06beab857cba62a43876392d137210953631d7d060bd67ef8c2c1"
+    },
+    {
+      "path": "tools/bright-revit-exporter/tests/Test-CivilWallCutouts.ps1",
+      "bytes": 4576,
+      "sha256": "43429c262facecad5def377bfcd2f022ee77d5b79674fec61bf9eff8525e5488"
+    },
+    {
+      "path": "tools/bright-revit-exporter/tests/Test-CivilWallFingerprintCompatibility.ps1",
+      "bytes": 7930,
+      "sha256": "3a3e106176f43fed919ffab9ee267fae3743eebe8986f8adf0f904127e2cea5c"
+    },
+    {
+      "path": "tools/bright-revit-exporter/tests/Test-CivilWallIntegrity.ps1",
+      "bytes": 3387,
+      "sha256": "56db1d7cf04962789f7748c6f35b5ad874cdfbe11489d3308bbbbb6d7c3b9f4c"
+    },
+    {
+      "path": "tools/bright-revit-exporter/tests/Test-CivilWallJoinApi.ps1",
+      "bytes": 4005,
+      "sha256": "4c5900bbab5fd56a714a3bd391ae4f6ccaa4f0f51854a6c2e8e5b8bd020b0ae0"
+    },
+    {
+      "path": "tools/bright-revit-exporter/tests/Test-CivilWallJoinCore.ps1",
+      "bytes": 3393,
+      "sha256": "eb250504b275fdf0418ae968a0b33e47702914a894187c723c0f14c19eaf9125"
+    },
+    {
+      "path": "tools/bright-revit-exporter/tests/Test-CivilWallJoinPlan.ps1",
+      "bytes": 3224,
+      "sha256": "967f4e2ac99d12154da31d4988bf6c6f3aa370d32b02eb828b7eee3a7db22539"
+    },
+    {
+      "path": "tools/bright-revit-exporter/tests/Test-CivilWallJoinPlanUi.ps1",
+      "bytes": 4015,
+      "sha256": "efaa65fc6144f1fdbb9e95dba4ccf4883b25ef3b8c7fc711248133c85960c564"
+    },
+    {
+      "path": "tools/bright-revit-exporter/tests/Test-CivilWallJoinReader.ps1",
+      "bytes": 3960,
+      "sha256": "ec8c85cc4663623437419178f60796c58235a3a0be9a5c95371ac12feb5ee902"
+    },
+    {
+      "path": "tools/bright-revit-exporter/tests/Test-CivilWallJoinSession.ps1",
+      "bytes": 3658,
+      "sha256": "c8244bd201c91028a17029b8454a08cce0ae33b39bfdfedd062d1d5d844bd427"
+    },
+    {
+      "path": "tools/bright-revit-exporter/tests/Test-CivilWallJoinUi.ps1",
+      "bytes": 4807,
+      "sha256": "82e1a3dbaa7ff1e72aadcecf0e04ca2adda056134744610433f22926579cbb2c"
+    },
+    {
+      "path": "tools/bright-revit-exporter/tests/Test-CivilWallPerformance.ps1",
+      "bytes": 3876,
+      "sha256": "7da347afafe55fdcd171246add12e28d043ee3c69aaa0bd745a3f1e210b51f5a"
+    },
+    {
+      "path": "tools/bright-revit-exporter/tests/Test-CivilWallProjectRules.ps1",
+      "bytes": 2536,
+      "sha256": "a2c073a7cd5d17fd3d4e8cb3cd0c298119d390bd4f468065980706a4568233bb"
     },
     {
       "path": "tools/bright-revit-exporter/tests/Test-CivilWallReader.ps1",
-      "bytes": 2293,
-      "sha256": "f2958176df862eb4c2b2d8f0f00c27633caeee690391b98834cde3f8ebd3a442"
+      "bytes": 3748,
+      "sha256": "cd06e0fc9a0dfbe396e7ff5e61ffd3bc581a7835e5c45429fe915aba4e33ef81"
     },
     {
       "path": "tools/bright-revit-exporter/tests/Test-CivilWallReport.ps1",
-      "bytes": 1926,
-      "sha256": "e84af8893a4b1946994791c9cf715487212db2136bb41085cae6f1cfd0f867a0"
+      "bytes": 2694,
+      "sha256": "73c4fdffa66232b71a2c3a932bb84c4d91962a371864b92756ecdd4c76d1ad74"
+    },
+    {
+      "path": "tools/bright-revit-exporter/tests/Test-CivilWallRuleCalculation.ps1",
+      "bytes": 5370,
+      "sha256": "ef10abb4d44b83905c8d88e096ec85ace1e157f48de79120969ae031db54ab82"
+    },
+    {
+      "path": "tools/bright-revit-exporter/tests/Test-CivilWallRuleTemplates.ps1",
+      "bytes": 2614,
+      "sha256": "68f372d7c491b8aa752ed7e590d2ec60aaa999794011587fe5258e500d8e97f7"
+    },
+    {
+      "path": "tools/bright-revit-exporter/tests/Test-CivilWallRuleUi.ps1",
+      "bytes": 4869,
+      "sha256": "926f12c92bd4a3511888591530ee22c2052393fc7f32dd71378dc1e8682f0695"
     },
     {
       "path": "tools/bright-revit-exporter/tests/Test-CivilWallUi.ps1",
-      "bytes": 3859,
-      "sha256": "3e181c830132627af58927f94e6c69ef392ef57bfd5e6f93277cbd41fc271d0d"
+      "bytes": 3952,
+      "sha256": "1d4ae30c280ad9d660d48914d3e33caadc8beee5927ab56479548ac1aef1cc7f"
     },
     {
       "path": "tools/bright-revit-exporter/tests/Test-ExportOptionsDialog.ps1",
       "bytes": 2186,
       "sha256": "21fe5c4dce62dde16f214539ae1505e672166e00ec23df4b1ad17f9a5142a864"
+    },
+    {
+      "path": "tools/bright-revit-exporter/tests/Test-PluginSupportUi.ps1",
+      "bytes": 5104,
+      "sha256": "331ce1804a548d1c3b95d471c736aa62e46ad2572588e0ac802c7dad5fdbe655"
+    },
+    {
+      "path": "tools/bright-revit-exporter/tests/Test-PluginUpdateClient.ps1",
+      "bytes": 3996,
+      "sha256": "9b46109b7dd32c2d2c20481a807191a3694ce109b5b03ebf568938d05be409f8"
+    },
+    {
+      "path": "tools/bright-revit-exporter/tests/Test-PluginUpdateCore.ps1",
+      "bytes": 3806,
+      "sha256": "25f89c65583030f2bd80100bc0df3e5995ecc05ba7b999091454204e2ed547bc"
     },
     {
       "path": "tools/bright-revit-exporter/tests/Test-QuantitySnapshot.ps1",
@@ -1026,6 +1307,174 @@
       "path": "tools/bright-revit-exporter/tests/Test-SelectedView.ps1",
       "bytes": 3205,
       "sha256": "380b72e5ba3e0bdcdb324ed890167d0001fd2656f9da7c41317860c9871abbdc"
+    },
+    {
+      "path": "tools/bright-revit-exporter/tests/WallCutoutApiStubs.cs",
+      "bytes": 3630,
+      "sha256": "ca9653ac064c0b0e476bc60c0a6a6b383f313c0a2e0f524e3ff9d75753ba8c62"
+    },
+    {
+      "path": "tools/bright-revit-exporter/tests/WallJoinApiStubs.cs",
+      "bytes": 13737,
+      "sha256": "dd9bc971b46a5f61550102392cea46db9921d0460a0835303dcc8cf56047183f"
+    },
+    {
+      "path": "tools/bright-revit-exporter/tests/civil-host-verifier.test.mjs",
+      "bytes": 13961,
+      "sha256": "f016b3e6c779c1218f9c82ded36c0e330357cf604970eadabd35c0a78cbae3f5"
+    },
+    {
+      "path": "tools/bright-revit-exporter/tests/civil-project-host-verifier.test.mjs",
+      "bytes": 11447,
+      "sha256": "ee23aa72061bae18540331dd5d9a1085117bbd6febb834422643c456ffceedd0"
+    },
+    {
+      "path": "tools/bright-revit-exporter/tests/civil-wall-host-verifier.test.mjs",
+      "bytes": 9923,
+      "sha256": "a34c62c117a1e899715cc2360523a81a3ae50bbcbbc6462f279a79a8db4f92bc"
+    },
+    {
+      "path": "tools/bright-revit-exporter/tests/fixtures/revit-v1.8.0-update.json",
+      "bytes": 615,
+      "sha256": "fb8245644d55954b6d789c5f323d098cb996214a05ec4819af6425e75f2095a7"
+    },
+    {
+      "path": "tools/bright-revit-exporter/tests/fixtures/revit-v1.8.0-update.json.sha256",
+      "bytes": 91,
+      "sha256": "71843a4d8561ff5f59566758d4fc00079abc92ad5a16cc8dee38b92d1bc881db"
+    },
+    {
+      "path": "tools/bright-revit-exporter/tests/host/Build-CivilWallHostAcceptance.ps1",
+      "bytes": 3621,
+      "sha256": "3174fd5f7175ea772bbe282a6174c65bad0bd1d3597c263c5ce628449273154f"
+    },
+    {
+      "path": "tools/bright-revit-exporter/tests/host/Build-CivilWallJoinHostAcceptance.ps1",
+      "bytes": 5019,
+      "sha256": "f16648d37bc033eee9c4df4a0b150aee063ec1bc1324f33af10ef4e979c099ad"
+    },
+    {
+      "path": "tools/bright-revit-exporter/tests/host/Build-CivilWallPhase3HostAcceptance.ps1",
+      "bytes": 4980,
+      "sha256": "47577919299f2dd41728162dc6182ff18d067eec7b07d84def0974127d92018b",
+      "publicTransform": {
+        "kind": "public-helper-defaults-only",
+        "replacements": [
+          {
+            "kind": "revit2020-default-to-system-ProgramFiles",
+            "count": 1
+          }
+        ],
+        "inputSha256": "4db382ab67accbb531a33bbc4502ccc8475cecabd70574906123e5dbf36c94f4",
+        "outputSha256": "47577919299f2dd41728162dc6182ff18d067eec7b07d84def0974127d92018b"
+      }
+    },
+    {
+      "path": "tools/bright-revit-exporter/tests/host/CivilSnapshotComparison.cs",
+      "bytes": 5402,
+      "sha256": "b5fc4242d6dfc93a1a88115c3b1bdb4dacc7bf4c51afae3d658b8263b4d662e3"
+    },
+    {
+      "path": "tools/bright-revit-exporter/tests/host/CivilSnapshotComparisonFixture.cs",
+      "bytes": 13421,
+      "sha256": "c3729458d83ff64026035907fdd120f01cb5387ba09927ac2b061989f86a4eda"
+    },
+    {
+      "path": "tools/bright-revit-exporter/tests/host/CivilWallHostAcceptanceApp.cs",
+      "bytes": 38676,
+      "sha256": "cbb71fe9825e96d609c3239a45666c5dcb5714b394345c4705bdefe349e99b58"
+    },
+    {
+      "path": "tools/bright-revit-exporter/tests/host/CivilWallJoinHostAcceptanceApp.cs",
+      "bytes": 55906,
+      "sha256": "308428273ba8fac8d407fde9a0bb96d270704390d9ec6de7d808bba652a3e076"
+    },
+    {
+      "path": "tools/bright-revit-exporter/tests/host/CivilWallPhase3HostAcceptanceApp.cs",
+      "bytes": 33460,
+      "sha256": "686cac911c5097762f0c89239afed42d7f5ba54032b6e00bb6b446b05701569d"
+    },
+    {
+      "path": "tools/bright-revit-exporter/tests/host/Invoke-CivilWallHostAcceptance.ps1",
+      "bytes": 11804,
+      "sha256": "129f95f8e0de6a4b6876f5989f2163dccf31490bcbde132563e8dbb112db2dfe"
+    },
+    {
+      "path": "tools/bright-revit-exporter/tests/host/Invoke-CivilWallJoinHostAcceptance.ps1",
+      "bytes": 8271,
+      "sha256": "e8895404ff0ff5c3ff44b8aa7945074d35f7b5d08a2c0ac2938b541a3ac50b9c"
+    },
+    {
+      "path": "tools/bright-revit-exporter/tests/host/Invoke-CivilWallPhase3HostAcceptance.ps1",
+      "bytes": 8278,
+      "sha256": "0748ee1a3e47393f6ed6db97444690a106b3f3c57b5e001bd7accf6ecaac9d0d",
+      "publicTransform": {
+        "kind": "public-helper-defaults-only",
+        "replacements": [
+          {
+            "kind": "revit2020-default-to-system-ProgramFiles",
+            "count": 1
+          }
+        ],
+        "inputSha256": "ddc79cdb05e9569449e2b0f054d43796f92c3919b78d53446a10af879c281cfa",
+        "outputSha256": "0748ee1a3e47393f6ed6db97444690a106b3f3c57b5e001bd7accf6ecaac9d0d"
+      }
+    },
+    {
+      "path": "tools/bright-revit-exporter/tests/host/Prepare-CivilWallJoinHostAcceptance.ps1",
+      "bytes": 9671,
+      "sha256": "2fbdda9ce42831551d5ca513f023c201d25c76de08fd0cfc83c1a9b48caf8440"
+    },
+    {
+      "path": "tools/bright-revit-exporter/tests/host/Prepare-CivilWallPhase3HostAcceptance.ps1",
+      "bytes": 9324,
+      "sha256": "dd84a7022e8400ba6e81b4e245893e06a13b55d50f6992218657933d5e48be98",
+      "publicTransform": {
+        "kind": "public-helper-defaults-only",
+        "replacements": [
+          {
+            "kind": "revit2020-default-to-system-ProgramFiles",
+            "count": 1
+          }
+        ],
+        "inputSha256": "06256adc9d969e195c9b04125c83e46d73e48fb4cc34cb42952e86194bc8039f",
+        "outputSha256": "dd84a7022e8400ba6e81b4e245893e06a13b55d50f6992218657933d5e48be98"
+      }
+    },
+    {
+      "path": "tools/bright-revit-exporter/tests/host/README.md",
+      "bytes": 4480,
+      "sha256": "e67843dda3e3a4bf58ddbf9c21ec81da260524d77fd99c19670f7c20a518b9a6"
+    },
+    {
+      "path": "tools/bright-revit-exporter/tests/host/REVIT2020_VALIDATION.md",
+      "bytes": 3823,
+      "sha256": "b79a5f24e6dc003db2d27050c3f86e36fc1e286f166fb2d406f198f86ed5d223"
+    },
+    {
+      "path": "tools/bright-revit-exporter/tests/host/Test-CivilSnapshotComparison.ps1",
+      "bytes": 4860,
+      "sha256": "4af3dff80ed2f83d9e84e910b259f9570bdfce52d0f067c7b8b58d122f0230c8"
+    },
+    {
+      "path": "tools/bright-revit-exporter/tests/host/civil-wall-join-host-verifier.test.mjs",
+      "bytes": 34256,
+      "sha256": "c4fa5a3e2c9e2892b268b9bd8c4cbce53a05bbab0771884b48646fcbc70f746e"
+    },
+    {
+      "path": "tools/bright-revit-exporter/tests/host/civil-wall-phase3-verifier.test.mjs",
+      "bytes": 6696,
+      "sha256": "402f841f7766ae3477119fdf8cd478808a8f1f14924197fe647984686ac30f26"
+    },
+    {
+      "path": "tools/bright-revit-exporter/tests/host/verify-civil-wall-join-host.mjs",
+      "bytes": 61051,
+      "sha256": "bad7c9dcd6b9227593d96bdb9bfb9a3fc73b8d054ebfbcf46b190e3f950576af"
+    },
+    {
+      "path": "tools/bright-revit-exporter/tests/host/verify-civil-wall-phase3-host.mjs",
+      "bytes": 39894,
+      "sha256": "9b624d173e40fa2f0a71a5e6a554e1ac8dd425d755972634e0f4499fc1692620"
     },
     {
       "path": "tools/bright-revit-exporter/tests/verify-civil-host.mjs",
@@ -1059,8 +1508,8 @@
     },
     {
       "path": "tools/bright-revit-installer/BrightVisionSetup.cs",
-      "bytes": 19105,
-      "sha256": "21371f99c04b8439b9e772c0c8b9a6eec2f88a1cba865ae6a4394691703b3b94"
+      "bytes": 19112,
+      "sha256": "6b8c4425f83b866dc171d106a46cb9360ed49eb50a9f9acdfc8eb407c59c16fa"
     },
     {
       "path": "tools/bright-revit-installer/BrightVisionSetup.manifest",
@@ -1069,8 +1518,8 @@
     },
     {
       "path": "tools/bright-revit-installer/Build-BrightVisionInstaller.ps1",
-      "bytes": 8725,
-      "sha256": "c9a2ecfa64fc61d32eb29523c7b469c9f36f9269542b9a3eaba293f806417364"
+      "bytes": 8728,
+      "sha256": "5d7bf08b1bf03c8ae69d41989419f3d3378ff0d635cae6d3a8d14df17a5f1ce3"
     },
     {
       "path": "tools/bright-revit-installer/Invoke-BrightVisionSetup.ps1",
@@ -1089,8 +1538,26 @@
     },
     {
       "path": "tools/bright-revit-installer/README.md",
-      "bytes": 9198,
-      "sha256": "97b6c9b0f1b77e0282fe1d474adc824850c5a58a927540abc7e82daf90b055a5"
+      "bytes": 12333,
+      "sha256": "bfb5a0b2868ebcf4d864b7012fa28f5d159209985fa56d76093802703a76519d",
+      "publicTransform": {
+        "kind": "sequential-public-source-transformations",
+        "inputSha256": "812c57325ae787dc0e8b6e297e24239f43a34a4bd33a4b5292c47f00a0857b5b",
+        "outputSha256": "bfb5a0b2868ebcf4d864b7012fa28f5d159209985fa56d76093802703a76519d",
+        "steps": [
+          {
+            "kind": "versioned-1.11-scope-note",
+            "inputSha256": "812c57325ae787dc0e8b6e297e24239f43a34a4bd33a4b5292c47f00a0857b5b",
+            "outputSha256": "c91665cc0ce459ae610ba87c828331b88b147a578566f5534f5394e027d26d86"
+          },
+          {
+            "kind": "local-validation-links-to-public-scope-text",
+            "linksReplaced": 2,
+            "inputSha256": "c91665cc0ce459ae610ba87c828331b88b147a578566f5534f5394e027d26d86",
+            "outputSha256": "bfb5a0b2868ebcf4d864b7012fa28f5d159209985fa56d76093802703a76519d"
+          }
+        ]
+      }
     },
     {
       "path": "tools/bright-revit-installer/Restore-BosExport.ps1",
@@ -1104,13 +1571,13 @@
     },
     {
       "path": "tools/bright-revit-installer/tests/Test-BrightVisionInstaller.ps1",
-      "bytes": 38664,
-      "sha256": "168d444fd50536e3a55cf9acbdab21821b23708c76e176fb79e23f7acb957119"
+      "bytes": 38748,
+      "sha256": "d9af9d6b54bf1c02b35b9aa95e07586045065e23835988203f9def6ed3d7fe03"
     },
     {
       "path": "tools/bright-revit-installer/tests/Test-PackagedInstaller.ps1",
-      "bytes": 8460,
-      "sha256": "d30c5554170ae3aaacdea47c13898c9f02f3c4a1f7ad3e29df87f696192a20a2"
+      "bytes": 8461,
+      "sha256": "bf32680856bd921d010ef0f4c9cedd867b26f72fe4fcda25b4d64c9887e73655"
     },
     {
       "path": "tools/bright-revit-installer/tests/Test-RestoreBosExport.ps1",
@@ -1159,8 +1626,14 @@
     {
       "path": "README.md",
       "sourcePath": "tools/bright-open-source/templates/public-README.md",
-      "bytes": 8148,
-      "sha256": "e505c5e8d62cadd948cbd181b006a18c47bf4fe803e346a9c64ba169ae2c5296"
+      "bytes": 4226,
+      "sha256": "8b56d86035a1386c5fa3ec685a8834419c09422f3d72b9434ab290a4e532ccda",
+      "publicTransform": {
+        "kind": "versioned-1.11-public-product-readme",
+        "publicationStatusAuthority": "GitHub Release page; no captured online-state assertion",
+        "inputSha256": "e505c5e8d62cadd948cbd181b006a18c47bf4fe803e346a9c64ba169ae2c5296",
+        "outputSha256": "8b56d86035a1386c5fa3ec685a8834419c09422f3d72b9434ab290a4e532ccda"
+      }
     },
     {
       "path": "CONTRIBUTING.md",
@@ -1189,8 +1662,15 @@
     {
       "path": ".github/workflows/source-ci.yml",
       "sourcePath": "tools/bright-open-source/templates/source-ci.yml.example",
-      "bytes": 3358,
-      "sha256": "769de60d999471a89f64a78d15578b380f2360d833730614cefc1b47218407b8"
+      "bytes": 4485,
+      "sha256": "3831c541d4d979959ad0a0fd516a9c3e68a36b280ef86e020382bcf66b190283",
+      "publicTransform": {
+        "kind": "append-three-offline-updater-fixture-steps-to-Windows-job",
+        "preservedBaselinePrefixBytes": 3358,
+        "appendedBytes": 1127,
+        "inputSha256": "769de60d999471a89f64a78d15578b380f2360d833730614cefc1b47218407b8",
+        "outputSha256": "3831c541d4d979959ad0a0fd516a9c3e68a36b280ef86e020382bcf66b190283"
+      }
     }
   ],
   "excluded": "No original git history, cloud code, research, recovered vendor code, SDK binaries, models, credentials, installation records or compiled artifacts.",
@@ -1630,5 +2110,427 @@
     "revitStarted": false,
     "nativeDesktopInput": false,
     "newRealHostVerified": false
+  },
+  "sourceSnapshotReleaseAvailable": false,
+  "sourceSnapshotDigestContract": "SHA256 of Ordinal path-sorted path + NUL + bytes + NUL + sha256 + LF for module, legal and public metadata records; SOURCE-MANIFEST.json excludes its own digest.",
+  "revit111Development": {
+    "version": "1.11.0",
+    "status": "historical-offline-source-capture",
+    "baseCommit": "626d6be65d50aa7c108dfa6c1149f4ea85cb8eae",
+    "baselineManifestSha256": "a37979750223cc459c5775bdf426ab4d51ce570ab1a275b3a23137f793a17c68",
+    "productionSources": 42,
+    "buildTargets": 14,
+    "productionSourceHashes": [
+      {
+        "name": "Json.cs",
+        "sha256": "2ffe46676d6dc974aa50f1c0140433ee2dae69ece9b618491529b20270d8cc1d"
+      },
+      {
+        "name": "PackageWriter.cs",
+        "sha256": "1ff8d5bbccf88f5a9267a6b9a4aac248bd4d9bb5be446bdc0f84dcf3dcae6e30"
+      },
+      {
+        "name": "ExportStatistics.cs",
+        "sha256": "c08e9682833cadc955a16594edcfc9a20d4994ff1d0a4ad642ce6d010509ce54"
+      },
+      {
+        "name": "QuantitySnapshot.cs",
+        "sha256": "bc6a65f1522ef367378114d8551b728092ce512aef616e9ce9c2f731c2af8166"
+      },
+      {
+        "name": "RevitQuantityReader.cs",
+        "sha256": "3dcb162e9780f422b286eb6fc5432515b8351401e39ed16963198ee82ca724ce"
+      },
+      {
+        "name": "CivilQuantityModel.cs",
+        "sha256": "5aace88f9ccc4dd82fc8bcc1e4b333b8b5abd1dbcc7384057e69c1975f5f409e"
+      },
+      {
+        "name": "CivilProject.cs",
+        "sha256": "e72a44805edb49d87ca7fbd08c1ca1eee45fb531efc9e00397ca1eaf57727264"
+      },
+      {
+        "name": "CivilLevelResolver.cs",
+        "sha256": "e803bd01325798e4df37e7ed62459168d47fe40d7d487357fa3dbab7ae64192f"
+      },
+      {
+        "name": "RevitCivilQuantityReader.cs",
+        "sha256": "4a90079aa9ea78ddc7678c4eb26846f636f99ee07dfef48b147639b2ca885ce9"
+      },
+      {
+        "name": "CivilProjectWindow.cs",
+        "sha256": "10b708824167fc05aeec33abf2a71ac5afad7a3cedc3a6d661934b3a37f07b1c"
+      },
+      {
+        "name": "CivilQuantityWindow.cs",
+        "sha256": "c27ba49be1c73716accb73b9998def402f1ec028392a108fce940f86955a28c0"
+      },
+      {
+        "name": "CivilQuantityCommand.cs",
+        "sha256": "16a004558873e3759b62e56a806c444ea4ce059cdfa38a9ec2983e194dbf92aa"
+      },
+      {
+        "name": "CivilWallRuleTemplates.cs",
+        "sha256": "86f4c405e09c23b4d43c34440e9f927697fc7aefc54ac591fa798b1435176c67"
+      },
+      {
+        "name": "CivilWallReadControl.cs",
+        "sha256": "521104307e01a7b67eaa368d940f9341e41c58a3f33135906c1b1fd59e6d759a"
+      },
+      {
+        "name": "CivilWallFacts.cs",
+        "sha256": "ae2f118f01bb55ec7795566930fc13226689daceec0b3d695735eb181c00d878"
+      },
+      {
+        "name": "CivilWallBatchIntegrity.cs",
+        "sha256": "7e3fbb4532e0f527a9dc9afb5d0bf3610652218e44d0d069c6035791a7813508"
+      },
+      {
+        "name": "CivilWallCalculation.cs",
+        "sha256": "2b603ab6b8166cf8bd07310886348465096775ce16c332ac3e3104483ac2c0d7"
+      },
+      {
+        "name": "CivilWallReport.cs",
+        "sha256": "bb6c1f9c8afcb69dc0354bfb5cfe7d70238ebe8a4346ddacf64b5e2d8b645d69"
+      },
+      {
+        "name": "RevitWallCutoutReader.cs",
+        "sha256": "5143c151ccfa85ba1722897a4ce4a91af9166b834bfcdb748bc8fc47f7716a7c"
+      },
+      {
+        "name": "RevitCivilWallReader.cs",
+        "sha256": "ffcd5a781dff2aa5d438d63f9178d0a2f1931cf839a401b2178b3dca3f3ff95c"
+      },
+      {
+        "name": "CivilWallRuleWindow.cs",
+        "sha256": "082106935da3db786a0c88f02e715f7202b081bdc5a4caa991ef51964895db42"
+      },
+      {
+        "name": "CivilWallWindow.cs",
+        "sha256": "a08f963ba971dc70d992deb03647cd9f3ffee54f22ccfda67518a00355afc550"
+      },
+      {
+        "name": "CivilWallCommand.cs",
+        "sha256": "0d1c3929698ebb2b06adf00031542f6b7b49371af6a69beafebd46c1040fa864"
+      },
+      {
+        "name": "CivilWallJoinCore.cs",
+        "sha256": "a64c749f3d02d2f2db97d1a9f4ba97d4f8afae7abe42e6f128b3337c5671e678"
+      },
+      {
+        "name": "CivilWallJoinPlan.cs",
+        "sha256": "6b65c67911ad19463094f287c243bece10032bdda07e19eff6f44848a7fd3e3a"
+      },
+      {
+        "name": "CivilWallJoinPlanWindow.cs",
+        "sha256": "5925050c24f9ae53e5e117713cfe7a6974405b8063788d6416ab075e28c7093d"
+      },
+      {
+        "name": "CivilWallJoinSession.cs",
+        "sha256": "60f137ced64fb6440af61f1697dec7647b55a0a428ab2a60a9cb8c0d0ad130c8"
+      },
+      {
+        "name": "RevitWallJoinReader.cs",
+        "sha256": "bf3df8189600029feee6379744478629f510ba4a904883df981fdc6cb5d716fa"
+      },
+      {
+        "name": "CivilWallJoinWindow.cs",
+        "sha256": "7c3325c1d2bafb6ea5fbcc929f2abe80ade2100b02d94cb2ef3ba0f06484a89f"
+      },
+      {
+        "name": "CivilWallJoinCommand.cs",
+        "sha256": "aeb9563eec5db0d6532fddd58c20f93c342f62adc4adc0ac81d10b119f026332"
+      },
+      {
+        "name": "BrandPixels.cs",
+        "sha256": "09e559a5d19d1f36ec5085a02d725b160b2a58f1eb2abe12de45488a542e15ea"
+      },
+      {
+        "name": "Branding.cs",
+        "sha256": "99b6145d71fd0ded0efa4ff00500f9baafa8174a89b61f7f153835969f0b8d14"
+      },
+      {
+        "name": "ExportOptions.cs",
+        "sha256": "8048b2cb2cb3a6cd643cba91d7157839f7fc8ae63828b2bee40334d7913bd624"
+      },
+      {
+        "name": "ExportOptionsDialog.cs",
+        "sha256": "da667ebe8b72933a5defd1250725e328a62751c162f0f90525cdf4dcbe655c2e"
+      },
+      {
+        "name": "ExportAttachments.cs",
+        "sha256": "554d73a95b0feb238a6a7b12664925e74cb1f88d6012e286d83e412b234b2813"
+      },
+      {
+        "name": "SelectedViewResolver.cs",
+        "sha256": "d0d350308bae43a439bd66d7460aae36cf6f64aa8f6d4334964b056bdab23cbc"
+      },
+      {
+        "name": "PluginUpdateCore.cs",
+        "sha256": "c1b6a7d81ad8948d60fffc1374c9da720b60308a2f70822ccb82c15443b79bdc"
+      },
+      {
+        "name": "PluginUpdateClient.cs",
+        "sha256": "96e9133b5228b627ba7452035dc9b162431135e043bdb4827de1b37940691a10"
+      },
+      {
+        "name": "PluginUpdateWindow.cs",
+        "sha256": "636c1f29f72cb938693312491edc5e9c9e991cc4f2c2c39842a07a34b56c6735"
+      },
+      {
+        "name": "PluginHelpWindow.cs",
+        "sha256": "709e80272b8c01fa900f234964bfa9abd9dce1bba3f6e09cfe9d5f282966a620"
+      },
+      {
+        "name": "PluginSupportCommands.cs",
+        "sha256": "632f27a3d3c777958f6ee15190a7a33fc1197fae67f6afcee70a08ba2c1b3e06"
+      },
+      {
+        "name": "RevitApp.cs",
+        "sha256": "5ee0f28c272c4b6b30e99e7e7a2e02ee37509aeec9ccccf7228176ea1fa97e65"
+      }
+    ],
+    "finalPrivateBuildManifestSha256": "0be2dc8149e52315e82b7c2c3010b85cb1556157c5c8f5a21691a29361aa2c3b",
+    "newSourceFiles": [
+      "tools/bright-revit-exporter/CivilWallBatchIntegrity.cs",
+      "tools/bright-revit-exporter/CivilWallJoinCommand.cs",
+      "tools/bright-revit-exporter/CivilWallJoinCore.cs",
+      "tools/bright-revit-exporter/CivilWallJoinPlan.cs",
+      "tools/bright-revit-exporter/CivilWallJoinPlanWindow.cs",
+      "tools/bright-revit-exporter/CivilWallJoinSession.cs",
+      "tools/bright-revit-exporter/CivilWallJoinWindow.cs",
+      "tools/bright-revit-exporter/CivilWallReadControl.cs",
+      "tools/bright-revit-exporter/CivilWallRuleTemplates.cs",
+      "tools/bright-revit-exporter/CivilWallRuleWindow.cs",
+      "tools/bright-revit-exporter/PluginHelpWindow.cs",
+      "tools/bright-revit-exporter/PluginSupportCommands.cs",
+      "tools/bright-revit-exporter/PluginUpdateClient.cs",
+      "tools/bright-revit-exporter/PluginUpdateCore.cs",
+      "tools/bright-revit-exporter/PluginUpdateWindow.cs",
+      "tools/bright-revit-exporter/RevitWallCutoutReader.cs",
+      "tools/bright-revit-exporter/RevitWallJoinReader.cs",
+      "tools/bright-revit-exporter/USER_GUIDE.md",
+      "tools/bright-revit-exporter/rule-templates/README.md",
+      "tools/bright-revit-exporter/rule-templates/index.json",
+      "tools/bright-revit-exporter/rule-templates/native-opening-only.bvwallrules.json",
+      "tools/bright-revit-exporter/rule-templates/project-geometry.bvwallrules.json",
+      "tools/bright-revit-exporter/tests/CivilWallCutoutFixture.cs",
+      "tools/bright-revit-exporter/tests/CivilWallIntegrityFixture.cs",
+      "tools/bright-revit-exporter/tests/CivilWallJoinCoreFixture.cs",
+      "tools/bright-revit-exporter/tests/CivilWallJoinPlanFixture.cs",
+      "tools/bright-revit-exporter/tests/CivilWallJoinPlanUiFixture.cs",
+      "tools/bright-revit-exporter/tests/CivilWallJoinReaderFixture.cs",
+      "tools/bright-revit-exporter/tests/CivilWallJoinSessionFixture.cs",
+      "tools/bright-revit-exporter/tests/CivilWallJoinUiFixture.cs",
+      "tools/bright-revit-exporter/tests/CivilWallPerformanceFixture.cs",
+      "tools/bright-revit-exporter/tests/CivilWallProjectRulesFixture.cs",
+      "tools/bright-revit-exporter/tests/CivilWallRuleCalculationFixture.cs",
+      "tools/bright-revit-exporter/tests/CivilWallRuleTemplateFixture.cs",
+      "tools/bright-revit-exporter/tests/CivilWallRuleUiFixture.cs",
+      "tools/bright-revit-exporter/tests/JoinUiReaderStubs.cs",
+      "tools/bright-revit-exporter/tests/PluginSupportUiFixture.cs",
+      "tools/bright-revit-exporter/tests/PluginUpdateClientFixture.cs",
+      "tools/bright-revit-exporter/tests/PluginUpdateCoreFixture.cs",
+      "tools/bright-revit-exporter/tests/Test-CivilWallCutouts.ps1",
+      "tools/bright-revit-exporter/tests/Test-CivilWallFingerprintCompatibility.ps1",
+      "tools/bright-revit-exporter/tests/Test-CivilWallIntegrity.ps1",
+      "tools/bright-revit-exporter/tests/Test-CivilWallJoinApi.ps1",
+      "tools/bright-revit-exporter/tests/Test-CivilWallJoinCore.ps1",
+      "tools/bright-revit-exporter/tests/Test-CivilWallJoinPlan.ps1",
+      "tools/bright-revit-exporter/tests/Test-CivilWallJoinPlanUi.ps1",
+      "tools/bright-revit-exporter/tests/Test-CivilWallJoinReader.ps1",
+      "tools/bright-revit-exporter/tests/Test-CivilWallJoinSession.ps1",
+      "tools/bright-revit-exporter/tests/Test-CivilWallJoinUi.ps1",
+      "tools/bright-revit-exporter/tests/Test-CivilWallPerformance.ps1",
+      "tools/bright-revit-exporter/tests/Test-CivilWallProjectRules.ps1",
+      "tools/bright-revit-exporter/tests/Test-CivilWallRuleCalculation.ps1",
+      "tools/bright-revit-exporter/tests/Test-CivilWallRuleTemplates.ps1",
+      "tools/bright-revit-exporter/tests/Test-CivilWallRuleUi.ps1",
+      "tools/bright-revit-exporter/tests/Test-PluginSupportUi.ps1",
+      "tools/bright-revit-exporter/tests/Test-PluginUpdateClient.ps1",
+      "tools/bright-revit-exporter/tests/Test-PluginUpdateCore.ps1",
+      "tools/bright-revit-exporter/tests/WallCutoutApiStubs.cs",
+      "tools/bright-revit-exporter/tests/WallJoinApiStubs.cs",
+      "tools/bright-revit-exporter/tests/fixtures/revit-v1.8.0-update.json",
+      "tools/bright-revit-exporter/tests/fixtures/revit-v1.8.0-update.json.sha256",
+      "tools/bright-revit-exporter/tests/host/Build-CivilWallJoinHostAcceptance.ps1",
+      "tools/bright-revit-exporter/tests/host/Build-CivilWallPhase3HostAcceptance.ps1",
+      "tools/bright-revit-exporter/tests/host/CivilWallJoinHostAcceptanceApp.cs",
+      "tools/bright-revit-exporter/tests/host/CivilWallPhase3HostAcceptanceApp.cs",
+      "tools/bright-revit-exporter/tests/host/Invoke-CivilWallJoinHostAcceptance.ps1",
+      "tools/bright-revit-exporter/tests/host/Invoke-CivilWallPhase3HostAcceptance.ps1",
+      "tools/bright-revit-exporter/tests/host/Prepare-CivilWallJoinHostAcceptance.ps1",
+      "tools/bright-revit-exporter/tests/host/Prepare-CivilWallPhase3HostAcceptance.ps1",
+      "tools/bright-revit-exporter/tests/host/civil-wall-join-host-verifier.test.mjs",
+      "tools/bright-revit-exporter/tests/host/civil-wall-phase3-verifier.test.mjs",
+      "tools/bright-revit-exporter/tests/host/verify-civil-wall-join-host.mjs",
+      "tools/bright-revit-exporter/tests/host/verify-civil-wall-phase3-host.mjs"
+    ],
+    "frozenViewerRuntimeFiles": 105,
+    "frozenViewerRuntimeDigest": "d277803dedb547324d0653362b9fa5a82f998b88588e9cd2e38bbedfab887dbd",
+    "preservedComponentLockSha256": "2c3c3847ec2b2752b508d30c0a130d53c99e29aaba71fbfba060d67626bd2f61",
+    "sourceAudit": "Exact allowlist; regular unlinked UTF-8 text; privacy/secret-pattern and full inventory checks; Apache-2.0 and company attribution; owned-rule hashes/fingerprints; final production-source hashes.",
+    "hostedCiForThisSnapshot": "not-run",
+    "liveHostForThisVersion": "not-run",
+    "liveHostArtifactsIncluded": false,
+    "historicalHostEvidenceInheritedAsCurrent": false,
+    "commitCreated": false,
+    "repositoryPushed": false,
+    "releasePublished": false,
+    "userInstalled": false,
+    "publicationStateContract": "Captured flags describe only this offline preparation. Later repository, hosted CI and release status must be checked on the official GitHub pages.",
+    "releaseStatusUrl": "https://github.com/queqideliang/bright-vision/releases/tag/revit-v1.11.0",
+    "updaterCheckAndDownloadAreIndependentOfInstallation": true,
+    "installerRequiresAllRevitProcessesClosed": true,
+    "includedPublicProtocolFixtures": [
+      "tools/bright-revit-exporter/tests/fixtures/revit-v1.8.0-update.json",
+      "tools/bright-revit-exporter/tests/fixtures/revit-v1.8.0-update.json.sha256"
+    ],
+    "publicTransforms": [
+      {
+        "path": "tools/bright-revit-exporter/tests/host/Build-CivilWallPhase3HostAcceptance.ps1",
+        "kind": "public-helper-defaults-only",
+        "replacements": [
+          {
+            "kind": "revit2020-default-to-system-ProgramFiles",
+            "count": 1
+          }
+        ],
+        "inputSha256": "4db382ab67accbb531a33bbc4502ccc8475cecabd70574906123e5dbf36c94f4",
+        "outputSha256": "47577919299f2dd41728162dc6182ff18d067eec7b07d84def0974127d92018b"
+      },
+      {
+        "path": "tools/bright-revit-exporter/tests/host/Invoke-CivilWallPhase3HostAcceptance.ps1",
+        "kind": "public-helper-defaults-only",
+        "replacements": [
+          {
+            "kind": "revit2020-default-to-system-ProgramFiles",
+            "count": 1
+          }
+        ],
+        "inputSha256": "ddc79cdb05e9569449e2b0f054d43796f92c3919b78d53446a10af879c281cfa",
+        "outputSha256": "0748ee1a3e47393f6ed6db97444690a106b3f3c57b5e001bd7accf6ecaac9d0d"
+      },
+      {
+        "path": "tools/bright-revit-exporter/tests/host/Prepare-CivilWallPhase3HostAcceptance.ps1",
+        "kind": "public-helper-defaults-only",
+        "replacements": [
+          {
+            "kind": "revit2020-default-to-system-ProgramFiles",
+            "count": 1
+          }
+        ],
+        "inputSha256": "06256adc9d969e195c9b04125c83e46d73e48fb4cc34cb42952e86194bc8039f",
+        "outputSha256": "dd84a7022e8400ba6e81b4e245893e06a13b55d50f6992218657933d5e48be98"
+      },
+      {
+        "path": ".github/workflows/source-ci.yml",
+        "kind": "append-three-offline-updater-fixture-steps-to-Windows-job",
+        "preservedBaselinePrefixBytes": 3358,
+        "appendedBytes": 1127,
+        "inputSha256": "769de60d999471a89f64a78d15578b380f2360d833730614cefc1b47218407b8",
+        "outputSha256": "3831c541d4d979959ad0a0fd516a9c3e68a36b280ef86e020382bcf66b190283"
+      },
+      {
+        "path": "README.md",
+        "kind": "versioned-1.11-public-product-readme",
+        "publicationStatusAuthority": "GitHub Release page; no captured online-state assertion",
+        "inputSha256": "e505c5e8d62cadd948cbd181b006a18c47bf4fe803e346a9c64ba169ae2c5296",
+        "outputSha256": "8b56d86035a1386c5fa3ec685a8834419c09422f3d72b9434ab290a4e532ccda"
+      },
+      {
+        "path": "tools/bright-open-source/templates/public-README.md",
+        "kind": "synchronize-versioned-public-readme-template",
+        "inputSha256": "e505c5e8d62cadd948cbd181b006a18c47bf4fe803e346a9c64ba169ae2c5296",
+        "outputSha256": "8b56d86035a1386c5fa3ec685a8834419c09422f3d72b9434ab290a4e532ccda"
+      },
+      {
+        "path": "tools/bright-revit-exporter/BUILDING.md",
+        "kind": "versioned-1.11-scope-note",
+        "inputSha256": "01ccd2ef325a52f87b15fdce8c980f67399b0ae33c05722eb3777dc91265d6f3",
+        "outputSha256": "ee7db2f16a67b1e25ebf60ed33c828b93b3d50e18ce3fb243f60555fcc703bfa"
+      },
+      {
+        "path": "tools/bright-open-source/RELEASE_PLAN.md",
+        "kind": "versioned-1.11-scope-note",
+        "inputSha256": "3a616ea1166aed7a9cf888658fab41d76665400766063fe42f2bae589987a6b5",
+        "outputSha256": "7d9b0fd866193b76cd6b96354900a4c05d2c036aff8131050471c981a5f4c27e"
+      },
+      {
+        "path": "tools/bright-revit-exporter/README.md",
+        "kind": "sequential-public-source-transformations",
+        "inputSha256": "4099492dde8094bebb3a68a3fbc0044a492ef51feb7424709ad8c7515b36c59a",
+        "outputSha256": "549a873d986b096316f71def4569045f71adb60cd3c6bc3f5c7f82b15bf0e746",
+        "steps": [
+          {
+            "kind": "versioned-1.11-scope-note",
+            "inputSha256": "4099492dde8094bebb3a68a3fbc0044a492ef51feb7424709ad8c7515b36c59a",
+            "outputSha256": "968196f0df527b64e45bef5d87f31aa0a6a0cea0b99e88d6d77cc7e38e083d77"
+          },
+          {
+            "kind": "local-validation-links-to-public-scope-text",
+            "linksReplaced": 1,
+            "inputSha256": "968196f0df527b64e45bef5d87f31aa0a6a0cea0b99e88d6d77cc7e38e083d77",
+            "outputSha256": "549a873d986b096316f71def4569045f71adb60cd3c6bc3f5c7f82b15bf0e746"
+          }
+        ]
+      },
+      {
+        "path": "tools/bright-revit-installer/README.md",
+        "kind": "sequential-public-source-transformations",
+        "inputSha256": "812c57325ae787dc0e8b6e297e24239f43a34a4bd33a4b5292c47f00a0857b5b",
+        "outputSha256": "bfb5a0b2868ebcf4d864b7012fa28f5d159209985fa56d76093802703a76519d",
+        "steps": [
+          {
+            "kind": "versioned-1.11-scope-note",
+            "inputSha256": "812c57325ae787dc0e8b6e297e24239f43a34a4bd33a4b5292c47f00a0857b5b",
+            "outputSha256": "c91665cc0ce459ae610ba87c828331b88b147a578566f5534f5394e027d26d86"
+          },
+          {
+            "kind": "local-validation-links-to-public-scope-text",
+            "linksReplaced": 2,
+            "inputSha256": "c91665cc0ce459ae610ba87c828331b88b147a578566f5534f5394e027d26d86",
+            "outputSha256": "bfb5a0b2868ebcf4d864b7012fa28f5d159209985fa56d76093802703a76519d"
+          }
+        ]
+      },
+      {
+        "path": "tools/bright-revit-exporter/CIVIL_QUANTITY_ROADMAP.md",
+        "kind": "sequential-public-source-transformations",
+        "inputSha256": "33abdcd6c281206c10cb7745155e0c2eddda2e1cc0f9360d2154ecf21e9608ad",
+        "outputSha256": "cc038debd00e5fdcbdf1e9832244a1c646f79deeee4773e7659eb21131972ff8",
+        "steps": [
+          {
+            "kind": "versioned-1.11-scope-note",
+            "inputSha256": "33abdcd6c281206c10cb7745155e0c2eddda2e1cc0f9360d2154ecf21e9608ad",
+            "outputSha256": "3f9af7378030286b381c2cf048b5d282498fd72b43b8632d28fe86630abada17"
+          },
+          {
+            "kind": "local-validation-links-to-public-scope-text",
+            "linksReplaced": 2,
+            "inputSha256": "3f9af7378030286b381c2cf048b5d282498fd72b43b8632d28fe86630abada17",
+            "outputSha256": "cc038debd00e5fdcbdf1e9832244a1c646f79deeee4773e7659eb21131972ff8"
+          }
+        ]
+      }
+    ],
+    "hostedCiChanges": {
+      "job": "publisher-contract",
+      "addedOwnedDllFixtures": [
+        "Test-PluginUpdateCore.ps1",
+        "Test-PluginUpdateClient.ps1",
+        "Test-PluginSupportUi.ps1"
+      ],
+      "referenceFramework": "MSBuild .NETFramework v4.8 reference assemblies from system ProgramFiles(x86)",
+      "baselineWorkflowPrefixPreserved": true,
+      "networkUsedByNewFixtures": false,
+      "childFixtureExecutableUsed": false,
+      "installerStarted": false,
+      "revitStarted": false
+    },
+    "historicalHostDocumentsRetainedUnchanged": [
+      "tools/bright-revit-exporter/tests/host/README.md",
+      "tools/bright-revit-exporter/tests/host/REVIT2020_VALIDATION.md"
+    ]
   }
 }

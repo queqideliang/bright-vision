@@ -13,6 +13,7 @@ namespace BrightVision.Civil
         public string GeometryViewName { get; set; }
         public string GeometryPhaseId { get; set; }
         public List<CivilWallFact> Walls { get; set; }
+        public CivilWallRuleTemplate RuleTemplate { get; set; }
         public CivilWallSnapshot() { Walls = new List<CivilWallFact>(); GeometryViewUniqueId = GeometryViewName = GeometryPhaseId = String.Empty; }
     }
 
@@ -67,6 +68,7 @@ namespace BrightVision.Civil
         public string Name { get; set; }
         public string HostUniqueId { get; set; }
         public string Kind { get; set; }
+        public string CutoutMethod { get; set; }
         public string Status { get; set; }
         public string Source { get; set; }
         public double? RectX0 { get; set; }
@@ -77,7 +79,7 @@ namespace BrightVision.Civil
         public CivilWallInsert()
         {
             ElementId = UniqueId = Name = HostUniqueId = Source = String.Empty;
-            Kind = "other"; Status = "unsupported"; Issues = new List<string>();
+            Kind = "other"; CutoutMethod = "native-opening"; Status = "unsupported"; Issues = new List<string>();
         }
     }
 }

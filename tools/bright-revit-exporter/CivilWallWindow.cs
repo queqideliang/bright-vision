@@ -19,29 +19,38 @@ namespace BrightVision.Revit
     {
         private readonly ComboBox scope = new ComboBox(), phase = new ComboBox(), option = new ComboBox(), geometryView = new ComboBox(), statusFilter = new ComboBox();
         private readonly ComboBox quantityLevelPicker = new ComboBox(), segmentPicker = new ComboBox(), groupPicker = new ComboBox();
+        private readonly ComboBox rulePicker = new ComboBox();
         private readonly TextBox search = new TextBox();
         private readonly TextBlock status = new TextBlock(), summary = new TextBlock(), details = new TextBlock(), projectStatus = new TextBlock();
+        private readonly TextBlock ruleStatus = new TextBlock();
         private readonly DataGrid walls = new DataGrid(), ledger = new DataGrid(), groups = new DataGrid();
         private readonly TabControl tabs = new TabControl();
         private readonly Button csvButton = new Button(), focusButton = new Button(), refreshButton = new Button();
         private readonly Button projectButton = new Button(), loadProjectButton = new Button(), saveProjectButton = new Button();
+        private readonly Button cancelReadButton = new Button(), editRuleButton = new Button(), loadRuleButton = new Button(), saveRuleButton = new Button();
         private readonly Func<CivilReadRequest, string, CivilWallSnapshot> read;
+        private readonly CivilWallRuleReader readWithRules;
         private readonly Func<long> revision;
         private readonly Func<string, bool> confirmDiscard;
         private readonly DispatcherTimer timer = new DispatcherTimer();
+        private readonly System.Diagnostics.Stopwatch progressClock = new System.Diagnostics.Stopwatch();
+        private long lastInputPumpMilliseconds;
         private bool initializing = true, stale = true, reading, projectDirty, reportError;
+        private bool cancellationRequested, pumpingInput, closeAfterRead;
         private string successfulKey, projectPath;
         private CivilProjectSettings currentProject;
+        private CivilWallRuleTemplate selectedRule = CivilWallRuleTemplates.Default();
         private List<CivilWallReportRow> filtered = new List<CivilWallReportRow>();
         internal CivilWallCalculationBatch LastBatch { get; private set; }
         internal CivilWallReportData LastReport { get; private set; }
         internal IList<CivilElementRecord> SelectedFocusElements { get; private set; }
+        internal CivilWallRuleTemplate SelectedRuleTemplate { get { return CivilWallRuleTemplates.Clone(selectedRule); } }
 
         internal CivilWallWindow(CivilReadRequest initial, IList<CivilChoice> phases, IList<CivilChoice> options, IList<CivilChoice> views,
-            string selectedView, Func<CivilReadRequest, string, CivilWallSnapshot> read, Func<long> revision, Func<string, bool> confirmDiscard = null)
+            string selectedView, Func<CivilReadRequest, string, CivilWallSnapshot> read, Func<long> revision, Func<string, bool> confirmDiscard = null, CivilWallRuleReader readWithRules = null)
         {
-            if (initial == null || read == null || revision == null) throw new ArgumentNullException("initial/read/revision");
-            this.read = read; this.revision = revision;
+            if (initial == null || (read == null && readWithRules == null) || revision == null) throw new ArgumentNullException("initial/read/revision");
+            this.read = read; this.readWithRules = readWithRules; this.revision = revision;
             this.confirmDiscard = confirmDiscard ?? (message => MessageBox.Show(this, message, "BV · 未保存的工程设置", MessageBoxButton.YesNo, MessageBoxImage.Question) == MessageBoxResult.Yes);
             SelectedFocusElements = new List<CivilElementRecord>();
             Title = "BV · 墙体试算与台账 · 崛亮视觉"; Icon = Branding.Icon(32);
@@ -62,7 +71,16 @@ namespace BrightVision.Revit
             Choices(phase, phases, initial.PhaseId); Choices(option, options, initial.DesignOptionId); Choices(geometryView, views, selectedView);
             request.Children.Add(Field("计量范围",scope,135)); request.Children.Add(Field("阶段",phase,150)); request.Children.Add(Field("设计选项",option,135)); request.Children.Add(Field("几何校验视图（不切换活动视图）",geometryView,245));
             refreshButton.Content = "读取并试算"; refreshButton.Padding = new Thickness(16,7,16,7); refreshButton.Margin = new Thickness(5,20,0,0);
-            refreshButton.Click += delegate { RefreshCalculation(); }; request.Children.Add(refreshButton); controls.Children.Add(request);
+            refreshButton.Click += delegate { RefreshCalculation(); }; request.Children.Add(refreshButton);
+            cancelReadButton.Content = "取消本轮"; cancelReadButton.Padding = new Thickness(12,7,12,7); cancelReadButton.Margin = new Thickness(7,20,0,0);
+            cancelReadButton.Click += delegate { RequestCancel(); }; request.Children.Add(cancelReadButton); controls.Children.Add(request);
+            WrapPanel rules = new WrapPanel { Margin = new Thickness(0,7,0,0) };
+            rulePicker.DisplayMemberPath = "Name"; rulePicker.SelectedValuePath = "TemplateId"; rulePicker.MinHeight = 29; rulePicker.Width = 252; rulePicker.Margin = new Thickness(0,0,8,0);
+            ConfigureRulePicker(); rules.Children.Add(rulePicker);
+            ProjectButton(rules, editRuleButton, "编辑自有模板…", EditRule);
+            ProjectButton(rules, loadRuleButton, "导入 BV 规则 JSON…", OpenRuleDialog);
+            ProjectButton(rules, saveRuleButton, "导出 BV 规则 JSON…", SaveRuleDialog); controls.Children.Add(rules);
+            ruleStatus.TextWrapping = TextWrapping.Wrap; ruleStatus.Foreground = Brushes.DimGray; ruleStatus.Margin = new Thickness(0,4,0,0); controls.Children.Add(ruleStatus);
             WrapPanel projectBar = new WrapPanel { Margin = new Thickness(0,7,0,0) };
             ProjectButton(projectBar, projectButton, "计量工程设置…", EditProject);
             ProjectButton(projectBar, loadProjectButton, "打开工程 JSON…", OpenProjectDialog);
@@ -106,45 +124,94 @@ namespace BrightVision.Revit
             buttons.Children.Add(csvButton); buttons.Children.Add(focusButton); buttons.Children.Add(close); DockPanel.SetDock(buttons,Dock.Right); footer.Children.Add(buttons);
             footer.Children.Add(new TextBlock { Text = "只读 RVT · 归属不是几何切量", VerticalAlignment = VerticalAlignment.Center, Foreground = Brushes.DimGray }); Grid.SetRow(footer,4); root.Children.Add(footer);
             scope.SelectionChanged += RequestChanged; phase.SelectionChanged += RequestChanged; option.SelectionChanged += RequestChanged; geometryView.SelectionChanged += RequestChanged;
+            rulePicker.SelectionChanged += delegate {
+                if (initializing) return;
+                CivilWallRuleTemplate value = rulePicker.SelectedItem as CivilWallRuleTemplate;
+                if (value == null) return;
+                try { SetRuleTemplate(value); } catch (Exception error) { ProjectError(error); ConfigureRulePicker(); }
+            };
             search.TextChanged += delegate { ApplyFilters(); }; statusFilter.SelectionChanged += delegate { ApplyFilters(); };
             quantityLevelPicker.SelectionChanged += delegate { ApplyFilters(); }; segmentPicker.SelectionChanged += delegate { ApplyFilters(); }; groupPicker.SelectionChanged += delegate { ApplyFilters(); };
-            timer.Interval = TimeSpan.FromMilliseconds(800); timer.Tick += delegate { CheckFreshness(); }; Loaded += delegate { timer.Start(); }; Closed += delegate { timer.Stop(); };
-            Closing += delegate(object sender,System.ComponentModel.CancelEventArgs args) { if (!CanDiscardProjectChanges("计量工程设置尚未保存到 JSON。是否放弃未保存的设置并关闭？")) { args.Cancel = true; SelectedFocusElements = new List<CivilElementRecord>(); } };
+            timer.Interval = TimeSpan.FromMilliseconds(800); timer.Tick += delegate { PollSourceFreshness(); }; Loaded += delegate { timer.Start(); }; Closed += delegate { timer.Stop(); };
+            Closing += delegate(object sender,System.ComponentModel.CancelEventArgs args) {
+                if (reading) { closeAfterRead = true; RequestCancel(); args.Cancel = true; return; }
+                if (!CanDiscardProjectChanges("计量工程设置尚未保存到 JSON。是否放弃未保存的设置并关闭？")) { args.Cancel = true; SelectedFocusElements = new List<CivilElementRecord>(); }
+            };
             initializing = false; UpdateButtons();
         }
 
         internal void RefreshCalculation()
         {
             if (reading) return;
-            reading = true; stale = true; SelectedFocusElements = new List<CivilElementRecord>(); UpdateButtons(); status.Text = "正在读取墙体事实和校验实体…";
+            reading = true; cancellationRequested = false; stale = true; progressClock.Restart();lastInputPumpMilliseconds=-50;SelectedFocusElements = new List<CivilElementRecord>(); UpdateButtons(); status.Text = "正在读取墙体事实和校验实体；可在几何操作边界取消…";
             try
             {
-                CivilReadRequest request = CurrentRequest(); string view = Id(geometryView);
+                CivilReadRequest request = CurrentRequest(); string view = Id(geometryView); string requestedKey = Key(); long sourceRevision = revision();
+                CivilWallRuleTemplate rule = CivilWallRuleTemplates.Clone(selectedRule); string fingerprint = CivilWallRuleTemplates.Fingerprint(rule);
                 if (String.IsNullOrEmpty(view)) throw new InvalidOperationException("请选择明确的几何校验三维视图。");
-                CivilWallSnapshot facts = read(request,view); CivilWallCalculationBatch batch = CivilWallCalculator.Calculate(facts);
+                var control = new CivilWallReadControl { IsCancellationRequested = delegate { return cancellationRequested; }, Progress = ReadProgress };
+                control.Checkpoint("读取准备", 0, 0);
+                CivilWallSnapshot facts = readWithRules == null ? read(request,view) : readWithRules(request,view,CivilWallRuleTemplates.Clone(rule),control);
+                if (facts == null || facts.NativeSnapshot == null) throw new InvalidDataException("读取未返回完整墙体快照。");
+                if (readWithRules == null) facts.RuleTemplate = CivilWallRuleTemplates.Clone(rule);
+                if (facts.RuleTemplate == null || CivilWallRuleTemplates.Fingerprint(facts.RuleTemplate) != fingerprint)
+                    throw new InvalidDataException("读取事实没有绑定本轮选定规则；未提交结果。");
+                control.Checkpoint("确定性试算", 0, facts.Walls == null ? 0 : facts.Walls.Count);
+                CivilWallCalculationBatch batch = CivilWallCalculator.Calculate(facts);
                 CivilWallReportData report = CivilWallReport.Create(batch,currentProject);
-                LastBatch = batch; LastReport = report; successfulKey = Key(); stale = revision() != facts.NativeSnapshot.Revision;
-                status.Text = stale ? "读取期间模型发生变化，请重新读取。" : facts.NativeSnapshot.ModelTitle + " · " + facts.NativeSnapshot.ScopeLabel + " · " + facts.NativeSnapshot.PhaseLabel + " · 几何视图：" + ((CivilChoice)geometryView.SelectedItem).Label;
-                ConfigureProjectFilters(); ApplyFilters();
+                FilteredView next = BuildView(report,currentProject);
+                control.Checkpoint("提交前校验", facts.Walls.Count, facts.Walls.Count);
+                CivilWallBatchIntegrity.Validate(batch);
+                if (requestedKey != Key() || sourceRevision != revision() || facts.NativeSnapshot.Revision != sourceRevision || batch.RuleFingerprint != fingerprint)
+                    throw new InvalidOperationException("读取期间模型、条件或规则发生变化；本轮结果未提交，请重新读取。");
+                // All source, rule, report, filter, grouping and finite-total
+                // checks succeeded before replacing the completed pair.
+                LastBatch = batch; LastReport = report; successfulKey = requestedKey; stale = false; reportError = false;
+                ConfigureProjectFilters(); PublishView(next);
+                status.Text = facts.NativeSnapshot.ModelTitle + " · " + facts.NativeSnapshot.ScopeLabel + " · " + facts.NativeSnapshot.PhaseLabel + " · 几何视图：" + ((CivilChoice)geometryView.SelectedItem).Label;
             }
+            catch (OperationCanceledException) { status.Text = "本轮已取消，没有提交半批结果。" + (LastBatch == null ? "" : "旧完成结果已过期，请重新读取。"); }
             catch (Exception error) { if (error is OutOfMemoryException) throw; status.Text = "本轮未完成：" + error.Message + (LastBatch == null ? "" : "；旧结果已过期。"); }
-            finally { reading = false; UpdateButtons(); }
+            finally
+            {
+                reading = false; UpdateButtons();
+                if (closeAfterRead) { closeAfterRead = false; if (IsVisible) Dispatcher.BeginInvoke(DispatcherPriority.Normal,new Action(Close)); }
+            }
+        }
+        internal void RequestCancel()
+        {
+            if (!reading) return;
+            cancellationRequested = true; SelectedFocusElements = new List<CivilElementRecord>();
+            status.Text = "已请求取消；正在进行的单次几何操作结束后停止，不提交半批结果。";
+        }
+        private void ReadProgress(string stage, int completed, int total)
+        {
+            if (!reading) return;
+            status.Text = cancellationRequested ? "已请求取消，等待当前几何操作结束…" : stage + (total > 0 ? " · " + completed + " / " + total : "") + "；可在操作边界取消。";
+            if (!IsVisible || pumpingInput || progressClock.ElapsedMilliseconds-lastInputPumpMilliseconds<50) return;
+            lastInputPumpMilliseconds=progressClock.ElapsedMilliseconds;
+            // The modal ExternalCommand stays on its original Revit API
+            // thread. The bounded frame drains queued input/render work
+            // at an explicit adapter checkpoint. Every other action is locked
+            // and its helper refuses reentry; no API work runs on Task.Run.
+            pumpingInput = true;
+            try
+            {
+                var frame = new DispatcherFrame();
+                Dispatcher.BeginInvoke(DispatcherPriority.Background,new Action(delegate { frame.Continue = false; }));
+                Dispatcher.PushFrame(frame);
+            }
+            finally { pumpingInput = false; }
         }
         internal void ApplyFilters()
         {
-            if (initializing || LastReport == null) return;
+            if (initializing || reading || LastReport == null) return;
             SelectedFocusElements = new List<CivilElementRecord>();
             try
             {
-                List<CivilWallReportRow> next = CivilWallReport.Filter(LastReport,search.Text.Trim(),Id(statusFilter),Id(quantityLevelPicker),Id(segmentPicker));
-                List<CivilWallReportGroup> nextGroups = CivilWallReport.Group(next,Id(groupPicker));
-                List<CivilWallReportRow> calculated = next.Where(row => row.Result.Status == "calculated").ToList();
-                double area, volume; Totals(calculated,out area,out volume);
-                List<WallRow> nextWalls = next.Select(row => new WallRow(row)).ToList();
-                string text = "当前 " + next.Count + " 面墙 · 通过 " + calculated.Count + " · 未纳入 " + (next.Count-calculated.Count) + " · 净投影面积 " + (calculated.Count==0?"—":Total(area,"m²")) + " · 试算体积 " + (calculated.Count==0?"—":Total(volume,"m³")) + "（仅通过项；原生量未替代）";
-                bool recovered = reportError; filtered = next; walls.ItemsSource = nextWalls; groups.ItemsSource = nextGroups; summary.Text = text; reportError = false;
+                FilteredView next = BuildView(LastReport,currentProject);
+                bool recovered = reportError; PublishView(next); reportError = false;
                 if(recovered)status.Text="当前筛选已恢复，可导出和定位；几何读取条件未改变。";
-                ShowLedger();
             }
             catch(Exception error)
             {
@@ -153,6 +220,22 @@ namespace BrightVision.Revit
             }
             UpdateButtons();
         }
+        private FilteredView BuildView(CivilWallReportData report,CivilProjectSettings profile)
+        {
+            string quantity = Id(quantityLevelPicker), segment = Id(segmentPicker);
+            if (quantity != "" && quantity != CivilWallReport.UnassignedId && (profile == null || !profile.QuantityLevels.Any(level => level.Id == quantity))) quantity = "";
+            if (segment != "" && segment != CivilWallReport.UnassignedId && (profile == null || !profile.Segments.Any(item => item.Id == segment))) segment = "";
+            List<CivilWallReportRow> next = CivilWallReport.Filter(report,search.Text.Trim(),Id(statusFilter),quantity,segment);
+            List<CivilWallReportGroup> nextGroups = CivilWallReport.Group(next,Id(groupPicker));
+            List<CivilWallReportRow> calculated = next.Where(row => row.Result.Status == "calculated").ToList();
+            double area,volume; Totals(calculated,out area,out volume);
+            return new FilteredView { Rows = next, Groups = nextGroups, Walls = next.Select(row => new WallRow(row)).ToList(),
+                Summary = "当前 " + next.Count + " 面墙 · 通过 " + calculated.Count + " · 未纳入 " + (next.Count-calculated.Count) + " · 净投影面积 " + (calculated.Count == 0 ? "—" : Total(area,"m²")) + " · 试算体积 " + (calculated.Count == 0 ? "—" : Total(volume,"m³")) + "（仅通过项；原生量未替代）" };
+        }
+        private void PublishView(FilteredView next)
+        {
+            filtered = next.Rows; walls.ItemsSource = next.Walls; groups.ItemsSource = next.Groups; summary.Text = next.Summary; ShowLedger();
+        }
         private static void Totals(List<CivilWallReportRow> rows,out double area,out double volume)
         {
             area=rows.Sum(row=>row.Result.ResultAreaMetres2.Value);volume=rows.Sum(row=>row.Result.ResultVolumeMetres3.Value);
@@ -160,17 +243,21 @@ namespace BrightVision.Revit
         }
         private void ValidateProjectView(CivilWallReportData report,CivilProjectSettings profile)
         {
-            string quantity=Id(quantityLevelPicker),segment=Id(segmentPicker);
-            if(quantity!=""&&quantity!="__unassigned__"&&!profile.QuantityLevels.Any(level=>level.Id==quantity))quantity="";
-            if(segment!=""&&segment!="__unassigned__"&&!profile.Segments.Any(item=>item.Id==segment))segment="";
-            List<CivilWallReportRow> rows=CivilWallReport.Filter(report,search.Text.Trim(),Id(statusFilter),quantity,segment);
-            CivilWallReport.Group(rows,Id(groupPicker));double area,volume;Totals(rows.Where(row=>row.Result.Status=="calculated").ToList(),out area,out volume);
+            BuildView(report,profile);
         }
         internal bool CheckFreshness()
+        { return Freshness(true); }
+        internal bool PollSourceFreshness()
+        { return Freshness(false); }
+        private bool Freshness(bool verifyReport)
         {
+            if (reading) { UpdateButtons(); return false; }
             if (!stale && LastBatch != null)
             {
-                try { if (Key()!=successfulKey || revision()!=LastBatch.Input.NativeSnapshot.Revision) { stale=true; status.Text="模型或读取条件已变化，旧结果过期，请重新读取。"; } }
+                try {
+                    if (Key()!=successfulKey || revision()!=LastBatch.Input.NativeSnapshot.Revision || LastBatch.RuleFingerprint!=CivilWallRuleTemplates.Fingerprint(selectedRule)) { stale=true; status.Text="模型、规则或读取条件已变化，旧结果过期，请重新读取。"; }
+                    else if (verifyReport) CivilWallReport.Validate(LastReport);
+                }
                 catch (Exception error) { if (error is OutOfMemoryException) throw; stale=true; status.Text="无法确认来源状态："+error.Message; }
             }
             if (stale) SelectedFocusElements = new List<CivilElementRecord>();
@@ -206,27 +293,74 @@ namespace BrightVision.Revit
         private static List<CivilElementRecord> UniqueSources(IEnumerable<CivilElementRecord> source) { return source.Where(item=>item!=null&&!String.IsNullOrEmpty(item.UniqueId)&&!String.IsNullOrEmpty(item.ElementId)).GroupBy(item=>item.UniqueId+"|"+item.ElementId,StringComparer.Ordinal).Select(group=>group.First()).ToList(); }
         internal void SetProject(CivilProjectSettings profile)
         {
+            EnsureIdle();
             if(!CheckFreshness())throw new InvalidOperationException("请先读取并试算，再设置计量工程。");
-            CivilProjectSettings candidate=CivilProject.Clone(profile); CivilWallReportData applied=CivilWallReport.Create(LastBatch,candidate);ValidateProjectView(applied,candidate);
+            CivilProjectSettings candidate=CivilProject.Clone(profile); CivilWallReportData applied=CivilWallReport.Create(LastBatch,candidate);FilteredView next=BuildView(applied,candidate);
+            CivilWallRuleTemplate rule=candidate.SchemaVersion==2?CivilWallRuleTemplates.Clone(candidate.WallRuleTemplate):CivilWallRuleTemplates.Clone(selectedRule);
+            bool ruleChanged=CivilWallRuleTemplates.Fingerprint(rule)!=LastBatch.RuleFingerprint;
             if(currentProject==null||currentProject.ProjectId!=candidate.ProjectId)projectPath=null;
-            currentProject=candidate;LastReport=applied;projectDirty=true;ConfigureProjectFilters();ApplyFilters();UpdateButtons();
+            currentProject=candidate;selectedRule=rule;projectDirty=true;ConfigureRulePicker();ConfigureProjectFilters();
+            if(ruleChanged){stale=true;SelectedFocusElements=new List<CivilElementRecord>();status.Text="工程规则与旧批次不同；已载入规则与归属，旧结果过期，必须重新读取试算。";}
+            else{LastReport=applied;PublishView(next);status.Text=candidate.SchemaVersion==1?"格式 1 工程未保存墙体规则；明确沿用当前已选模板，保存时将写入格式 2。":"已应用同一规则下的计量工程归属。";}
+            UpdateButtons();
         }
         internal void SaveProject(string path)
         {
+            EnsureIdle();
             if(!CheckFreshness()||currentProject==null)throw new InvalidOperationException("请先读取并设置计量工程。");
             CivilProjectSettings candidate=CivilProject.Clone(currentProject);CivilReadRequest request=CurrentRequest();
-            if(candidate.PreferredScope!=request.Scope||candidate.PhaseId!=request.PhaseId||candidate.DesignOptionId!=request.DesignOptionId){candidate.PreferredScope=request.Scope;candidate.PhaseId=request.PhaseId;candidate.DesignOptionId=request.DesignOptionId;CivilProject.Touch(candidate);}
-            CivilWallReportData applied=CivilWallReport.Create(LastBatch,candidate);ValidateProjectView(applied,candidate);string destination=Path.GetFullPath(path);
+            bool changed=candidate.PreferredScope!=request.Scope||candidate.PhaseId!=request.PhaseId||candidate.DesignOptionId!=request.DesignOptionId||candidate.SchemaVersion!=2||candidate.WallRuleTemplate==null||CivilWallRuleTemplates.Fingerprint(candidate.WallRuleTemplate)!=CivilWallRuleTemplates.Fingerprint(selectedRule);
+            candidate.PreferredScope=request.Scope;candidate.PhaseId=request.PhaseId;candidate.DesignOptionId=request.DesignOptionId;candidate.SchemaVersion=2;candidate.WallRuleTemplate=CivilWallRuleTemplates.Clone(selectedRule);if(changed)CivilProject.Touch(candidate);
+            CivilWallReportData applied=CivilWallReport.Create(LastBatch,candidate);FilteredView next=BuildView(applied,candidate);string destination=Path.GetFullPath(path);
             if(!destination.EndsWith(".bvproject.json",StringComparison.OrdinalIgnoreCase))throw new InvalidDataException("请选择 .bvproject.json 工程文件。");
-            CivilProjectStore.Save(destination,candidate);currentProject=candidate;LastReport=applied;projectPath=destination;projectDirty=false;ApplyFilters();UpdateButtons();
+            CivilProjectStore.Save(destination,candidate);currentProject=candidate;LastReport=applied;projectPath=destination;projectDirty=false;PublishView(next);UpdateButtons();
         }
         internal void LoadProject(string path)
         {
+            EnsureIdle();
             if(!CheckFreshness())throw new InvalidOperationException("请先读取并试算，再打开计量工程。");
-            CivilProjectSettings candidate=CivilProjectStore.Load(path);CivilWallReportData applied=CivilWallReport.Create(LastBatch,candidate);ValidateProjectView(applied,candidate);string destination=Path.GetFullPath(path);
-            currentProject=candidate;LastReport=applied;projectPath=destination;projectDirty=false;ConfigureProjectFilters();ApplyFilters();UpdateButtons();
-            status.Text="已打开工程设置；模型来源已核对，读取范围／阶段／设计选项／校验视图继续使用当前选择。";
+            CivilProjectSettings candidate=CivilProjectStore.Load(path);CivilWallReportData applied=CivilWallReport.Create(LastBatch,candidate);FilteredView next=BuildView(applied,candidate);string destination=Path.GetFullPath(path);
+            CivilWallRuleTemplate rule=candidate.SchemaVersion==2?CivilWallRuleTemplates.Clone(candidate.WallRuleTemplate):CivilWallRuleTemplates.Clone(selectedRule);
+            bool ruleChanged=CivilWallRuleTemplates.Fingerprint(rule)!=LastBatch.RuleFingerprint;
+            currentProject=candidate;selectedRule=rule;projectPath=destination;projectDirty=false;ConfigureRulePicker();ConfigureProjectFilters();
+            if(ruleChanged){stale=true;SelectedFocusElements=new List<CivilElementRecord>();status.Text="已打开工程与其规则模板；规则不同于旧批次，旧结果过期，须重新读取，未用新标签替换旧数量。";}
+            else{LastReport=applied;PublishView(next);status.Text=candidate.SchemaVersion==1?"已打开格式 1 工程；文件没有墙体规则，明确沿用当前已选模板，保存时迁移为格式 2。":"已打开工程设置及相同规则；来源已核对，读取范围／阶段／设计选项／校验视图保持当前选择。";}
+            UpdateButtons();
         }
+        internal void SetRuleTemplate(CivilWallRuleTemplate value)
+        {
+            EnsureIdle();CivilWallRuleTemplate candidate=CivilWallRuleTemplates.Clone(value);
+            if(CivilWallRuleTemplates.Fingerprint(candidate)==CivilWallRuleTemplates.Fingerprint(selectedRule)){ConfigureRulePicker();return;}
+            CivilProjectSettings profile=currentProject==null?null:CivilProject.Clone(currentProject);
+            if(profile!=null){profile.SchemaVersion=2;profile.WallRuleTemplate=CivilWallRuleTemplates.Clone(candidate);CivilProject.Touch(profile);}
+            selectedRule=candidate;if(profile!=null){currentProject=profile;projectDirty=true;}
+            stale=true;SelectedFocusElements=new List<CivilElementRecord>();ConfigureRulePicker();status.Text="规则模板已变化，旧结果过期；请重新读取试算。";UpdateButtons();
+        }
+        internal void LoadRuleTemplate(string path){EnsureIdle();CivilWallRuleTemplate candidate=CivilWallRuleTemplates.Load(path);SetRuleTemplate(candidate);}
+        internal void SaveRuleTemplate(string path){EnsureIdle();CivilWallRuleTemplates.Save(path,CivilWallRuleTemplates.Clone(selectedRule));}
+        private void EnsureIdle(){if(reading)throw new InvalidOperationException("正在读取试算；请先取消或等待完成，再修改规则或工程设置。");}
+        private void ConfigureRulePicker()
+        {
+            bool previous=initializing;initializing=true;
+            try{var values=CivilWallRuleTemplates.Catalog().ToList();if(!values.Any(value=>CivilWallRuleTemplates.Fingerprint(value)==CivilWallRuleTemplates.Fingerprint(selectedRule)))values.Add(CivilWallRuleTemplates.Clone(selectedRule));rulePicker.ItemsSource=values;rulePicker.SelectedItem=values.First(value=>CivilWallRuleTemplates.Fingerprint(value)==CivilWallRuleTemplates.Fingerprint(selectedRule));}
+            finally{initializing=previous;}
+        }
+        private void EditRule()
+        {
+            if(reading)return;
+            try{var dialog=new CivilWallRuleWindow(selectedRule){Owner=this};if(dialog.ShowDialog()==true)SetRuleTemplate(dialog.Result);}catch(Exception error){RuleError(error);}
+        }
+        private void OpenRuleDialog()
+        {
+            if(reading)return;var dialog=new OpenFileDialog{Title="导入 BV 自有墙体规则",Filter="BV 规则 JSON (*.json)|*.json",CheckFileExists=true};if(dialog.ShowDialog(this)!=true)return;
+            try{LoadRuleTemplate(dialog.FileName);}catch(Exception error){RuleError(error);}
+        }
+        private void SaveRuleDialog()
+        {
+            if(reading)return;var dialog=new SaveFileDialog{Title="导出 BV 自有墙体规则",Filter="BV 规则 JSON (*.json)|*.json",DefaultExt=".json",AddExtension=true,OverwritePrompt=true,FileName="BV-墙体规则.bvwallrule.json"};if(dialog.ShowDialog(this)!=true)return;
+            try{SaveRuleTemplate(dialog.FileName);status.Text="已导出当前 BV 自有规则模板："+dialog.FileName;}catch(Exception error){RuleError(error);}
+        }
+        private void RuleError(Exception error){if(error is OutOfMemoryException)throw error;status.Text="规则模板操作未完成："+error.Message;}
         internal bool CanDiscardProjectChanges(string message) { return !projectDirty || confirmDiscard(message); }
         private void ConfigureProjectFilters()
         {
@@ -267,9 +401,19 @@ namespace BrightVision.Revit
             try{ExportCsv(dialog.FileName);status.Text="已保存："+dialog.FileName;}catch(Exception error){if(error is OutOfMemoryException)throw;status.Text="未保存："+error.Message;}
         }
         private void RequestChanged(object sender,SelectionChangedEventArgs args){if(!initializing){stale=true;SelectedFocusElements=new List<CivilElementRecord>();status.Text="读取条件已变化，请重新读取。";UpdateButtons();}}
-        private void UpdateButtons(){bool valid=!reading&&!stale&&!reportError&&LastBatch!=null&&LastReport!=null;refreshButton.IsEnabled=!reading;csvButton.IsEnabled=valid;focusButton.IsEnabled=valid&&FocusCandidates().Count>0;projectButton.IsEnabled=valid;loadProjectButton.IsEnabled=valid;saveProjectButton.IsEnabled=valid&&currentProject!=null;projectStatus.Text=currentProject==null?"尚未创建计量工程":currentProject.Name+" · 修订 "+currentProject.Revision+(projectDirty?" · 未保存":"");}
+        private void UpdateButtons()
+        {
+            bool valid=!reading&&!stale&&!reportError&&LastBatch!=null&&LastReport!=null;
+            refreshButton.IsEnabled=!reading;cancelReadButton.IsEnabled=reading;csvButton.IsEnabled=valid;focusButton.IsEnabled=valid&&FocusCandidates().Count>0;
+            projectButton.IsEnabled=valid;loadProjectButton.IsEnabled=valid;saveProjectButton.IsEnabled=valid&&currentProject!=null;
+            foreach(Control control in new Control[]{scope,phase,option,geometryView,rulePicker,editRuleButton,loadRuleButton,saveRuleButton,search,statusFilter,quantityLevelPicker,segmentPicker,groupPicker,tabs})control.IsEnabled=!reading;
+            projectStatus.Text=currentProject==null?"尚未创建计量工程":currentProject.Name+" · 修订 "+currentProject.Revision+(projectDirty?" · 未保存":"");
+            string fingerprint=CivilWallRuleTemplates.Fingerprint(selectedRule);
+            ruleStatus.Text="项目约定模板："+selectedRule.Name+" · r"+selectedRule.Revision+" · "+(selectedRule.OpeningPolicy==CivilWallRuleTemplates.VerifiedRectCutout?"真实矩形门窗 + Opening":"仅原生矩形 Opening")+" · 拒绝重叠 · 指纹 "+fingerprint.Substring(0,16)+(stale?" · 旧结果过期／尚未计算":"");
+            ruleStatus.ToolTip="模板标识："+selectedRule.TemplateId+"\n规则指纹："+fingerprint+"\n交接策略："+selectedRule.JoinPolicy+"；当前不支持优先级扣量。";
+        }
         private CivilReadRequest CurrentRequest(){if(scope.SelectedItem==null||phase.SelectedItem==null||option.SelectedItem==null)throw new InvalidOperationException("请明确选择范围、阶段与设计选项。");return new CivilReadRequest{Scope=Id(scope),PhaseId=Id(phase),DesignOptionId=Id(option)};}
-        private string Key(){CivilReadRequest r=CurrentRequest();return r.Scope+"\n"+r.PhaseId+"\n"+r.DesignOptionId+"\n"+Id(geometryView);}
+        private string Key(){CivilReadRequest r=CurrentRequest();return r.Scope+"\n"+r.PhaseId+"\n"+r.DesignOptionId+"\n"+Id(geometryView)+"\n"+CivilWallRuleTemplates.Fingerprint(selectedRule);}
         private static void ProjectButton(Panel panel,Button button,string label,Action action){button.Content=label;button.Padding=new Thickness(10,5,10,5);button.Margin=new Thickness(0,0,7,0);button.Click+=delegate{action();};panel.Children.Add(button);}
         private static CivilChoice Choice(string id,string label){return new CivilChoice{Id=id,Label=label};}
         private static string Id(ComboBox box){var c=box.SelectedItem as CivilChoice;return c==null?"":c.Id;}
@@ -280,6 +424,13 @@ namespace BrightVision.Revit
         private static void Column(DataGrid grid,string header,string binding,double width){var value=new Binding(binding);if(binding.EndsWith("Metres2",StringComparison.Ordinal)||binding.EndsWith("Metres3",StringComparison.Ordinal)){value.StringFormat="0.######";value.TargetNullValue="—";}grid.Columns.Add(new DataGridTextColumn{Header=header,Binding=value,Width=new DataGridLength(width)});}
         private static string Number(double? value){return value.HasValue?value.Value.ToString(Math.Abs(value.Value)>=1e12?"0.########E+0":"0.########",CultureInfo.CurrentCulture):"—";}
         private static string Total(double value,string unit){return Double.IsInfinity(value)||Double.IsNaN(value)?"合计溢出":value.ToString(Math.Abs(value)>=1e12?"0.###E+0":"0.###",CultureInfo.CurrentCulture)+" "+unit;}
+        private sealed class FilteredView
+        {
+            internal List<CivilWallReportRow> Rows;
+            internal List<CivilWallReportGroup> Groups;
+            internal List<WallRow> Walls;
+            internal string Summary;
+        }
         private sealed class WallRow
         {
             internal readonly CivilWallReportRow Record;internal WallRow(CivilWallReportRow source){Record=source;}

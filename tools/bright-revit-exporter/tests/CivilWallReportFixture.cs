@@ -26,7 +26,7 @@ internal static class CivilWallReportFixture
             RectX0 = empty ? 0 : 1, RectX1 = empty ? length : 3, RectZ0 = empty ? 0 : 1, RectZ1 = empty ? height : 2 });
         return wall;
     }
-    private static CivilWallCalculationBatch Batch()
+    private static CivilWallCalculationBatch Batch(Action<CivilWallSnapshot> prepare = null)
     {
         var walls = new List<CivilWallFact> { Wall("A", 10, 3, .2, true, false), Wall("B", 5, 2, .3, false, false),
             new CivilWallFact { ElementId = "C", UniqueId = "wall-C", Name = "unsupported", Status = "unsupported", Issues = new List<string> { "缺少几何证明" } },
@@ -40,7 +40,9 @@ internal static class CivilWallReportFixture
                 RawLevelId = "raw-" + wall.ElementId, RawLevelName = "原始参照", LevelSource = "WALL_BASE_CONSTRAINT",
                 Area = wall.NativeArea, Volume = wall.NativeVolume, Length = wall.ParameterLength });
         }
-        return CivilWallCalculator.Calculate(new CivilWallSnapshot { NativeSnapshot = native, Walls = walls, GeometryViewUniqueId = "view-uid", GeometryViewName = "三维", GeometryPhaseId = "phase-id" });
+        var input = new CivilWallSnapshot { NativeSnapshot = native, Walls = walls, GeometryViewUniqueId = "view-uid", GeometryViewName = "三维", GeometryPhaseId = "phase-id" };
+        if (prepare != null) prepare(input);
+        return CivilWallCalculator.Calculate(input);
     }
     private static CivilProjectSettings Project(CivilSnapshot snapshot)
     {
@@ -99,6 +101,11 @@ internal static class CivilWallReportFixture
         string text = CivilWallReport.ToCsv(data, onlyA, "quantity-level"); List<List<string>> csv = Csv(text);
         Check(text.Contains(CivilWallReport.SchemaId) && text.Contains(CivilWallCalculator.AreaRuleId) && text.Contains("wall-A") && text.Contains("A-opening-uid") && !text.Contains("wall-B") && !text.Contains("wall-E"), "V2 CSV carries only selected wall and its own complete ledger.");
         Check(csv.Any(row => row.Count == 2 && row[0] == "计量工程Id" && row[1] == profile.ProjectId) && csv.Any(row => row.Count == 2 && row[0] == "模型修订" && row[1] == "9") && text.Contains("view-uid"), "CSV preserves project, revision and explicit geometry context.");
+        Check(csv.Any(row => row.Count == 2 && row[0] == "计算批次" && row[1] == batch.BatchId), "CSV binds the original sealed batch identity.");
+        Check(csv.Any(row => row.Count == 2 && row[0] == "规则模板Id" && row[1] == batch.RuleTemplate.TemplateId) && csv.Any(row => row.Count == 2 && row[0] == "规则模板" && row[1] == batch.RuleTemplate.Name) && csv.Any(row => row.Count == 2 && row[0] == "规则修订" && row[1] == batch.RuleTemplate.Revision.ToString(CultureInfo.InvariantCulture)), "CSV binds its effective template identity, name and revision.");
+        Check(csv.Any(row => row.Count == 2 && row[0] == "规则指纹SHA256" && row[1] == batch.RuleFingerprint), "CSV preserves the sealed rule fingerprint.");
+        Check(csv.Any(row => row.Count == 2 && row[0] == "事实指纹SHA256" && row[1] == batch.InputFingerprint), "CSV preserves the sealed fact fingerprint.");
+        Check(csv.Any(row => row.Count == 2 && row[0] == "切洞策略" && row[1] == batch.RuleTemplate.OpeningPolicy) && csv.Any(row => row.Count == 2 && row[0] == "交接策略" && row[1] == batch.RuleTemplate.JoinPolicy), "CSV preserves effective policies rather than a UI selection.");
         List<string> wallHeader = csv.Single(row => row.Count == CivilWallReport.WallColumnCount && row[0] == "墙ElementId");
         List<string> wallCsv = csv.Single(row => row.Count == CivilWallReport.WallColumnCount && row[0] == "A");
         Check(wallHeader.Count == 38 && wallCsv[wallHeader.IndexOf("净单侧投影面积m2")] == "28" && wallCsv[wallHeader.IndexOf("项目试算体积m3")] == "5.6", "CSV area and volume match independently known 28 / 5.6 values.");
@@ -117,7 +124,7 @@ internal static class CivilWallReportFixture
         string zeroCsv = CivilWallReport.ToCsv(data, data.Rows.Where(row => row.Source.ElementId == "E"), "type");
         List<string> zeroTotal = Csv(zeroCsv).Single(row => row.Count == CivilWallReport.GroupColumnCount && row[0] == "total");
         Check(zeroTotal[9] == "0" && zeroTotal[10] == "0", "Legitimate zero remains numeric zero in CSV.");
-        CivilWallCalculationBatch hostile = Batch(); hostile.Input.NativeSnapshot.ModelTitle = " \t=metadata"; hostile.Results[0].Fact.Name = "=CMD(\"quoted\")\nnew line";
+        CivilWallCalculationBatch hostile = Batch(input => { input.NativeSnapshot.ModelTitle = " \t=metadata"; input.Walls[0].Name = "=CMD(\"quoted\")\nnew line"; input.NativeSnapshot.Elements[0].Name = input.Walls[0].Name; });
         string hostileText = CivilWallReport.ToCsv(CivilWallReport.Create(hostile), null, "level"); List<List<string>> hostileCsv = Csv(hostileText);
         Check(hostileCsv.Any(row => row.Count == 2 && row[0] == "模型" && row[1].StartsWith("'", StringComparison.Ordinal)) && hostileCsv.Any(row => row.Count == 38 && row[0] == "A" && row[2].StartsWith("'=CMD", StringComparison.Ordinal) && row[2].Contains("\n")), "Quoted/multiline formulas stay inert text while valid data structure is retained.");
         Refuses(delegate { CivilWallReport.Group(new[] { data.Rows[0], data.Rows[0] }, "type"); }, "Duplicate wall rows cannot inflate group totals.");
@@ -161,7 +168,13 @@ internal static class CivilWallReportFixture
         Refuses(delegate { CivilWallReport.Create(invalid); }, "Nonfinite passed projection cannot enter groups or CSV.");
         invalid = Batch(); invalid.Results[0].ResultVolumeMetres3 = null;
         Refuses(delegate { CivilWallReport.Create(invalid); }, "Incomplete passed volume cannot enter area-only sums.");
-        CivilWallReportData overflow = CivilWallReport.Create(Batch()); overflow.Rows[0].Result.BasisAreaMetres2 = Double.MaxValue; overflow.Rows[1].Result.BasisAreaMetres2 = Double.MaxValue;
+        CivilWallReportData overflow = CivilWallReport.Create(Batch(input => {
+            foreach (int index in new[] { 0, 1 })
+            {
+                CivilWallFact fact = input.Walls[index]; fact.ParameterLength = Metric(1e308,"m","large finite fixture axis"); fact.ParameterHeight = Metric(1,"m","fixture height"); fact.ParameterWidth = Metric(.2,"m","fixture width");
+                fact.Inserts.Clear(); fact.GeometryVolumeMetres3 = 1e308 * .2; input.NativeSnapshot.Elements[index].Length = fact.ParameterLength;
+            }
+        }));
         Refuses(delegate { CivilWallReport.ToCsv(overflow, null, "type"); }, "Cross-group grand total overflow refuses rather than exporting an incomplete CSV.");
         CivilWallReportData stale = CivilWallReport.Create(Batch()); stale.Batch.Input.NativeSnapshot.Revision++;
         Refuses(delegate { CivilWallReport.Filter(stale, "", "", "", ""); }, "Changed native revision invalidates report access.");
@@ -171,8 +184,12 @@ internal static class CivilWallReportFixture
         Refuses(delegate { CivilWallReport.ToCsv(stale, null, "level"); }, "Changed batch coverage invalidates report even if source revision was not bumped.");
         stale = CivilWallReport.Create(Batch()); stale.Snapshot.Elements.Add(new CivilElementRecord { ElementId = "new-wall", UniqueId = "new-wall-uid", KindCode = "wall" });
         Refuses(delegate { CivilWallReport.Filter(stale, "", "", "", ""); }, "Added native wall without matching report row invalidates stale coverage.");
-        CivilWallCalculationBatch mixedKinds = Batch(); mixedKinds.Input.NativeSnapshot.Elements.Add(new CivilElementRecord { ElementId = "floor-id", UniqueId = "floor-uid", KindCode = "floor" });
+        CivilWallCalculationBatch mixedKinds = Batch(input => input.NativeSnapshot.Elements.Add(new CivilElementRecord { ElementId = "floor-id", UniqueId = "floor-uid", KindCode = "floor" }));
         Check(CivilWallReport.Create(mixedKinds).Rows.Count == 5, "Other native categories are permitted without inventing wall results for them.");
+        CivilWallCalculationBatch custom = Batch(input => { input.RuleTemplate = CivilWallRuleTemplates.Copy(CivilWallRuleTemplates.LegacyExplicitOpeningOnly(),"BV 自定义复核"); input.RuleTemplate.Revision = 2; });
+        List<List<string>> customCsv = Csv(CivilWallReport.ToCsv(CivilWallReport.Create(custom),null,"type"));
+        Check(custom.RuleFingerprint != batch.RuleFingerprint && customCsv.Any(row => row.Count == 2 && row[0] == "规则模板Id" && row[1] == custom.RuleTemplate.TemplateId) && customCsv.Any(row => row.Count == 2 && row[0] == "规则模板" && row[1] == "BV 自定义复核") && customCsv.Any(row => row.Count == 2 && row[0] == "规则修订" && row[1] == "2"), "Custom template metadata comes from its sealed batch instead of the default catalog.");
+        Check(customCsv.Any(row => row.Count == 2 && row[0] == "规则指纹SHA256" && row[1] == custom.RuleFingerprint) && customCsv.Any(row => row.Count == 2 && row[0] == "切洞策略" && row[1] == "native-opening-only"), "Custom template fingerprint and effective policy survive report export.");
         File.WriteAllText(Path.Combine(output, "report.json"), "{\"result\":\"PASS\",\"assertions\":" + checks + ",\"schema\":\"" + CivilWallReport.SchemaId + "\",\"scope\":\"Own pure managed report/domain DLL; synthetic source identities, project annotations, projection/volume grouping and v2 CSV; no Revit, native window or child fixture executable\"}");
         Console.WriteLine("PASS " + checks + " wall report assertions."); return 0;
     }

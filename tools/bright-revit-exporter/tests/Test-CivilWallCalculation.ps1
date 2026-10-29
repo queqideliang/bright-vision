@@ -16,8 +16,8 @@ if(!$FrameworkDirectory -and !(Test-Path -LiteralPath (Join-Path $framework 'msc
 }
 $dll=Join-Path $output 'CivilWallCalculationFixture.dll'
 $argsList=@('/nologo','/noconfig','/target:library','/platform:anycpu','/optimize+','/codepage:65001','/langversion:5','/nostdlib+',('/out:'+$dll))
-foreach($name in @('mscorlib.dll','System.dll','System.Core.dll')) { $argsList+='/reference:'+(Join-Path $framework $name) }
-foreach($name in @('CivilQuantityModel.cs','CivilWallFacts.cs','CivilWallCalculation.cs')) { $argsList+=Join-Path $module $name }
+foreach($name in @('mscorlib.dll','System.dll','System.Core.dll','System.Runtime.Serialization.dll','System.Xml.dll')) { $argsList+='/reference:'+(Join-Path $framework $name) }
+foreach($name in @('CivilQuantityModel.cs','CivilWallRuleTemplates.cs','CivilWallFacts.cs','CivilWallBatchIntegrity.cs','CivilWallCalculation.cs')) { $argsList+=Join-Path $module $name }
 $argsList+=Join-Path $PSScriptRoot 'CivilWallCalculationFixture.cs'
 & (Join-Path $env:WINDIR 'Microsoft.NET\Framework64\v4.0.30319\csc.exe') @argsList
 if($LASTEXITCODE -ne 0) { throw 'Wall domain fixture compile failed.' }

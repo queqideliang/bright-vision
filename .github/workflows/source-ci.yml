@@ -75,3 +75,19 @@ jobs:
         run: '& tools/bright-revit-exporter/tests/Test-CivilWallUi.ps1'
       # This test resolves gh.exe only to its own recording PowerShell script.
       # It never contacts GitHub, creates a tag, uploads or starts an installer.
+
+      # BV 1.11 additions compile owned fixture DLLs with the hosted runner
+      # reference assemblies. Fake transport/offscreen WPF only: no network,
+      # fixture executable, installer, Autodesk API or Revit process is used.
+      - name: Verify BV 1.11 update protocol and public manifest fixture
+        shell: powershell
+        run: |
+          & tools/bright-revit-exporter/tests/Test-PluginUpdateCore.ps1 -FrameworkDirectory (Join-Path ${env:ProgramFiles(x86)} 'Reference Assemblies\Microsoft\Framework\.NETFramework\v4.8')
+      - name: Verify BV 1.11 updater with fake HTTP transport
+        shell: powershell
+        run: |
+          & tools/bright-revit-exporter/tests/Test-PluginUpdateClient.ps1 -FrameworkDirectory (Join-Path ${env:ProgramFiles(x86)} 'Reference Assemblies\Microsoft\Framework\.NETFramework\v4.8')
+      - name: Verify BV 1.11 help and updater in offscreen WPF
+        shell: powershell
+        run: |
+          & tools/bright-revit-exporter/tests/Test-PluginSupportUi.ps1 -FrameworkDirectory (Join-Path ${env:ProgramFiles(x86)} 'Reference Assemblies\Microsoft\Framework\.NETFramework\v4.8')

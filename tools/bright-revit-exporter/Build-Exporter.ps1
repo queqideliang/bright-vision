@@ -46,7 +46,7 @@ function RefPack([int]$Major,[bool]$Desktop) {
     if (!$pack) { throw "Missing $packName for .NET $Major; configure a licensed local reference directory." }
     return Join-Path $pack.FullName "ref\net$Major.0"
 }
-$source = @('Json.cs','PackageWriter.cs','ExportStatistics.cs','QuantitySnapshot.cs','RevitQuantityReader.cs','CivilQuantityModel.cs','CivilProject.cs','CivilLevelResolver.cs','RevitCivilQuantityReader.cs','CivilProjectWindow.cs','CivilQuantityWindow.cs','CivilQuantityCommand.cs','CivilWallFacts.cs','CivilWallCalculation.cs','CivilWallReport.cs','RevitCivilWallReader.cs','CivilWallWindow.cs','CivilWallCommand.cs','BrandPixels.cs','Branding.cs','ExportOptions.cs','ExportOptionsDialog.cs','ExportAttachments.cs','SelectedViewResolver.cs','RevitApp.cs') | ForEach-Object { Join-Path $PSScriptRoot $_ }
+$source = @('Json.cs','PackageWriter.cs','ExportStatistics.cs','QuantitySnapshot.cs','RevitQuantityReader.cs','CivilQuantityModel.cs','CivilProject.cs','CivilLevelResolver.cs','RevitCivilQuantityReader.cs','CivilProjectWindow.cs','CivilQuantityWindow.cs','CivilQuantityCommand.cs','CivilWallRuleTemplates.cs','CivilWallReadControl.cs','CivilWallFacts.cs','CivilWallBatchIntegrity.cs','CivilWallCalculation.cs','CivilWallReport.cs','RevitWallCutoutReader.cs','RevitCivilWallReader.cs','CivilWallRuleWindow.cs','CivilWallWindow.cs','CivilWallCommand.cs','CivilWallJoinCore.cs','CivilWallJoinPlan.cs','CivilWallJoinPlanWindow.cs','CivilWallJoinSession.cs','RevitWallJoinReader.cs','CivilWallJoinWindow.cs','CivilWallJoinCommand.cs','BrandPixels.cs','Branding.cs','ExportOptions.cs','ExportOptionsDialog.cs','ExportAttachments.cs','SelectedViewResolver.cs','PluginUpdateCore.cs','PluginUpdateClient.cs','PluginUpdateWindow.cs','PluginHelpWindow.cs','PluginSupportCommands.cs','RevitApp.cs') | ForEach-Object { Join-Path $PSScriptRoot $_ }
 $sourceHashes = @($source | ForEach-Object { [ordered]@{ name=[IO.Path]::GetFileName($_);sha256=(Get-FileHash -LiteralPath $_).Hash.ToLowerInvariant() } })
 $variants = @()
 foreach ($year in 2015..2026) {
@@ -76,7 +76,7 @@ foreach ($year in 2015..2026) {
         if ($runtime -in @('net45','net48')) {
             $framework = if ($runtime -eq 'net45') { $framework45 } else { $framework48 }
             $arguments += '/nostdlib+'
-            foreach ($name in @('mscorlib.dll','System.dll','System.Core.dll','System.IO.Compression.dll','System.Runtime.Serialization.dll','System.Xml.dll','WindowsBase.dll','PresentationCore.dll','PresentationFramework.dll','System.Xaml.dll','System.Windows.Forms.dll','System.Drawing.dll')) { $references += Join-Path $framework $name }
+            foreach ($name in @('mscorlib.dll','System.dll','System.Core.dll','System.Net.Http.dll','System.IO.Compression.dll','System.Runtime.Serialization.dll','System.Xml.dll','WindowsBase.dll','PresentationCore.dll','PresentationFramework.dll','System.Xaml.dll','System.Windows.Forms.dll','System.Drawing.dll')) { $references += Join-Path $framework $name }
             $arguments += @($references | ForEach-Object { "/reference:$_" })
             $arguments += $source
             & $legacyCompiler @arguments
@@ -125,6 +125,6 @@ if (!$SkipFixture) {
 }
 foreach ($record in $sourceHashes) { if ((Get-FileHash -LiteralPath (Join-Path $PSScriptRoot $record.name)).Hash.ToLowerInvariant() -cne $record.sha256) { throw 'Exporter source changed during compilation; rebuild a consistent bundle.' } }
 if (!$variants.Count) { throw 'No valid build targets were selected.' }
-$manifest = [ordered]@{ schemaVersion = 1; packageId = 'BrightVision.RevitExporter'; packageVersion = '1.8.0'; productName = 'BV - 崛亮视觉 · Bright Vision'; addinId = '6F12FA44-368B-4E47-9197-3DE316D5392A'; vendorId = 'BRVI'; fullClassName = 'BrightVision.Revit.App'; sourceFiles=$sourceHashes; variants = $variants }
+$manifest = [ordered]@{ schemaVersion = 1; packageId = 'BrightVision.RevitExporter'; packageVersion = '1.11.0'; productName = 'BV - 崛亮视觉 · Bright Vision'; addinId = '6F12FA44-368B-4E47-9197-3DE316D5392A'; vendorId = 'BRVI'; fullClassName = 'BrightVision.Revit.App'; sourceFiles=$sourceHashes; variants = $variants }
 [IO.File]::WriteAllText((Join-Path $output 'build-manifest.json'),($manifest | ConvertTo-Json -Depth 12),(New-Object Text.UTF8Encoding($false)))
 [pscustomobject]@{ Result = 'Built'; Variants = $variants.Count; Manifest = (Join-Path $output 'build-manifest.json'); HostVerification = $false }

@@ -343,7 +343,7 @@ $null=Legacy (Join-Path $machine '2020')
 $result=@(& $manager -Action Install -BundlePath $case.Bundle -RevitVersions 2020 -AddinsRoot $case.Target -MachineAddinsRoot $machine -ReplaceLegacy:$false -Confirm:$false)[0]
 Assert ($result.BridgeBackedUp -and !$result.LegacyReplacementEnabled -and !(Test-Path -LiteralPath (Join-Path $case.Target '2020\BOSRevitExplore.addin'))) 'Legacy opt-out preserves original product but still removes this product bridge dependency.'
 
-foreach ($upgrade in @(@{From='1.3.0';To='1.3.1'},@{From='1.3.1';To='1.4.0'},@{From='1.4.0';To='1.5.0'},@{From='1.5.0';To='1.6.0'},@{From='1.6.0';To='1.7.0'},@{From='1.7.0';To='1.8.0'})) {
+foreach ($upgrade in @(@{From='1.3.0';To='1.3.1'},@{From='1.3.1';To='1.4.0'},@{From='1.4.0';To='1.5.0'},@{From='1.5.0';To='1.6.0'},@{From='1.6.0';To='1.7.0'},@{From='1.7.0';To='1.8.0'},@{From='1.8.0';To='1.9.0'},@{From='1.9.0';To='1.10.0'},@{From='1.10.0';To='1.11.0'})) {
 $case=Fixture ('upgrade-preserves-original-recovery-'+$upgrade.From+'-'+$upgrade.To)
 Set-BundleVersion $case $upgrade.From
 Bridge $case.Target '2020'

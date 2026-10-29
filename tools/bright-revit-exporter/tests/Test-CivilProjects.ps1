@@ -8,6 +8,7 @@ Set-StrictMode -Version Latest
 $ErrorActionPreference = 'Stop'
 $moduleDirectory = [IO.Path]::GetFullPath((Split-Path $PSScriptRoot -Parent))
 $frameworkDirectory = Join-Path ([IO.Path]::GetFullPath($ReferenceCache)) 'framework\net45'
+if (!(Test-Path -LiteralPath (Join-Path $frameworkDirectory 'mscorlib.dll'))) { $frameworkDirectory = Join-Path $env:WINDIR 'Microsoft.NET\Framework64\v4.0.30319' }
 if (!$OutputPath) { $OutputPath = Join-Path $moduleDirectory ('artifacts\tests\civil-project-' + [guid]::NewGuid().ToString('N')) }
 $testOutput = [IO.Path]::GetFullPath($OutputPath)
 [void][IO.Directory]::CreateDirectory($testOutput)
@@ -17,6 +18,7 @@ $arguments = @('/nologo','/noconfig','/target:library','/platform:anycpu','/opti
 foreach ($name in @('mscorlib.dll','System.dll','System.Core.dll','System.Runtime.Serialization.dll','System.Xml.dll')) { $arguments += '/reference:' + (Join-Path $frameworkDirectory $name) }
 $arguments += Join-Path $moduleDirectory 'CivilQuantityModel.cs'
 $arguments += Join-Path $moduleDirectory 'CivilProject.cs'
+$arguments += Join-Path $moduleDirectory 'CivilWallRuleTemplates.cs'
 $arguments += Join-Path $PSScriptRoot 'CivilQuantityFixture.cs'
 $arguments += Join-Path $PSScriptRoot 'CivilProjectFixture.cs'
 $stdout = Join-Path $testOutput 'compile.stdout.txt'

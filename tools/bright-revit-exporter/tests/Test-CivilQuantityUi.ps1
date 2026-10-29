@@ -21,7 +21,7 @@ foreach ($name in @('mscorlib.dll','System.dll','System.Core.dll','System.Runtim
     if (!(Test-Path -LiteralPath $reference -PathType Leaf)) { throw "Missing framework reference: $reference" }
     $arguments += '/reference:' + $reference
 }
-$sourceNames = @('BrandPixels.cs','Branding.cs','CivilQuantityModel.cs','CivilProject.cs','CivilProjectWindow.cs','CivilQuantityWindow.cs')
+$sourceNames = @('BrandPixels.cs','Branding.cs','CivilQuantityModel.cs','CivilProject.cs','CivilWallRuleTemplates.cs','CivilProjectWindow.cs','CivilQuantityWindow.cs')
 $sourceHashes = @($sourceNames | ForEach-Object { [ordered]@{ name=$_; sha256=(Get-FileHash -LiteralPath (Join-Path $moduleDirectory $_)).Hash.ToLowerInvariant() } })
 foreach ($name in $sourceNames) { $arguments += Join-Path $moduleDirectory $name }
 $arguments += Join-Path $PSScriptRoot 'CivilQuantityUiFixture.cs'

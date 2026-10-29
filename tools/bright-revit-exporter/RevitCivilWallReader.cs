@@ -25,7 +25,12 @@ namespace BrightVision.Revit
         { return Read(ui, nativeSnapshot, request, ui == null ? null : ui.ActiveView); }
 
         internal static CivilWallSnapshot Read(UIDocument ui, CivilSnapshot nativeSnapshot, CivilReadRequest request, View geometryView)
+        { return Read(ui, nativeSnapshot, request, geometryView, CivilWallRuleTemplates.Default(), null); }
+
+        internal static CivilWallSnapshot Read(UIDocument ui, CivilSnapshot nativeSnapshot, CivilReadRequest request, View geometryView, CivilWallRuleTemplate template, CivilWallReadControl control)
         {
+            template = CivilWallRuleTemplates.Clone(template ?? CivilWallRuleTemplates.Default());
+            if (control != null) control.Checkpoint("核对来源与规则", 0, 0);
             if (ui == null || ui.Document == null || !ui.Document.IsValidObject || ui.Document.IsFamilyDocument)
                 throw new InvalidOperationException("请先打开有效的工程模型。");
             if (nativeSnapshot == null) throw new ArgumentNullException("nativeSnapshot");
@@ -38,7 +43,7 @@ namespace BrightVision.Revit
                 throw new InvalidOperationException("来源工程或模型修订已变化，请先刷新原始量。");
             Phase phase = document.GetElement(ParseId(request.PhaseId)) as Phase;
             if (phase == null) throw new InvalidOperationException("墙体试算需要明确的当前工程阶段。");
-            CivilWallSnapshot result = new CivilWallSnapshot { NativeSnapshot = nativeSnapshot };
+            CivilWallSnapshot result = new CivilWallSnapshot { NativeSnapshot = nativeSnapshot, RuleTemplate = template };
             if (geometryView != null)
             {
                 if (!geometryView.IsValidObject || !geometryView.Document.Equals(document))
@@ -55,9 +60,10 @@ namespace BrightVision.Revit
                 Parameter viewPhase = geometryView.get_Parameter(BuiltInParameter.VIEW_PHASE);
                 if (viewPhase != null && viewPhase.HasValue && viewPhase.StorageType == StorageType.ElementId) result.GeometryPhaseId = Id(viewPhase.AsElementId());
             }
-            WallCatalog catalog = contextIssue == null ? BuildWallCatalog(document, phase) : null;
+            WallCatalog catalog = contextIssue == null ? BuildWallCatalog(document, phase, control) : null;
             foreach (CivilElementRecord source in nativeSnapshot.Elements)
             {
+                if (control != null) control.Checkpoint("读取墙体与切洞", result.Walls.Count, nativeSnapshot.Elements.Count);
                 Element element = document.GetElement(source.UniqueId);
                 Wall wall = element as Wall;
                 if (wall == null && source.KindCode != "wall") continue;
@@ -72,7 +78,7 @@ namespace BrightVision.Revit
                     { fact.Status = "failed"; fact.Issues.Add("原始量表中的墙来源已失效或不再是原生墙，未静默丢弃该来源。"); continue; }
                     if (!wall.IsValidObject || Id(wall.Id) != source.ElementId)
                     { Unsupported(fact, "原生墙身份已变化。"); continue; }
-                    ReadWall(document, wall, source, phase, geometryView, contextIssue, catalog, fact);
+                    ReadWall(document, wall, source, phase, geometryView, contextIssue, catalog, fact, template, control);
                 }
                 catch (Exception error)
                 {
@@ -81,6 +87,7 @@ namespace BrightVision.Revit
                     fact.Issues.Add("墙体读取／布尔校验失败，未出试算量：" + error.GetType().Name + "：" + error.Message);
                 }
             }
+            if (control != null) control.Checkpoint("完成墙体事实", result.Walls.Count, result.Walls.Count);
             if (RevitCivilQuantityReader.Revision(document) != nativeSnapshot.Revision)
                 throw new InvalidOperationException("墙体读取期间模型已变化，请刷新后重算；原结果未替换。");
             return result;
@@ -99,7 +106,7 @@ namespace BrightVision.Revit
             return null;
         }
 
-        private static void ReadWall(Document document, Wall wall, CivilElementRecord source, Phase phase, View view, string contextIssue, WallCatalog catalog, CivilWallFact fact)
+        private static void ReadWall(Document document, Wall wall, CivilElementRecord source, Phase phase, View view, string contextIssue, WallCatalog catalog, CivilWallFact fact, CivilWallRuleTemplate template, CivilWallReadControl control)
         {
             WallType type = wall.WallType;
             if (type != null) { fact.TypeUniqueId = type.UniqueId; fact.TypeName = type.Name; }
@@ -149,22 +156,26 @@ namespace BrightVision.Revit
                 foreach (Element joined in location.get_ElementsAtJoin(end))
                     if (joined != null && !joined.Id.Equals(wall.Id) && !fact.EndpointJoinedElementIds.Contains(Id(joined.Id)))
                         fact.EndpointJoinedElementIds.Add(Id(joined.Id));
-            if (!ReadInserts(document, wall, phase, origin, axis, normal, baseZ, fact)) return;
+            if (!ReadInserts(document, wall, phase, origin, axis, normal, baseZ, fact, template, control)) return;
             if (contextIssue != null) { Unsupported(fact, contextIssue); return; }
             if (fact.JoinedElementIds.Count > 0 || fact.EndpointJoinedElementIds.Count > 0)
             { Unsupported(fact, "存在显式几何连接或墙端交接，本轮不猜测交接增扣顺序。"); return; }
             if (fact.Inserts.Any(insert => insert.Status == "unsupported"))
             { Unsupported(fact, "存在未可靠识别的宿主插入／门窗实际切洞，本轮未将名义尺寸当实际洞口。"); return; }
-            VerifyGeometry(wall, view, origin, axis, normal, baseZ, length, height, width, catalog, fact);
+            VerifyGeometry(wall, view, origin, axis, normal, baseZ, length, height, width, catalog, fact, template, control);
         }
 
-        private static bool ReadInserts(Document document, Wall wall, Phase phase, XYZ origin, XYZ axis, XYZ normal, double baseZ, CivilWallFact fact)
+        internal static bool ReadConfirmedInserts(Document document, Wall wall, Phase phase, XYZ origin, XYZ axis, XYZ normal, double baseZ, CivilWallFact fact, CivilWallRuleTemplate template, CivilWallReadControl control)
+        { return ReadInserts(document, wall, phase, origin, axis, normal, baseZ, fact, template, control); }
+
+        private static bool ReadInserts(Document document, Wall wall, Phase phase, XYZ origin, XYZ axis, XYZ normal, double baseZ, CivilWallFact fact, CivilWallRuleTemplate template, CivilWallReadControl control)
         {
             IList<ElementId> ids = wall.FindInserts(true, true, true, true).ToList();
             if (ids.Count > MaximumInserts) { Unsupported(fact, "单墙宿主插入超过 200 个，未截断后继续试算。"); return false; }
             HashSet<string> seen = new HashSet<string>(StringComparer.Ordinal);
             foreach (ElementId id in ids)
             {
+                if (control != null) control.Checkpoint("读取宿主切洞", fact.Inserts.Count, ids.Count);
                 if (!seen.Add(Id(id))) continue;
                 Element element = document.GetElement(id);
                 CivilWallInsert item = new CivilWallInsert { ElementId = Id(id), Source = "HostObject.FindInserts(true,true,true,true)" };
@@ -188,7 +199,21 @@ namespace BrightVision.Revit
                 if ((status != ElementOnPhaseStatus.New && status != ElementOnPhaseStatus.Existing) || element.DesignOption != null)
                 { item.Status = "excluded"; item.Issues.Add("插入不属于本次现有／新建阶段与主模型范围。"); continue; }
                 if (opening == null)
-                { item.Issues.Add("门窗／其他族的实际切洞形状尚未验证；不以类型宽高代替 void。"); continue; }
+                {
+                    if (family != null && template.OpeningPolicy == CivilWallRuleTemplates.VerifiedRectCutout &&
+                        (category == (long)BuiltInCategory.OST_Doors || category == (long)BuiltInCategory.OST_Windows))
+                    {
+                        CivilWallInsert verified; string reason;
+                        if (RevitWallCutoutReader.TryReadRectangle(document, wall, family, origin, axis, normal, baseZ, CoordinateToleranceFeet, out verified, out reason))
+                        {
+                            verified.Source += "; confirmed host + selected phase/main model; final wall solid consistency required";
+                            fact.Inserts[fact.Inserts.Count - 1] = verified;
+                        }
+                        else item.Issues.Add(reason);
+                    }
+                    else item.Issues.Add("本规则未接纳该门窗／其他族的实际切洞；不以类型宽高代替 void。");
+                    continue;
+                }
                 if (!opening.IsRectBoundary) { item.Kind = "other"; item.Issues.Add("非矩形 Opening 尚未支持。"); continue; }
                 IList<XYZ> points = opening.BoundaryRect;
                 if (points == null || points.Count != 2 || points.Any(point => point == null || !Finite(point.X) || !Finite(point.Y) || !Finite(point.Z)))
@@ -202,6 +227,7 @@ namespace BrightVision.Revit
                 { item.Issues.Add("Opening 矩形宽或高过小／退化。"); continue; }
                 item.RectX0 = Math.Min(x0, x1) * MetresPerFoot; item.RectX1 = Math.Max(x0, x1) * MetresPerFoot;
                 item.RectZ0 = Math.Min(z0, z1) * MetresPerFoot; item.RectZ1 = Math.Max(z0, z1) * MetresPerFoot;
+                item.CutoutMethod = "native-opening";
                 item.Source = "Opening.Host + Opening.IsRectBoundary + Opening.BoundaryRect; projected to wall axis and base Z; "
                     + (ownPhases ? "Opening.GetPhaseStatus" : "Opening.HasPhases=false; confirmed host phase and geometry view");
                 item.Status = "recognized";
@@ -209,7 +235,7 @@ namespace BrightVision.Revit
             return true;
         }
 
-        private static void VerifyGeometry(Wall wall, View view, XYZ origin, XYZ axis, XYZ normal, double baseZ, double length, double height, double width, WallCatalog catalog, CivilWallFact fact)
+        private static void VerifyGeometry(Wall wall, View view, XYZ origin, XYZ axis, XYZ normal, double baseZ, double length, double height, double width, WallCatalog catalog, CivilWallFact fact, CivilWallRuleTemplate template, CivilWallReadControl control)
         {
             List<Solid> owned = new List<Solid>();
             try
@@ -231,7 +257,7 @@ namespace BrightVision.Revit
                         }
                         if (solids.Count == 0) { Unsupported(fact, "当前几何未提供可核对的正体积实体。"); return; }
                         Solid actual = solids[0];
-                        for (int index = 1; index < solids.Count; index++) actual = Own(BooleanOperationsUtils.ExecuteBooleanOperation(actual, solids[index], BooleanOperationsType.Union), owned);
+                        for (int index = 1; index < solids.Count; index++) actual = Boolean(actual, solids[index], BooleanOperationsType.Union, owned, control);
                         fact.GeometryVolumeMetres3 = CheckedVolume(actual) * CubicMetresPerCubicFoot;
                         double minimumN = Double.PositiveInfinity, maximumN = Double.NegativeInfinity;
                         foreach (Solid solid in solids)
@@ -249,23 +275,25 @@ namespace BrightVision.Revit
                         { Unsupported(fact, "实际实体厚度范围与类型厚度不一致，未把斜墙、变截面或附加几何当矩形墙。"); return; }
                         Solid expected = Own(Prism(origin, axis, normal, 0, length, minimumN, minimumN + width, baseZ, height), owned);
                         double prismMetres3 = CheckedVolume(expected) * CubicMetresPerCubicFoot;
-                        fact.GeometryToleranceMetres3 = Math.Max(1e-8, prismMetres3 * 1e-8);
+                        fact.GeometryToleranceMetres3 = Math.Max(template.AbsoluteToleranceMetres3, prismMetres3 * template.RelativeTolerance);
                         foreach (CivilWallInsert insert in fact.Inserts.Where(item => item.Status == "recognized"))
                         {
+                            if (control != null) control.Checkpoint("扣除已确认切洞实体", 0, fact.Inserts.Count);
                             double x0 = insert.RectX0.Value / MetresPerFoot, x1 = insert.RectX1.Value / MetresPerFoot;
                             double z0 = insert.RectZ0.Value / MetresPerFoot, z1 = insert.RectZ1.Value / MetresPerFoot;
                             // Boolean differences naturally clip at the wall boundary
                             // and subtract overlapping openings only once.
                             Solid cutter = Own(Prism(origin, axis, normal, x0, x1, minimumN - CoordinateToleranceFeet * 10, maximumN + CoordinateToleranceFeet * 10, baseZ + z0, z1 - z0), owned);
-                            expected = Own(BooleanOperationsUtils.ExecuteBooleanOperation(expected, cutter, BooleanOperationsType.Difference), owned);
+                            expected = Boolean(expected, cutter, BooleanOperationsType.Difference, owned, control);
                         }
-                        Solid excess = Own(BooleanOperationsUtils.ExecuteBooleanOperation(expected, actual, BooleanOperationsType.Difference), owned);
-                        Solid missing = Own(BooleanOperationsUtils.ExecuteBooleanOperation(actual, expected, BooleanOperationsType.Difference), owned);
+                        Solid excess = Boolean(expected, actual, BooleanOperationsType.Difference, owned, control);
+                        if (control != null) control.Checkpoint("核验实际墙体形状", 0, 2);
+                        Solid missing = Boolean(actual, expected, BooleanOperationsType.Difference, owned, control);
                         double difference = (CheckedVolume(excess) + CheckedVolume(missing)) * CubicMetresPerCubicFoot;
                         fact.SymmetricDifferenceMetres3 = difference;
                         if (difference > fact.GeometryToleranceMetres3.Value)
                         { Unsupported(fact, "参数矩形棱柱扣明确矩形洞口后，与实际墙实体不一致；可能存在编辑轮廓、未知切割或其他形状影响。"); return; }
-                        if (!CheckInterwallOverlap(wall, view, actual, catalog, fact)) return;
+                        if (!CheckInterwallOverlap(wall, view, actual, catalog, fact, control)) return;
                         fact.GeometryVerified = true; fact.Status = "verified";
                     }
                 }
@@ -297,7 +325,7 @@ namespace BrightVision.Revit
             internal string Issue;
             internal readonly List<WallBox> Walls = new List<WallBox>();
         }
-        private static WallCatalog BuildWallCatalog(Document document, Phase phase)
+        private static WallCatalog BuildWallCatalog(Document document, Phase phase, CivilWallReadControl control)
         {
             WallCatalog catalog = new WallCatalog();
             try
@@ -309,6 +337,7 @@ namespace BrightVision.Revit
                 { catalog.Issue = "根文档墙目录超过 20,000 个，本轮没有截断后宣称墙间检查完整。"; return catalog; }
                 foreach (Wall other in walls)
                 {
+                    if (control != null && catalog.Walls.Count % 32 == 0) control.Checkpoint("读取同阶段墙体依赖目录", catalog.Walls.Count, walls.Count);
                     if (other == null || !other.IsValidObject)
                     { catalog.Issue = "墙目录含失效对象，无法证明本次墙体独立性。"; return catalog; }
                     WallBox entry = new WallBox { Wall = other, ElementId = Id(other.Id) };
@@ -362,7 +391,7 @@ namespace BrightVision.Revit
                 return result;
             }
         }
-        private static bool CheckInterwallOverlap(Wall wall, View view, Solid actual, WallCatalog catalog, CivilWallFact fact)
+        private static bool CheckInterwallOverlap(Wall wall, View view, Solid actual, WallCatalog catalog, CivilWallFact fact, CivilWallReadControl control)
         {
             if (catalog == null || catalog.Issue != null)
             { Unsupported(fact, catalog == null ? "缺少同阶段主模型墙目录，墙间检查未完成。" : catalog.Issue); return false; }
@@ -376,6 +405,7 @@ namespace BrightVision.Revit
             { Unsupported(fact, "同阶段主模型墙重叠候选超过 64 个，未截断后继续出量。"); return false; }
             foreach (WallBox candidate in candidates)
             {
+                if (control != null) control.Checkpoint("核对相邻墙体", 0, candidates.Count);
                 if (candidate.Issue != null || candidate.Bounds == null)
                 { Unsupported(fact, "墙间检查未完成，ElementId=" + candidate.ElementId + "：" + candidate.Issue); return false; }
                 List<Solid> owned = new List<Solid>();
@@ -398,8 +428,8 @@ namespace BrightVision.Revit
                             }
                             if (solids.Count == 0) throw new InvalidOperationException("候选墙未提供正体积实体。");
                             Solid other = solids[0];
-                            for (int index = 1; index < solids.Count; index++) other = Own(BooleanOperationsUtils.ExecuteBooleanOperation(other, solids[index], BooleanOperationsType.Union), owned);
-                            Solid intersection = Own(BooleanOperationsUtils.ExecuteBooleanOperation(actual, other, BooleanOperationsType.Intersect), owned);
+                            for (int index = 1; index < solids.Count; index++) other = Boolean(other, solids[index], BooleanOperationsType.Union, owned, control);
+                            Solid intersection = Boolean(actual, other, BooleanOperationsType.Intersect, owned, control);
                             double overlap = CheckedVolume(intersection) * CubicMetresPerCubicFoot;
                             if (overlap > fact.GeometryToleranceMetres3.Value) fact.IntersectingWallElementIds.Add(candidate.ElementId);
                         }
@@ -418,6 +448,9 @@ namespace BrightVision.Revit
             return true;
         }
 
+        internal static Solid CreateParameterPrism(XYZ origin, XYZ axis, XYZ normal, double x0, double x1, double n0, double n1, double baseZ, double height)
+        { return Prism(origin, axis, normal, x0, x1, n0, n1, baseZ, height); }
+
         private static Solid Prism(XYZ origin, XYZ axis, XYZ normal, double x0, double x1, double n0, double n1, double baseZ, double height)
         {
             XYZ a = new XYZ(origin.X + axis.X * x0 + normal.X * n0, origin.Y + axis.Y * x0 + normal.Y * n0, baseZ);
@@ -433,6 +466,15 @@ namespace BrightVision.Revit
             finally { loop.Dispose(); }
         }
         private static Solid Own(Solid solid, IList<Solid> owned) { if (solid == null) throw new InvalidOperationException("布尔操作未返回实体。"); owned.Add(solid); return solid; }
+        private static Solid Boolean(Solid left, Solid right, BooleanOperationsType operation, IList<Solid> owned, CivilWallReadControl control)
+        {
+            if (control != null) control.Checkpoint("实体布尔操作前", 0, 1);
+            Solid result = Own(BooleanOperationsUtils.ExecuteBooleanOperation(left, right, operation), owned);
+            // Register ownership before pumping input, so cancellation also
+            // releases the just-computed native solid in the caller's finally.
+            if (control != null) control.Checkpoint("实体布尔操作后", 1, 1);
+            return result;
+        }
         private static double CheckedVolume(Solid solid) { double value = solid.Volume; if (!Finite(value) || value < 0) throw new InvalidOperationException("几何校验体积无效。"); return value; }
         private static bool Positive(CivilMetric metric) { return metric != null && metric.Status == "available" && metric.Value.HasValue && metric.Value.Value > 0; }
         private static bool Finite(double value) { return !Double.IsNaN(value) && !Double.IsInfinity(value); }

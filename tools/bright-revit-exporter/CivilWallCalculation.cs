@@ -41,6 +41,11 @@ namespace BrightVision.Civil
     {
         public CivilWallSnapshot Input { get; set; }
         public List<CivilWallResult> Results { get; set; }
+        public CivilWallRuleTemplate RuleTemplate { get; internal set; }
+        public string RuleFingerprint { get; internal set; }
+        public string InputFingerprint { get; internal set; }
+        public string ResultFingerprint { get; internal set; }
+        public string BatchId { get; internal set; }
         public CivilWallCalculationBatch() { Results = new List<CivilWallResult>(); }
     }
 
@@ -58,18 +63,23 @@ namespace BrightVision.Civil
         public static CivilWallCalculationBatch Calculate(CivilWallSnapshot input)
         {
             if (input == null || input.NativeSnapshot == null || input.Walls == null) throw new InvalidDataException("缺少墙体读取快照。");
+            CivilWallRuleTemplate rule = CivilWallRuleTemplates.Clone(input.RuleTemplate ?? CivilWallRuleTemplates.Default());
             var seen = new HashSet<string>(StringComparer.Ordinal);
             var batch = new CivilWallCalculationBatch { Input = input };
             foreach (CivilWallFact fact in input.Walls)
             {
                 if (fact == null || String.IsNullOrWhiteSpace(fact.UniqueId) || !seen.Add(fact.UniqueId))
                     throw new InvalidDataException("墙体来源身份缺失或重复；本轮结果未生成。");
-                batch.Results.Add(CalculateWall(fact));
+                batch.Results.Add(CalculateWithRule(fact, rule));
             }
+            CivilWallBatchIntegrity.Seal(batch);
             return batch;
         }
 
         public static CivilWallResult CalculateWall(CivilWallFact fact)
+        { return CalculateWithRule(fact, CivilWallRuleTemplates.Default()); }
+
+        private static CivilWallResult CalculateWithRule(CivilWallFact fact, CivilWallRuleTemplate rule)
         {
             if (fact == null) throw new ArgumentNullException("fact");
             var result = new CivilWallResult { Fact = fact };
@@ -86,6 +96,9 @@ namespace BrightVision.Civil
                     !fact.GeometryToleranceMetres3.HasValue || !FinitePositive(fact.GeometryToleranceMetres3.Value))
                     throw new UnsupportedWall("缺少有效的实体体积、双向差集或容差证据。");
                 double tolerance = fact.GeometryToleranceMetres3.Value;
+                double ruleTolerance = Math.Max(rule.AbsoluteToleranceMetres3, basis * rule.RelativeTolerance);
+                if (tolerance > ruleTolerance && tolerance - ruleTolerance > ruleTolerance * 1e-12)
+                    throw new UnsupportedWall("实体证据的容差比所选模板允许值更宽，未使用旧规则证明新规则结果。");
                 // The adapter cannot silently declare an arbitrarily large
                 // geometry tolerance and turn a different wall into a match.
                 if (tolerance > Math.Max(1e-6, basis * 1e-7) || fact.SymmetricDifferenceMetres3.Value > tolerance)
@@ -95,6 +108,10 @@ namespace BrightVision.Civil
                 if (fact.Inserts.Any(i => i == null)) throw new UnsupportedWall("宿主插入记录缺失。");
                 if (inserts.Any(i => i.Status != "recognized" || i.Kind != "rect-opening"))
                     throw new UnsupportedWall("存在未确认的门窗、洞口或其他切洞，不能按名义尺寸扣减。");
+                if (inserts.Any(i => i.CutoutMethod != "native-opening" && i.CutoutMethod != "family-rect-cutout"))
+                    throw new UnsupportedWall("实际切洞的提取方法未知，未将其作为本方案的扣减依据。");
+                if (rule.OpeningPolicy == CivilWallRuleTemplates.NativeOpeningOnly && inserts.Any(i => i.CutoutMethod != "native-opening"))
+                    throw new UnsupportedWall("当前模板只接受原生矩形 Opening；门窗族实际切洞不纳入此方案。");
                 var identities = new HashSet<string>(StringComparer.Ordinal);
                 var rectangles = new List<Rect>();
                 result.Ledger.Add(new CivilWallLedgerEntry {
@@ -181,6 +198,7 @@ namespace BrightVision.Civil
 
         public static string ToCsv(CivilWallCalculationBatch batch, IEnumerable<CivilWallResult> selected)
         {
+            CivilWallBatchIntegrity.Validate(batch);
             if (batch == null || batch.Input == null || batch.Input.NativeSnapshot == null) throw new ArgumentNullException("batch");
             List<CivilWallResult> rows = (selected ?? batch.Results).ToList();
             if (rows.Any(row => !batch.Results.Contains(row))) throw new InvalidDataException("报表记录不属于本次计算批次。");

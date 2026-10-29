@@ -15,8 +15,8 @@ using BrightVision.Export;
 [assembly: AssemblyProduct("bright vision")]
 [assembly: AssemblyCompany("崛亮视觉")]
 [assembly: AssemblyCopyright("Copyright 2026 崛亮视觉 (Bright Vision)")]
-[assembly: AssemblyVersion("1.8.0.0")]
-[assembly: AssemblyFileVersion("1.8.0.0")]
+[assembly: AssemblyVersion("1.11.0.0")]
+[assembly: AssemblyFileVersion("1.11.0.0")]
 #if BRIGHT_NET10
 [assembly: TargetFramework(".NETCoreApp,Version=v10.0")]
 #elif BRIGHT_NET8
@@ -44,6 +44,9 @@ namespace BrightVision.Revit
                 quantities.Image = Branding.Icon(16);
                 quantities.LargeImage = Branding.Icon(32);
                 panel.AddItem(quantities);
+                PushButtonData joins = new PushButtonData("BrightVision.CivilWallJoins", "墙体交接\n体积核算", Assembly.GetExecutingAssembly().Location, typeof(CivilWallJoinCommand).FullName);
+                joins.ToolTip = "完整读取请求墙及范围外邻墙，按明确确认的优先顺序分配重叠体积，逐条扣减并核对组件并集守恒。当前为部分普通直墙的项目约定；未支持形状不出量。";
+                joins.AvailabilityClassName = typeof(ProjectAvailability).FullName; joins.Image = Branding.Icon(16); joins.LargeImage = Branding.Icon(32); panel.AddItem(joins);
                 PushButtonData wall = new PushButtonData("BrightVision.CivilWallTrial", "墙体试算\n与台账", Assembly.GetExecutingAssembly().Location, typeof(CivilWallCommand).FullName);
                 wall.ToolTip = "崛亮视觉 · Bright Vision：部分普通直墙的单侧轴向投影面积、体积、洞口并集台账，按计量层／施工段汇总并导出。实体校验通过才出量；不是模板、抹灰或地区清单／定额量。";
                 wall.AvailabilityClassName = typeof(ProjectAvailability).FullName; wall.Image = Branding.Icon(16); wall.LargeImage = Branding.Icon(32); panel.AddItem(wall);
@@ -53,6 +56,10 @@ namespace BrightVision.Revit
                 button.Image = Branding.Icon(16);
                 button.LargeImage = Branding.Icon(32);
                 panel.AddItem(button);
+                PushButtonData updates = new PushButtonData("BrightVision.CheckUpdates", "检查\n更新", Assembly.GetExecutingAssembly().Location, typeof(PluginUpdateCommand).FullName);
+                updates.ToolTip = "检查崛亮视觉官方插件版本，下载并校验更新。安装时需先保存工程并退出 Revit；不上传模型数据。"; updates.AvailabilityClassName = typeof(PluginSupportAvailability).FullName; updates.Image = Branding.Icon(16); panel.AddItem(updates);
+                PushButtonData help = new PushButtonData("BrightVision.Help", "功能介绍\n使用指南", Assembly.GetExecutingAssembly().Location, typeof(PluginHelpCommand).FullName);
+                help.ToolTip = "离线查看各功能用途、操作顺序、结果口径与入门步骤。"; help.AvailabilityClassName = typeof(PluginSupportAvailability).FullName; help.Image = Branding.Icon(16); panel.AddItem(help);
                 PushButtonData about = new PushButtonData("BrightVision.About", "关于\n崛亮视觉", Assembly.GetExecutingAssembly().Location, typeof(AboutCommand).FullName);
                 about.ToolTip = "崛亮视觉 · Bright Vision 社区版；版权与 Apache-2.0 开源许可。"; about.Image = Branding.Icon(16); panel.AddItem(about);
                 return Result.Succeeded;
@@ -89,7 +96,7 @@ namespace BrightVision.Revit
     {
         public Result Execute(ExternalCommandData data, ref string message, ElementSet elements)
         {
-            TaskDialog.Show("崛亮视觉 · Bright Vision", "BV 1.8.0 社区版开发预览\nCopyright 2026 崛亮视觉 (Bright Vision)\n\n自有社区源码采用 Apache License 2.0；保留版权、NOTICE 及第三方许可。品牌不代表分支版本获得官方背书。\n\n包含模型导出、原生量核对、工程归属设置和部分普通墙的面积／体积试算、分组与台账。尚不是完整地区清单／定额算量产品。\n\n已安装许可文件：" + Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location));
+            TaskDialog.Show("崛亮视觉 · Bright Vision", "BV 1.11.0 社区版开发预览\nCopyright 2026 崛亮视觉 (Bright Vision)\n\n自有社区源码采用 Apache License 2.0；保留版权、NOTICE 及第三方许可。品牌不代表分支版本获得官方背书。\n\n包含模型导出、原生量核对、工程归属设置和部分普通墙的面积／体积试算、分组与台账。功能介绍和检查更新可直接从 BV 页签打开；尚不是完整地区清单／定额算量产品。\n\n已安装许可文件：" + Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location));
             return Result.Succeeded;
         }
     }
@@ -214,7 +221,7 @@ namespace BrightVision.Revit
 
         internal Dictionary<string, object> Manifest()
         {
-            return PackageWriter.Fields("schema", "Bright.Vision.Model/1", "product", "bright vision", "publisher", "崛亮视觉", "exporterVersion", "1.8.0",
+            return PackageWriter.Fields("schema", "Bright.Vision.Model/1", "product", "bright vision", "publisher", "崛亮视觉", "exporterVersion", "1.11.0",
                 "revitVersion", root.Application.VersionNumber, "revitBuild", root.Application.VersionBuild,
                 "modelName", options.ModelName, "sourceDocument", root.Title, "documentScope", DocumentScope(root), "viewUniqueId", view.UniqueId,
                 "viewName", view.Name, "scope", "visible-selected-3d-view", "linkedModels", completeLinks,

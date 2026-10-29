@@ -1,5 +1,19 @@
 # 崛亮视觉 · Bright Vision Revit 插件
 
+**版本范围说明：** 此公开源码包含 BV 1.11 的检查更新与功能介绍／使用指南入口；安装和功能入门见 [插件使用说明](USER_GUIDE.md)。下文 1.10、1.9、1.8 的本机部署、发布状态及实机证据保留其历史语境，不作为 1.11 当前线上状态或本版实机通过结论。本次发布情况以 [1.11 发行页](https://github.com/queqideliang/bright-vision/releases/tag/revit-v1.11.0) 为准。
+
+当前本机已升级 **1.10.0 墙—墙交接体积核算开发版**。新入口读取请求墙与范围外依赖，逐组件确认优先顺序，再以洞后实体的剩余量逐步扣重并证明组件并集守恒；支持的几何和失败边界见 [分期路线](CIVIL_QUANTITY_ROADMAP.md)。方案为独立 `.bvwalljoins.json`，同几何重新打开会话可复用顺序，但必须重算；几何变化不能套旧方案。限定 Revit 2020 SDK 的 340 项断言／10 场景及独立 83 份数据复核通过，本机 2017／2018／2020／2026 已完成 CLI 升级；尚未公开发布。编译、安装与实机覆盖分别记录，不代表四年份功能实测。旧单墙算法继续保留原拒绝重叠策略。第三期其余范围仍待继续，交接体积不能除厚度冒充新的面积。操作与证据见 1.10 开发记录（本机验证资料，不随源码公开）。
+
+上一批 **1.9.0 的历史部署与验收保留**：新增默认“BV 项目几何核对”规则模板、复制编辑／JSON 导入导出、随工程保存的规则版本、结果封存、读取进度和取消，以及通过官方宿主 API 核验的矩形门窗实际切洞分支。默认项目口径已经确认，地区规则稍后另定。可导入的两个自有示例及准确边界见 [规则模板说明](rule-templates/README.md)。该构建曾在本机四年份部署，现已升级至 1.10；1.9 没有公开发布。其 Revit 2020 build `20190327_2315(x64)` SDK 的 120 项断言／8 组有限算例与独立数据复算通过，覆盖无孔、原生孔、实际矩形门窗切洞及两种策略；不覆盖原生窗口／Ribbon 点击、任意族或其他年份实机。下文 1.8 发行、下载和旧验收仍指已冻结的历史版本。
+
+### 为什么测试时会看到多个加载确认
+
+正式插件与临时 SDK 验收插件是不同的加载入口，截图中名称含 `SDK acceptance` 的是测试工具。验收结束后临时注册会按准确路径和哈希清理，正式安装包也不包含 SDK 验收 DLL。兼容旧安装的同名注册覆盖用于阻止旧导出器加载，不应当直接删除，否则可能重新启用旧插件。
+
+专用 SDK 测试现在通过 CLI 启动、运行并清理，结束前核对运行身份、进程创建时间、模型标题、回滚及源文件哈希，不要求用户反复开关测试样例。发布者安全提示仍由用户核对处理。当前安装包与插件 DLL 为 `NotSigned`；后续发行应补发布者代码签名。受信任的同一证书／发布者可减少重复提示，具体信任决定由用户确认，见 [Autodesk Revit 2020 签名说明](https://help.autodesk.com/cloudhelp/2020/ENU/Revit-Troubleshooting/files/GUID-900A3EBF-A809-4A0E-96ED-5EEC965A2728.htm)。
+
+当前开发包未配置 Authenticode 公司签名。`Load Once` 仅允许本次加载；信任选择应由用户核对 DLL 路径后自行作出。已变更的程序集或测试路径仍可能再次提示。正式发行应使用受信任机构颁发的公司代码签名证书，签署实际插件和安装器；文件 SHA-256 不能替代发布者签名。参见 [Autodesk 的加载选项说明](https://help.autodesk.com/cloudhelp/2020/ENU/Revit-Troubleshooting/files/GUID-36D29367-A540-4CFD-9773-4995BF1DF08A.htm)及[开发者签名说明](https://help.autodesk.com/cloudhelp/2026/ENU/Revit-API/files/Revit_API_Developers_Guide/Introduction/Add_In_Integration/Revit_API_Revit_API_Developers_Guide_Introduction_Add_In_Integration_Digitally_Signing_Your_Revit_Add_in_html.html)。
+
 当前社区版本为 **1.8.0 独立开发预览／第三期第二批**，采用 Apache-2.0；第三方组件保留各自许可。保留模型 ZIP 导出、土建原始量工作台、部分计量工程设置和首批墙体试算，1.8 在同一墙体几何门槛上增加单侧轴向投影面积与工程归属报表。运行时使用 Autodesk Revit API 与 Windows/.NET 系统库，不需要其他导出引擎。
 
 [下载独立插件 1.8.0](https://github.com/queqideliang/bright-vision/releases/download/revit-v1.8.0/BV-1.8.0-Setup.exe)，[发行说明与 SHA-256](https://github.com/queqideliang/bright-vision/releases/tag/revit-v1.8.0)。源码、分层后台及 [CI](https://github.com/queqideliang/bright-vision/actions/runs/40793987502) 已通过，本机 2017／2018／2020／2026 已 CLI 升级并核对；**没有新增真实 Revit SDK／窗口证据**。1.7 已发布的产物与 SDK 记录保留，不能作为 1.8 面积、报表或界面的实机结论。

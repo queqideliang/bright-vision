@@ -1,5 +1,7 @@
 # 崛亮视觉 · Bright Vision 的 GitHub 发布与更新
 
+**1.11 更新入口：** 本版增加插件内官方检查更新与帮助入口，首次须手动安装独立 1.11。检查、下载校验与安装是分开的操作，升级时须保存模型并退出全部 Revit。本次发布状态、附件和版本说明以 [1.11 发行页](https://github.com/queqideliang/bright-vision/releases/tag/revit-v1.11.0) 为准。下面 1.8／0.7 等版本的发布、检查与验收结论按对应历史保留，不证明 1.11 已通过同样验收。离线准备脚本不创建标签、提交、上传或公开 Release。
+
 官方仓库已由用户确认为 [queqideliang/bright-vision](https://github.com/queqideliang/bright-vision)。客户端 `electron/update-release.json` 固定该仓库并启用 preview 订阅；本目录的准备脚本仅离线生成发行清单，不会自动上传或公开发布。项目采用标准开源，许可和署名另见 `legal/LICENSE` 与 `legal/NOTICE`；云端源代码先保持私有。
 
 ## 下载与更新的关系

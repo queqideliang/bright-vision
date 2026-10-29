@@ -1,0 +1,19 @@
+{
+  "schemaVersion": 2,
+  "productId": "BrightVision.RevitExporter",
+  "publisher": "崛亮视觉",
+  "channel": "preview",
+  "version": "1.8.0",
+  "release": {
+    "owner": "queqideliang",
+    "repository": "bright-vision",
+    "tag": "revit-v1.8.0",
+    "url": "https://github.com/queqideliang/bright-vision/releases/tag/revit-v1.8.0"
+  },
+  "installer": {
+    "fileName": "BV-1.8.0-Setup.exe",
+    "size": 1674752,
+    "sha256": "73283e37ade3cd9832412fdb6ba2c7e4084e8048eb9be0b9e9376c6f76f6cf53",
+    "url": "https://github.com/queqideliang/bright-vision/releases/download/revit-v1.8.0/BV-1.8.0-Setup.exe"
+  }
+}

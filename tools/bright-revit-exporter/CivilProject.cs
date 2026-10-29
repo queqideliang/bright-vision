@@ -5,6 +5,8 @@ using System.IO;
 using System.Linq;
 using System.Runtime.Serialization;
 using System.Runtime.Serialization.Json;
+using System.Text;
+using System.Xml;
 
 namespace BrightVision.Civil
 {
@@ -59,6 +61,7 @@ namespace BrightVision.Civil
         [DataMember(Order = 13, EmitDefaultValue = false)] public string PreferredScope { get; set; }
         [DataMember(Order = 14, EmitDefaultValue = false)] public string PhaseId { get; set; }
         [DataMember(Order = 15, EmitDefaultValue = false)] public string DesignOptionId { get; set; }
+        [DataMember(Order = 16, EmitDefaultValue = false)] public CivilWallRuleTemplate WallRuleTemplate { get; set; }
         public CivilProjectSettings()
         {
             SchemaVersion = 1; ProjectId = Name = SourceDocumentScope = SourcePath = String.Empty;
@@ -88,7 +91,13 @@ namespace BrightVision.Civil
         public static void Validate(CivilProjectSettings profile)
         {
             if (profile == null) throw new ArgumentNullException("profile");
-            if (profile.SchemaVersion != 1) throw new InvalidDataException("不支持的计量工程格式版本。");
+            if (profile.SchemaVersion != 1 && profile.SchemaVersion != 2) throw new InvalidDataException("不支持的计量工程格式版本。");
+            if (profile.SchemaVersion == 1 && profile.WallRuleTemplate != null) throw new InvalidDataException("格式 1 计量工程不能保存墙体规则；请显式迁移为格式 2。");
+            if (profile.SchemaVersion == 2)
+            {
+                if (profile.WallRuleTemplate == null) throw new InvalidDataException("格式 2 计量工程必须包含明确的墙体规则模板。");
+                CivilWallRuleTemplates.Validate(profile.WallRuleTemplate);
+            }
             Guid id;
             if (!Guid.TryParse(profile.ProjectId, out id) || id == Guid.Empty) throw new InvalidDataException("计量工程标识无效。");
             Required(profile.Name, "工程名称", 512); Required(profile.SourceDocumentScope, "来源文档标识", 1024);
@@ -276,10 +285,20 @@ namespace BrightVision.Civil
                 {
                     byte[] buffer = new byte[65536]; int count;
                     while ((count = file.Read(buffer, 0, buffer.Length)) > 0) memory.Write(buffer, 0, count);
-                    memory.Position = 0;
+                    byte[] original = memory.ToArray();
                     CivilProjectSettings profile;
-                    try { profile = (CivilProjectSettings)Serializer().ReadObject(memory); }
-                    catch (Exception error) { throw new InvalidDataException("工程设置 JSON 无效或已损坏。", error); }
+                    try
+                    {
+                        CivilWallRuleTemplate strictTemplate = ValidateJsonShape(original);
+                        memory.Position = 0;
+                        profile = (CivilProjectSettings)Serializer().ReadObject(memory);
+                        if (profile != null && profile.SchemaVersion == 2) profile.WallRuleTemplate = strictTemplate;
+                    }
+                    catch (Exception error)
+                    {
+                        if (error is OutOfMemoryException || error is InvalidDataException) throw;
+                        throw new InvalidDataException("工程设置 JSON 无效或已损坏。", error);
+                    }
                     CivilProject.Validate(profile);
                     return profile;
                 }
@@ -298,11 +317,7 @@ namespace BrightVision.Civil
             {
                 // Never replace a damaged project with a fresh empty profile.
                 CivilProjectSettings previous = Load(path);
-                if (!String.Equals(previous.ProjectId, profile.ProjectId, StringComparison.OrdinalIgnoreCase) ||
-                    previous.SourceDocumentScope != profile.SourceDocumentScope ||
-                    !String.Equals(CivilProject.NormalizeSourcePath(previous.SourcePath), CivilProject.NormalizeSourcePath(profile.SourcePath), StringComparison.OrdinalIgnoreCase))
-                    throw new InvalidDataException("已有文件属于另一计量工程，不能覆盖。");
-                if (previous.Revision > profile.Revision) throw new InvalidDataException("已有工程文件修订号较新，请重新载入后再保存。");
+                ValidateReplacement(previous, profile);
             }
             string temporary = Path.Combine(folder, ".bright-civil-" + Guid.NewGuid().ToString("N") + ".tmp");
             try
@@ -318,8 +333,7 @@ namespace BrightVision.Civil
                 if (replacing)
                 {
                     CivilProjectSettings current = Load(path);
-                    if (!String.Equals(current.ProjectId, profile.ProjectId, StringComparison.OrdinalIgnoreCase) || current.Revision > profile.Revision)
-                        throw new InvalidDataException("工程文件已发生变化，请重新载入。");
+                    ValidateReplacement(current, profile);
                     File.Replace(temporary, path, null);
                 }
                 else File.Move(temporary, path);
@@ -330,6 +344,66 @@ namespace BrightVision.Civil
         private static DataContractJsonSerializer Serializer()
         {
             return new DataContractJsonSerializer(typeof(CivilProjectSettings), new DataContractJsonSerializerSettings { MaxItemsInObjectGraph = 1000000 });
+        }
+        private static void ValidateReplacement(CivilProjectSettings previous, CivilProjectSettings candidate)
+        {
+            if (!String.Equals(previous.ProjectId, candidate.ProjectId, StringComparison.OrdinalIgnoreCase) ||
+                previous.SourceDocumentScope != candidate.SourceDocumentScope ||
+                !String.Equals(CivilProject.NormalizeSourcePath(previous.SourcePath), CivilProject.NormalizeSourcePath(candidate.SourcePath), StringComparison.OrdinalIgnoreCase))
+                throw new InvalidDataException("已有文件属于另一计量工程，不能覆盖。");
+            if (previous.Revision > candidate.Revision) throw new InvalidDataException("已有工程文件修订号较新，请重新载入后再保存。");
+            if (previous.SchemaVersion == 2 && candidate.SchemaVersion != 2)
+                throw new InvalidDataException("不能将含墙体规则的格式 2 工程降级覆盖为格式 1；请另存文件。");
+            if (candidate.SchemaVersion == 2 && (previous.SchemaVersion != 2 ||
+                CivilWallRuleTemplates.Fingerprint(previous.WallRuleTemplate) != CivilWallRuleTemplates.Fingerprint(candidate.WallRuleTemplate)) && candidate.Revision <= previous.Revision)
+                throw new InvalidDataException("迁移或改变工程墙体规则必须提高工程修订号。");
+        }
+
+        private static CivilWallRuleTemplate ValidateJsonShape(byte[] bytes)
+        {
+            // JSON is parsed by the system data reader, not by a script engine.
+            // The JSON/XML representation has no DTD or external resolver.
+            new UTF8Encoding(false, true).GetString(bytes);
+            var quotas = new XmlDictionaryReaderQuotas { MaxDepth = 32, MaxStringContentLength = MaxBytes, MaxArrayLength = 100000, MaxBytesPerRead = 16384, MaxNameTableCharCount = 16384 };
+            var document = new XmlDocument { XmlResolver = null };
+            using (XmlDictionaryReader reader = JsonReaderWriterFactory.CreateJsonReader(bytes, quotas)) document.Load(reader);
+            XmlElement root = document.DocumentElement;
+            if (root == null || root.GetAttribute("type") != "object") throw new InvalidDataException("计量工程 JSON 必须为对象。");
+            var children = root.ChildNodes.Cast<XmlNode>().Select(node => node as XmlElement).ToList();
+            if (children.Any(node => node == null)) throw new InvalidDataException("计量工程 JSON 包含无效节点。");
+            List<XmlElement> schemas = children.Where(node => node.Name == "SchemaVersion").ToList();
+            int schema;
+            if (schemas.Count != 1 || schemas[0].GetAttribute("type") != "number" ||
+                !Int32.TryParse(schemas[0].InnerText, NumberStyles.Integer, CultureInfo.InvariantCulture, out schema) || (schema != 1 && schema != 2))
+                throw new InvalidDataException("计量工程 JSON 格式版本缺失、重复或不受支持。");
+            List<XmlElement> rules = children.Where(node => node.Name == "WallRuleTemplate").ToList();
+            if (rules.Count > 1) throw new InvalidDataException("计量工程墙体规则字段重复。");
+            if (schema == 1)
+            {
+                // Preserve schema-1 extension compatibility, but never silently
+                // accept a rule that an older application would discard.
+                if (rules.Count != 0 && rules[0].GetAttribute("type") != "null")
+                    throw new InvalidDataException("格式 1 计量工程不能携带墙体规则，请显式使用格式 2。");
+                return null;
+            }
+            string[] known = { "SchemaVersion", "ProjectId", "Name", "SourceDocumentScope", "SourcePath", "Revision", "QuantityLevels", "LevelMappings", "Segments", "ElementSegments", "CreatedAtUtc", "UpdatedAtUtc", "PreferredScope", "PhaseId", "DesignOptionId", "WallRuleTemplate" };
+            var seen = new HashSet<string>(StringComparer.Ordinal);
+            foreach (XmlElement child in children)
+            {
+                if (!known.Contains(child.Name, StringComparer.Ordinal)) throw new InvalidDataException("格式 2 计量工程包含未知字段：" + child.Name);
+                if (!seen.Add(child.Name)) throw new InvalidDataException("格式 2 计量工程字段重复：" + child.Name);
+            }
+            if (rules.Count != 1 || rules[0].GetAttribute("type") != "object") throw new InvalidDataException("格式 2 计量工程必须包含墙体规则对象。");
+            var templateDocument = new XmlDocument { XmlResolver = null };
+            XmlElement templateRoot = templateDocument.CreateElement("root");
+            foreach (XmlAttribute attribute in rules[0].Attributes) templateRoot.Attributes.Append((XmlAttribute)templateDocument.ImportNode(attribute, true));
+            foreach (XmlNode child in rules[0].ChildNodes) templateRoot.AppendChild(templateDocument.ImportNode(child, true));
+            templateDocument.AppendChild(templateRoot);
+            using (var memory = new MemoryStream())
+            {
+                using (XmlDictionaryWriter writer = JsonReaderWriterFactory.CreateJsonWriter(memory, new UTF8Encoding(false, true), false)) { templateDocument.WriteTo(writer); writer.Flush(); }
+                return CivilWallRuleTemplates.Parse(memory.ToArray());
+            }
         }
         internal static CivilProjectSettings CloneValue(CivilProjectSettings profile)
         {

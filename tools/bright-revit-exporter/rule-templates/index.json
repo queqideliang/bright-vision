@@ -1,0 +1,23 @@
+{
+    "schemaVersion":  1,
+    "product":  "崛亮视觉 · Bright Vision",
+    "scope":  "BV-owned project conventions; not regional bill or quota rules",
+    "templates":  [
+                      {
+                          "file":  "project-geometry.bvwallrules.json",
+                          "templateId":  "BV.Wall.ProjectGeometry",
+                          "revision":  1,
+                          "name":  "BV 项目几何核对",
+                          "fingerprint":  "72632c65c0506db4cf9bfdfae6900e10960b84517f36068c8ddf48a763ff7332",
+                          "sha256":  "5b9d0142822804afed4607d823f74f5593194df55038228c933ff2c3c3677d06"
+                      },
+                      {
+                          "file":  "native-opening-only.bvwallrules.json",
+                          "templateId":  "BV.Wall.LegacyExplicitOpeningOnly",
+                          "revision":  1,
+                          "name":  "BV 原生矩形 Opening 核对",
+                          "fingerprint":  "331ba049e809b3695ac90ef3332f58570e082a5598f5f5f683b027d450ea7917",
+                          "sha256":  "97542b5f6b0fb8ff5353812a754b4290b79660586369a0ea1fd8524c789f1c00"
+                      }
+                  ]
+}

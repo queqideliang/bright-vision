@@ -1,3 +1,4 @@
+// Copyright 2026 崛亮视觉 (Bright Vision). SPDX-License-Identifier: Apache-2.0
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -53,11 +54,11 @@ namespace Autodesk.Revit.DB
     {
         internal bool IsStackedWall,IsStackedWallMember;internal WallType WallType;internal Location Location;
         internal readonly List<ElementId> Inserts=new List<ElementId>();internal GeometryElement Geometry;
-        internal Options LastOptions;internal Exception GeometryError;internal Action DuringGeometry;
+        internal Options LastOptions;internal Exception GeometryError;internal Action DuringGeometry;internal int GeometryReads,BoundsReads;
         internal BoundingBoxXYZ Box=new BoundingBoxXYZ{Min=new XYZ(0,2,0),Max=new XYZ(10,3,10)};
-        internal BoundingBoxXYZ get_BoundingBox(View view){return Box;}
+        internal BoundingBoxXYZ get_BoundingBox(View view){BoundsReads++;return Box;}
         internal ICollection<ElementId> FindInserts(bool a,bool b,bool c,bool d){if(!a||!b||!c||!d)throw new Exception("Incomplete insert request");return Inserts;}
-        internal GeometryElement get_Geometry(Options options){LastOptions=options;if(DuringGeometry!=null)DuringGeometry();if(GeometryError!=null)throw GeometryError;return Geometry;}
+        internal GeometryElement get_Geometry(Options options){GeometryReads++;LastOptions=options;if(DuringGeometry!=null)DuringGeometry();if(GeometryError!=null)throw GeometryError;return Geometry;}
     }
     internal sealed class Opening:Element{internal Element Host;internal bool IsRectBoundary=true;internal IList<XYZ> BoundaryRect;}
     internal sealed class FamilyInstance:Element{internal Element Host;}
@@ -65,8 +66,9 @@ namespace Autodesk.Revit.DB
     {
         internal string Title="wall fixture",PathName="H:\\fixture\\wall.rvt";internal bool IsValidObject=true,IsFamilyDocument;internal long Revision;
         internal Element ProjectInformation=new Element{UniqueId="project-wall-fixture"};internal readonly Dictionary<int,Element> Elements=new Dictionary<int,Element>();
-        internal Element GetElement(ElementId id){Element e;return id!=null&&Elements.TryGetValue(id.IntegerValue,out e)?e:null;}
-        internal Element GetElement(string uid){return Elements.Values.FirstOrDefault(e=>e.UniqueId==uid);}
+        internal int GetElementCalls;
+        internal Element GetElement(ElementId id){GetElementCalls++;Element e;return id!=null&&Elements.TryGetValue(id.IntegerValue,out e)?e:null;}
+        internal Element GetElement(string uid){GetElementCalls++;return Elements.Values.FirstOrDefault(e=>e.UniqueId==uid);}
         internal T Add<T>(T e,int id)where T:Element{e.Document=this;e.Id=new ElementId(id);e.UniqueId="wall-e-"+id;Elements.Add(id,e);return e;}
     }
     internal sealed class FilteredElementCollector:IEnumerable<Element>,IDisposable
@@ -104,7 +106,7 @@ namespace Autodesk.Revit.DB
         internal static Line CreateBound(XYZ a,XYZ b){return new Line{A=a,B=b};}
         internal override XYZ GetEndPoint(int end){return end==0?A:B;}
     }
-    internal class GeometryObject:IDisposable{public void Dispose(){}}
+    internal class GeometryObject:IDisposable{internal int DisposeCalls;public void Dispose(){DisposeCalls++;}}
     internal sealed class GeometryInstance:GeometryObject{}
     internal sealed class Mesh:GeometryObject{}
     internal sealed class GeometryElement:List<GeometryObject>,IDisposable{public void Dispose(){}}
@@ -128,16 +130,19 @@ namespace Autodesk.Revit.DB
     internal static class BooleanOperationsUtils
     {
         internal static bool Throw;internal static double ForcedShapeResidual,IntersectionVolume;
+        internal static int Calls;internal static readonly List<Solid> Outputs=new List<Solid>();
         internal static Solid ExecuteBooleanOperation(Solid a,Solid b,BooleanOperationsType operation)
         {
+            Calls++;
             if(Throw)throw new InvalidOperationException("Controlled Boolean failure");
-            if(operation==BooleanOperationsType.Intersect)return new Solid{Tag="intersection",Volume=IntersectionVolume};
+            if(operation==BooleanOperationsType.Intersect)return Output(new Solid{Tag="intersection",Volume=IntersectionVolume});
             double value=operation==BooleanOperationsType.Union?a.Volume+b.Volume:Math.Max(0,a.Volume-b.Volume);
             if(operation==BooleanOperationsType.Difference&&a.Tag=="constructed"&&b.Tag=="constructed")
                 value=Math.Max(0,a.Volume-Math.Max(0,Math.Min(a.X1,b.X1)-Math.Max(a.X0,b.X0))*Math.Max(0,Math.Min(a.N1,b.N1)-Math.Max(a.N0,b.N0))*Math.Max(0,Math.Min(a.Z1,b.Z1)-Math.Max(a.Z0,b.Z0)));
             if(operation==BooleanOperationsType.Difference&&(a.Tag=="actual"||b.Tag=="actual"))value+=ForcedShapeResidual/2;
-            return new Solid{Tag=operation==BooleanOperationsType.Union?"actual":"constructed",Volume=value,X0=a.X0,X1=a.X1,N0=a.N0,N1=a.N1,Z0=a.Z0,Z1=a.Z1};
+            return Output(new Solid{Tag=operation==BooleanOperationsType.Union?"actual":"constructed",Volume=value,X0=a.X0,X1=a.X1,N0=a.N0,N1=a.N1,Z0=a.Z0,Z1=a.Z1});
         }
+        private static Solid Output(Solid value){Outputs.Add(value);return value;}
     }
 }
 namespace Autodesk.Revit.UI
