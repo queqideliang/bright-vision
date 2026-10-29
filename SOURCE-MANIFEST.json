@@ -3,7 +3,7 @@
   "draft": false,
   "publicationReady": false,
   "sourcePublicationReady": true,
-  "readinessScope": "Existing viewer 0.7.0 and standalone plugin 1.7.0 previews remain public. This reviewed snapshot prepares standalone plugin 1.8.0 source and background-only evidence for a later source push/CI, not a new viewer bundle, release or real Revit acceptance.",
+  "readinessScope": "BV 1.8.0 runtime source, actual hosted CI, independent public preview and four-asset download are verified at the recorded commit; four local years were CLI-upgraded separately. This new inventory is a documentation-only follow-up pending its own push, with no new live Revit host verification.",
   "repository": {
     "host": "github.com",
     "owner": "queqideliang",
@@ -25,7 +25,7 @@
     "tools/bright-revit-installer"
   ],
   "sourceSnapshotDate": "2026-10-29",
-  "sourceSnapshotSha256": "15c49c208be1023e239353d0785092feb79676f67f61aa6e971df4afd23aea60",
+  "sourceSnapshotSha256": "71aa83040dd4ca170511dda2c781bd67e818bb9b02dcb7e5474461a6e8dc7142",
   "files": [
     {
       "path": "tools/bim-viewer/.gitignore",
@@ -39,8 +39,8 @@
     },
     {
       "path": "tools/bim-viewer/BUILDING.md",
-      "bytes": 5284,
-      "sha256": "b1c9ddc51a7615646d085847b33df511a798835dfb4855f3ac10931253625d6d"
+      "bytes": 5291,
+      "sha256": "46e79923f406d3270eae35e1829ca4ddf7c765ea7dfb47b53be1349e72819a96"
     },
     {
       "path": "tools/bim-viewer/electron/archive-extractor.cjs",
@@ -609,8 +609,8 @@
     },
     {
       "path": "tools/bright-open-source/RELEASE_PLAN.md",
-      "bytes": 8339,
-      "sha256": "52f3b565e15b9791e000a2c84f99f22c1d8307ac14e539b348722a5f02352c50"
+      "bytes": 9001,
+      "sha256": "3a616ea1166aed7a9cf888658fab41d76665400766063fe42f2bae589987a6b5"
     },
     {
       "path": "tools/bright-open-source/templates/public-CONTRIBUTING.md",
@@ -619,8 +619,8 @@
     },
     {
       "path": "tools/bright-open-source/templates/public-README.md",
-      "bytes": 7402,
-      "sha256": "ac1dc2155cc865dbc8adcafa9e0f928abd64151dd11510235b6c21d4dc2bc399"
+      "bytes": 8148,
+      "sha256": "e505c5e8d62cadd948cbd181b006a18c47bf4fe803e346a9c64ba169ae2c5296"
     },
     {
       "path": "tools/bright-open-source/templates/public-SECURITY.md",
@@ -684,13 +684,13 @@
     },
     {
       "path": "tools/bright-revit-exporter/BUILDING.md",
-      "bytes": 4092,
-      "sha256": "543c8d742a08fec547a409fcde4fb6b5f6be2324f7487fd5d7afcc64040549f8"
+      "bytes": 4227,
+      "sha256": "01ccd2ef325a52f87b15fdce8c980f67399b0ae33c05722eb3777dc91265d6f3"
     },
     {
       "path": "tools/bright-revit-exporter/CIVIL_QUANTITY_ROADMAP.md",
-      "bytes": 14298,
-      "sha256": "43f069751c51ea04dd55c0a01d070ea90ebf9cc1993d0185b4a252bc398fc6ad"
+      "bytes": 14426,
+      "sha256": "cf5a9e20726488f2ef1998f6042d7ef095c1ef60c148c2128d280691f7e1142c"
     },
     {
       "path": "tools/bright-revit-exporter/CivilLevelResolver.cs",
@@ -799,8 +799,8 @@
     },
     {
       "path": "tools/bright-revit-exporter/README.md",
-      "bytes": 10902,
-      "sha256": "22b36605476730139ae3b81d3803c276b8676c94a3d070e3bd232f9dc39e574a"
+      "bytes": 11428,
+      "sha256": "85cb1014bf86ccb00936c3ed26b15d6796e53dbddf21b8de44ece363232fcccb"
     },
     {
       "path": "tools/bright-revit-exporter/reference-paths.example.json",
@@ -1089,8 +1089,8 @@
     },
     {
       "path": "tools/bright-revit-installer/README.md",
-      "bytes": 8765,
-      "sha256": "d93197c9d48326f76aaec1b4aafce8969e697755cdb876f91cb768a462689de1"
+      "bytes": 9198,
+      "sha256": "97b6c9b0f1b77e0282fe1d474adc824850c5a58a927540abc7e82daf90b055a5"
     },
     {
       "path": "tools/bright-revit-installer/Restore-BosExport.ps1",
@@ -1159,8 +1159,8 @@
     {
       "path": "README.md",
       "sourcePath": "tools/bright-open-source/templates/public-README.md",
-      "bytes": 7402,
-      "sha256": "ac1dc2155cc865dbc8adcafa9e0f928abd64151dd11510235b6c21d4dc2bc399"
+      "bytes": 8148,
+      "sha256": "e505c5e8d62cadd948cbd181b006a18c47bf4fe803e346a9c64ba169ae2c5296"
     },
     {
       "path": "CONTRIBUTING.md",
@@ -1195,9 +1195,9 @@
   ],
   "excluded": "No original git history, cloud code, research, recovered vendor code, SDK binaries, models, credentials, installation records or compiled artifacts.",
   "outstanding": [
-    "Push this reviewed source snapshot and inspect its actual hosted Node/Framework/offscreen WPF CI before publishing a new standalone plugin preview.",
-    "No new Revit host, native-window or real-user installation acceptance was executed for 1.8.0; do not inherit the old 1.7 SDK scope.",
-    "Keep viewer 0.7.0 and its frozen embedded 1.7.0 component on their separate tagged build chain."
+    "Push only this reviewed documentation follow-up; runtime commit, preview Release and its CI are already public.",
+    "New Revit host/window and broader geometry/business-rule coverage remain unverified for 1.8.0; the old 1.7 SDK object is historical.",
+    "Viewer 0.7.0 still embeds 1.7.0 and subscribes only to viewer tags; standalone plugin release/download is not an automatic plugin-updater E2E."
   ],
   "publicationReadyMeaning": "The legacy publicationReady=false field does not deny source publication or preview availability; it does not assert a stable release or complete runtime/update acceptance.",
   "initialPublicationSnapshot": {
@@ -1359,7 +1359,7 @@
       "revitStarted": false
     }
   },
-  "sourceSnapshotPushMeaning": "This new 1.8.0 source inventory has not yet been pushed; prior public versions and their original evidence remain separately recorded.",
+  "sourceSnapshotPushMeaning": "Only this new documentation inventory is pending push. Runtime source commit 997b1c2, its CI, tag and independent plugin Release are already public.",
   "publishedRuntimeSource": {
     "commit": "7f8001d40eaba14cfc2457ba893b36b168c55b82",
     "tag": "viewer-v0.7.0",
@@ -1430,7 +1430,7 @@
     "recordedAtUtc": "2026-10-29T00:22:51.208134+00:00",
     "pluginVersion": "1.8.0",
     "delivery": "Standalone Revit plugin candidate only; viewer 0.7.0 still embeds frozen plugin 1.7.0",
-    "status": "Source frozen, all 14 targets compiled, domain/report/reader/offscreen and isolated package checks passed; not installed in the real user profile or publicly released",
+    "status": "Independent preview public; runtime source CI and four-asset downloads passed; four-year current-user CLI upgrade verified separately. No new Revit host or window evidence.",
     "productionSourceFiles": 25,
     "compiledYearRuntimeTargets": 14,
     "sourceFreezeHashesVerified": true,
@@ -1468,7 +1468,11 @@
       "readerReportSha256": "44f5e6f63c14503cbff20a210e84f546dffbae02edca0d2c5cfdfb233c318483",
       "uiReportSha256": "8aa7940b5ef29086b707fcbefcb614ca3e3ead825c27dd4c4c2e9dda5632654c",
       "packagedValidationReportSha256": "7f25964d35b8b3bc51ea61774b6d4538e8c7044694920307e60c8564b3f4cdaa",
-      "isolatedPackageCliReportSha256": "5392eb61116273635d0b6435ad2c4ded17487ca3e980f5a925e18af1f875c0b8"
+      "isolatedPackageCliReportSha256": "5392eb61116273635d0b6435ad2c4ded17487ca3e980f5a925e18af1f875c0b8",
+      "runtimeCiReportSha256": "66bb3535c5a2ae3cae76a44007941180b3556f4e13ccc82271973ddfc9a0b27b",
+      "publicReleaseReportSha256": "0740232fd45223ce379413cd4873d929f1c76cc36645452deefa9606c2db248f",
+      "publicDownloadReportSha256": "13728974f95163fd070f573f8a5920c0d0d8d4e0651a8da7120a5b654131ebf5",
+      "realUserUpgradeVerificationSha256": "e298112c38aada8d1a81a7cef7b6a570f3bafdcb751e56eb1d122ff8729fb9e3"
     },
     "freshSourceEvidenceDigests": {
       "domain": "20cf98c55f20fd53583739f2a8338e42f41f1e5ca9706cc401c8ace2830c8ca4",
@@ -1485,8 +1489,8 @@
     "packageQaPassed": true,
     "sourceSnapshotPushed": false,
     "remoteCiForThisSnapshotExecuted": false,
-    "installedToRealUserProfile": false,
-    "publicReleaseAvailable": false,
+    "installedToRealUserProfile": true,
+    "publicReleaseAvailable": true,
     "realRevitSdkFor18Executed": false,
     "nativeWindowOrDesktopInputUsed": false,
     "old17SdkAssertionsInherited": false,
@@ -1500,11 +1504,131 @@
     "packageQaAllModuleFilesVerified": 65,
     "packageQaOfficialManifestParserUsed": true,
     "packageQaRealUserAddinsChanged": false,
-    "packageQaRevitStarted": false
+    "packageQaRevitStarted": false,
+    "runtimeSourceCommit": "997b1c2df62f67452b0165485c202d24f7284093",
+    "runtimeSourcePushed": true,
+    "remoteCiForPublishedRuntimePassed": true,
+    "publicDownloadVerified": true,
+    "pluginAutomaticUpdaterAvailable": false,
+    "downloadedInstallerExecuted": false,
+    "releasedBuildDocumentation": {
+      "installerReadmeSha256AtBuild": "d93197c9d48326f76aaec1b4aafce8969e697755cdb876f91cb768a462689de1",
+      "currentMainInstallerReadmeSha256": "97b6c9b0f1b77e0282fe1d474adc824850c5a58a927540abc7e82daf90b055a5",
+      "meaning": "Package QA applies to immutable release artifacts and original build inputs. The main README was updated afterward; the module and installer were not rebuilt."
+    }
   },
   "sourceFollowUp": {
-    "kind": "Standalone BV 1.8.0 source candidate",
+    "kind": "BV 1.8.0 publication documentation only",
     "pendingPush": true,
-    "viewerAndOldRevitReleaseTagsChanged": false
+    "runtimeCommit": "997b1c2df62f67452b0165485c202d24f7284093",
+    "runtimeAndReleaseTagsChanged": false
+  },
+  "revit180Publication": {
+    "id": 427335378,
+    "tag": "revit-v1.8.0",
+    "url": "https://github.com/queqideliang/bright-vision/releases/tag/revit-v1.8.0",
+    "sourceCommit": "997b1c2df62f67452b0165485c202d24f7284093",
+    "recordedAtUtc": "2026-10-29T00:31:27.196Z",
+    "draft": false,
+    "prerelease": true,
+    "assets": [
+      {
+        "fileName": "BV-1.8.0-Setup.exe",
+        "bytes": 1674752,
+        "sha256": "73283e37ade3cd9832412fdb6ba2c7e4084e8048eb9be0b9e9376c6f76f6cf53",
+        "url": "https://github.com/queqideliang/bright-vision/releases/download/revit-v1.8.0/BV-1.8.0-Setup.exe"
+      },
+      {
+        "fileName": "update.json",
+        "bytes": 615,
+        "sha256": "fb8245644d55954b6d789c5f323d098cb996214a05ec4819af6425e75f2095a7",
+        "url": "https://github.com/queqideliang/bright-vision/releases/download/revit-v1.8.0/update.json"
+      },
+      {
+        "fileName": "SHA256SUMS.txt",
+        "bytes": 163,
+        "sha256": "fe53c30c5202c554b12b86703595bd66f927ce39cd8eeb21bc998d5203c9d3b1",
+        "url": "https://github.com/queqideliang/bright-vision/releases/download/revit-v1.8.0/SHA256SUMS.txt"
+      },
+      {
+        "fileName": "release-notes.md",
+        "bytes": 2835,
+        "sha256": "55bd208788e9e08d8da62a1f2ef548fdc07458a63a84c6cc1e8bc265c47c3a9e",
+        "url": "https://github.com/queqideliang/bright-vision/releases/download/revit-v1.8.0/release-notes.md"
+      }
+    ],
+    "downloadVerification": {
+      "unauthenticated": true,
+      "publicAssets": 4,
+      "httpsRequests": 9,
+      "checks": 4,
+      "allActualAssetBytesMatch": true,
+      "installerBytes": 1674752,
+      "installerSha256": "73283e37ade3cd9832412fdb6ba2c7e4084e8048eb9be0b9e9376c6f76f6cf53",
+      "downloadedInstallerExecuted": false,
+      "pluginAutoUpdaterUsed": false,
+      "scope": "Independent plugin Release download only; no automatic plugin updater exists."
+    }
+  },
+  "revit180RuntimeCi": {
+    "runId": 40793987502,
+    "url": "https://github.com/queqideliang/bright-vision/actions/runs/40793987502",
+    "sourceCommit": "997b1c2df62f67452b0165485c202d24f7284093",
+    "result": "success",
+    "jobs": [
+      {
+        "name": "source",
+        "conclusion": "success"
+      },
+      {
+        "name": "publisher-contract",
+        "conclusion": "success"
+      }
+    ],
+    "scope": "Hosted Linux viewer headless and Windows domain/report/offscreen WPF, no live Revit."
+  },
+  "revit180LocalDeployment": {
+    "version": "1.8.0",
+    "method": "Authorized managed current-user CLI upgrade, separate from public download verification",
+    "registeredYears": [
+      {
+        "year": "2017",
+        "version": "1.8.0",
+        "variant": "2017-net45",
+        "files": 4,
+        "dllSha256": "7a181886ce264f797db5cbf1cd4c8d40a76255baae4747d615492574415cbdfb",
+        "registeredClass": "BrightVision.Revit.App"
+      },
+      {
+        "year": "2018",
+        "version": "1.8.0",
+        "variant": "2018-net45",
+        "files": 4,
+        "dllSha256": "57dcd903bc54f892e1399aa54627d62bc179bcc7d32e6af16b77e632c7eab853",
+        "registeredClass": "BrightVision.Revit.App"
+      },
+      {
+        "year": "2020",
+        "version": "1.8.0",
+        "variant": "2020-net45",
+        "files": 4,
+        "dllSha256": "14a74ee1a08ec45b10a4fa2b47b183fc73ccbc72be0498ab1a5219469fed9ca5",
+        "registeredClass": "BrightVision.Revit.App"
+      },
+      {
+        "year": "2026",
+        "version": "1.8.0",
+        "variant": "2026-net10",
+        "files": 4,
+        "dllSha256": "9828ac4d85afd23646dfe9d4d4a5ee5d5f57cfaa211c70dc96e4801ad28a4c8a",
+        "registeredClass": "BrightVision.Revit.App"
+      }
+    ],
+    "ownedFilesVerified": 16,
+    "repeatPlan": "AlreadyInstalled",
+    "old17FourFilesAndStateBackedUpPerYear": true,
+    "revitStarted": false,
+    "nativeDesktopInput": false,
+    "newRealHostVerified": false
   }
 }

@@ -12,6 +12,8 @@ GitHub 每个 Release 文件必须小于 2 GiB，不能把大型安装包当作 
 
 当前公开预览是查看器 **0.7.0**、内嵌 Revit 插件 **1.7.0**。[viewer-v0.7.0](https://github.com/queqideliang/bright-vision/releases/tag/viewer-v0.7.0) 的源码提交为 `7f8001d40eaba14cfc2457ba893b36b168c55b82`，四个 Release 附件的长度与远程 SHA-256 已核对。生产更新线上测试通过 5 项检查、7 次无认证 HTTPS 请求，完整下载 122,995,529 字节并通过 `verifyStaged`；同版本不重复下载、stable 排除 preview。旧版本测试是 `currentVersion:0.6.0` 的协议输入模拟，未运行旧客户端或安装器。0.6.0 与独立 1.7.0 的原 Release／标签保留，两端版本不强行保持同一数字。
 
+最新独立插件为 [BV 1.8.0](https://github.com/queqideliang/bright-vision/releases/tag/revit-v1.8.0)，对应源码 `997b1c2df62f67452b0165485c202d24f7284093`，已通过 [CI 40793987502](https://github.com/queqideliang/bright-vision/actions/runs/40793987502)。四个公开附件通过 9 次无认证 HTTPS 请求逐字节核对，安装包为 1,674,752 字节，下载缓存的 EXE 未执行。另已完成本机四年份 CLI 升级核验，但未启动 Revit。**这是独立附件发布／下载，不是插件自动更新 E2E**：目前没有插件自动更新器，查看器仍只订阅 `viewer-v*`，0.7 内置的 1.7 和原组件锁均未改变。
+
 稳定订阅只接受非 `prerelease` 发布；预览订阅接受更高版本的预览或正式发布。schema 2 的 `channel` 对应实际 Release 标记，客户端分别暴露 `subscriptionChannel` 与 `releaseChannel`；同版本不重复安装。
 
 ## 生成可审查的发布目录
@@ -24,7 +26,7 @@ node tools/bright-open-source/prepare-github-release.mjs `
   --revit-version 1.7.0 --installer ABSOLUTE_INSTALLER_PATH --output NEW_ABSOLUTE_DIRECTORY
 ```
 
-生成器离线复制最终安装包，写出 `update.json`、`SHA256SUMS.txt`、可编辑的 `release-notes.md` 与本地 `release-descriptor.json`。拒绝已有输出目录、其他产品文件名、重定向路径和变化中的输入；不运行 EXE、不读密钥、不联网、不写 `.git`。独立插件用 `--product revit --version 1.7.0`，安装包名为 `BV-1.7.0-Setup.exe`；该产品不是查看器的远程更新源。
+生成器离线复制最终安装包，写出 `update.json`、`SHA256SUMS.txt`、可编辑的 `release-notes.md` 与本地 `release-descriptor.json`。拒绝已有输出目录、其他产品文件名、重定向路径和变化中的输入；不运行 EXE、不读密钥、不联网、不写 `.git`。独立插件用 `--product revit --version 1.8.0`，安装包名为 `BV-1.8.0-Setup.exe`；该产品不是查看器的远程更新源。
 
 ```powershell
 node tools/bright-open-source/prepare-github-release.mjs --verify PREPARED_DIRECTORY

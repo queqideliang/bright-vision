@@ -2,7 +2,7 @@
 
 自有源码采用 Apache-2.0。编译引用需要开发者自行合法取得对应 Revit API 和 .NET reference assemblies；源码仓库不分发 Autodesk DLL、厂商安装程序或样例模型。
 
-当前目标为 **BV 1.8.0 开发预览／第三期第二批**。新增面积与工程报表仍在开发和后台验证；不要将旧 1.7 安装包、Revit 2020 SDK 的 81 项断言或新版的编译成功，写成本版已安装、已发布或已实机验收。
+当前目标为已独立发布的 **BV 1.8.0 开发预览／第三期第二批**，源码提交 `997b1c2df62f67452b0165485c202d24f7284093` 已通过 [实际 CI](https://github.com/queqideliang/bright-vision/actions/runs/40793987502)。本版 25 份源码／14 目标、后台测试与四年份 CLI 部署分别核对，但没有新 Revit SDK／窗口验证，不能继承旧 1.7 的 81 项断言。
 
 在 Windows 上复制 `reference-paths.example.json` 为仓库外或被忽略的本机配置，填写实际目录。`apiDirectories` 可按年份或 `年份-runtime` 指定；完整版本需分别提供 2015—2026 API，2025／2026 有 net8、net10 两个目标。没有配置时，脚本只查 `ReferenceCache/refs/<年份-runtime>` 与 `ReferenceCache/refs/<年份>`，不会搜索磁盘或自动下载 API。
 

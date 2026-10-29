@@ -2,17 +2,17 @@
 
 Bright Vision 是本地 BIM 模型查看器和独立 Revit 导出／计量插件。官方产品由 **崛亮视觉** 维护，自有社区源码采用 **Apache-2.0**，保留适用的公司版权、NOTICE 与第三方许可。衍生项目可以修改品牌。
 
-当前公开预览为查看器 **0.7.0**、插件／安装器 **1.7.0**。0.7.0 新增可见人物的第三人称漫游、自由飞行与确定性本地模型助手。实际支持范围、签名状态、已测 Revit build 与已知限制见对应 Release；开发预览不表示所有工程场景均已验收。
+当前公开预览为查看器 **0.7.0** 和独立 Revit 插件 **1.8.0**。查看器 0.7.0 的统一包仍内置冻结的 **BV 1.7.0**；最新插件请单独下载安装。实际支持范围、签名状态、已测 Revit build 与已知限制见对应 Release；开发预览不表示所有工程场景均已验收。
 
-当前 main 另在开发 **BV 1.8.0 独立插件／第三期第二批**：单侧轴向投影面积、带符号面积台账、完整来源及计量层／施工段／原生楼层／类型报表。尚未据此声明 1.8 已安装、公开发布或取得新实机证据；它不是第三期全部完成，不含地区规则、真实族切洞或交接增扣。下方已发布的 **0.7.0 统一包仍内置 1.7.0**，不会因 main 开发 1.8 自动改变附件或组件锁。
+**BV 1.8.0／第三期第二批**已独立发布：单侧轴向投影面积、带符号面积台账、完整来源及计量层／施工段／原生楼层／类型报表。源码 CI 与后台验证通过，本机四年份 CLI 升级已核对；没有新的 Revit 宿主／窗口验证。它不是第三期全部完成，不含地区规则、真实族切洞或交接增扣，也不改变 0.7.0 的附件、运行时或组件锁。
 
 官方源码和预览附件已发布至 [queqideliang/bright-vision](https://github.com/queqideliang/bright-vision)：
 
 **[下载 Windows 完整安装包 · 0.7.0](https://github.com/queqideliang/bright-vision/releases/download/viewer-v0.7.0/Bright.Vision-0.7.0-Setup.exe)** — 包含查看器与 Revit 插件 1.7.0。[发行说明与 SHA-256](https://github.com/queqideliang/bright-vision/releases/tag/viewer-v0.7.0)
 
-**[仅下载 Revit 插件 · 1.7.0](https://github.com/queqideliang/bright-vision/releases/download/revit-v1.7.0/BV-1.7.0-Setup.exe)** — 适用于已有查看器、只需安装导出／计量插件的电脑。[发行说明](https://github.com/queqideliang/bright-vision/releases/tag/revit-v1.7.0)
+**[仅下载 Revit 插件 · 1.8.0](https://github.com/queqideliang/bright-vision/releases/download/revit-v1.8.0/BV-1.8.0-Setup.exe)** — 适用于已有查看器、只需安装导出／计量插件的电脑。[发行说明与 SHA-256](https://github.com/queqideliang/bright-vision/releases/tag/revit-v1.8.0)
 
-历史预览 [查看器 0.6.0](https://github.com/queqideliang/bright-vision/releases/tag/viewer-v0.6.0) 保留原附件与标签。
+历史预览 [查看器 0.6.0](https://github.com/queqideliang/bright-vision/releases/tag/viewer-v0.6.0) 与 [独立插件 1.7.0](https://github.com/queqideliang/bright-vision/releases/tag/revit-v1.7.0) 保留原附件与标签。
 
 ## 可以做什么
 
@@ -29,9 +29,13 @@ Bright Vision 是本地 BIM 模型查看器和独立 Revit 导出／计量插件
 
 上面的受限 Revit 2020 SDK 记录仅属于 **BV 1.7**，不验证 1.8 新面积或工程报表；本轮 1.8 不启动真实 Revit。
 
+1.8 的源码提交 `997b1c2df62f67452b0165485c202d24f7284093` 已通过 [CI 40793987502](https://github.com/queqideliang/bright-vision/actions/runs/40793987502)，包括 Windows 领域／报表／离屏 WPF 与 Linux 查看器 headless。公开 Release 的四个附件通过 9 次无认证 HTTPS 请求逐字节核对，安装包为 1,674,752 字节；下载缓存的 EXE 未执行。此前四年份 CLI 升级是单独的部署核验，未启动 Revit。
+
 ## 使用与构建
 
 上方链接对应已公开的开发预览附件，安装前请阅读发行说明中的签名状态及已知限制。0.7.0 的生产更新模块已通过无认证公网检查、完整下载、独立 SHA-256 与 staging 核验；本次未运行安装器。测试以 `currentVersion:0.6.0` 模拟旧版本协议输入，未运行旧客户端；0.7.0 同版本不重复下载，stable 订阅不接收 preview。旧安装版本需要先安装包含该更新能力的新客户端。
+
+查看器更新器只订阅 `viewer-v*`，**独立插件 1.8.0 没有自动更新器**。其公开附件下载核验不等同于插件自动更新 E2E；插件按独立安装包／受保护的 CLI 流程升级。
 
 开发者先从 Web 查看器开始，不需要 Revit 或 Autodesk SDK：
 
